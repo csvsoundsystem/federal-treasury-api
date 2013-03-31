@@ -9,7 +9,6 @@ import pandas as pd
 
 if not os.path.split(os.getcwd())[-1] == 'code':
 	raise Exception('This file has to be run from the "code" directory!')
-sys.exit(0)
 
 FIXIE_DIR = '../data/fixie/'
 DAILY_CSV_DIR = '../data/daily_csv/'
@@ -33,11 +32,12 @@ def parsed_files():
 	return set([csv.split('_')[0] for csv in os.listdir(DAILY_CSV_DIR)])
 
 # fixies that have not been parsed into csvs
-new_files = list(downloaded.difference(parsed_files()))
+new_files = list(downloaded_files.difference(parsed_files()))
 # PARSE THEM
 for f in new_files:
-	print '\n'
-	dfs = parse_fms_fixies_2.parse_file(f)
+	fname = '../data/fixie/' + f + '.txt'
+	print '\n', fname
+	dfs = parse_fms_fixies_2.parse_file(fname)
 
 	for i, df in dfs.items():
 		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_t'+str(i)+'.csv')
