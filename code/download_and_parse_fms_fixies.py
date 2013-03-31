@@ -35,6 +35,7 @@ def parsed_files():
 new_files = list(downloaded_files.difference(parsed_files()))
 # PARSE THEM
 for f in new_files:
+	if len(f) == 0: continue
 	fname = '../data/fixie/' + f + '.txt'
 	print '\n', fname
 	dfs = parse_fms_fixies_2.parse_file(fname)
@@ -54,11 +55,14 @@ for i in range(1,9):
 	if not os.path.isfile(lifetime_csv):
 		lifetime = open(lifetime_csv, 'a')
 		# add the header
-		lifetime.write(open(parsed_files()[0]).readline())
+		lifetime.write(open(DAILY_CSV_DIR + list(parsed_files())[0]+'_t'+str(i)+'.csv').readline())
 		lifetime.close()
 
 	# append new csvs to lifetime csvs
 	for f in new_files:
+
+		# we have no idea why it's giving us a blank file
+		if len(f) == 0: continue
 
 		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_t'+str(i)+'.csv')
 

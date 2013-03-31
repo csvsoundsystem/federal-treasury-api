@@ -1,3 +1,5 @@
-Add the crontab to your crontab.
+Run this to schedule the thingy to download and parse daily.
 
-    ../crontab.sh| crontab
+    ./crontab.sh | crontab
+
+Run `crontab -e` to edit the schedule later.
