@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python2
 
 import download_fms_fixies
 import parse_fms_fixies_2
