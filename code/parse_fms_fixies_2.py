@@ -2,7 +2,6 @@
 import collections
 import datetime
 import numpy as np
-import matplotlib.pyplot as plt
 import pandas as pd
 from pprint import pprint
 import re
@@ -98,21 +97,21 @@ def parse_page(page, page_index, date, day):
 	for line in page:
 		#print line
 		row = {}
-		
+
 		row['date'] = date
 		row['day'] = day
-		
+
 		index = page.index(line)
 		if index == used_index : continue
 		indent = len(re.search(r'^\s*', line).group())
-		
+
 		# skip table header rows
 		if re.match(r'\s{7,}', line): continue
 		if get_table_name(line):
 			table_name = get_table_name(line)
 			continue
 		row['table'] = table_name
-		
+
 		# save footnotes for later assignment to their rows
 		if get_footnote(line):
 			footnote = get_footnote(line)
@@ -121,12 +120,12 @@ def parse_page(page, page_index, date, day):
 		# note rows with footnotes for later assignment
 		if re.search(r'\d\/ ', line):
 			row['footnote'] = re.search(r'(\d)\/ ', line).group(1)
-		
+
 		# separate digits and words
 		digits = re.findall(r'(\d+)', line)
 		words = re.findall(r'[^\W\d]+:?', line)
 		text = ' '.join(words)
-		
+
 		# get type row
 		if len(digits) == 0 and text.endswith(':') and indent == 1:
 			type_ = text[:-1]
@@ -137,7 +136,7 @@ def parse_page(page, page_index, date, day):
 		elif indent <= type_indent:
 			type_ = None
 		row['type'] = type_
-			
+
 		# get subtype row
 		if len(digits) == 0 and text.endswith(':'):
 			subtype = text[:-1]
@@ -148,7 +147,7 @@ def parse_page(page, page_index, date, day):
 		elif indent <= subtype_indent:
 			subtype = None
 		row['subtype'] = subtype
-		
+
 		# get and merge two-line rows
 		if len(digits) == 0 and not text.endswith(':'):
 			if two_line_delta == 1 or page_index != 1:
@@ -177,7 +176,7 @@ def parse_page(page, page_index, date, day):
 		if len(digits) == 0: continue
 
 		row['is_total'] = int('total' in text.lower())
-		
+
 		if page_index in [1, 6]:
 			try:
 				if page_index == 1:
@@ -221,7 +220,7 @@ def parse_page(page, page_index, date, day):
 				row['fytd'] = digits[-1]
 			except:
 				print "WARNING:", line
-			
+
 		table.append(row)
 
 	# assign footnotes to rows
@@ -256,6 +255,6 @@ def parse_page(page, page_index, date, day):
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif page_index in [7,8]:
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
-	
+
 	return df
 
