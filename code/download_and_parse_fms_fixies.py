@@ -43,7 +43,7 @@ for f in new_files:
 	for i, df in dfs.items():
 		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_t'+str(i)+'.csv')
 		df.to_csv(daily_csv,
-			index=False, header=True, encoding='utf-8', na_rep='NA')
+			index=False, header=True, encoding='utf-8', na_rep='')
 
 # iterate over all fms tables
 for i in range(1,9):
