@@ -77,7 +77,7 @@ def request_all_fixies(fnames):
 				f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'w', 'utf-8')
 				f.write(fixie)
 				f.close()
-				print 'INFO:', alt_fname, 'written to', SAVE_DIR
+				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
 				break
 		if fixie is None:
 			print 'WARNING:', fname, '(',
