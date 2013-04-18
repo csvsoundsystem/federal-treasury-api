@@ -55,7 +55,7 @@ for i in range(1,9):
 	if not os.path.isfile(lifetime_csv):
 		lifetime = open(lifetime_csv, 'a')
 		# add the header
-		lifetime.write(open(DAILY_CSV_DIR + list(parsed_files())[0]+'_t'+str(i)+'.csv').readline())
+		lifetime.write(open(os.path.join(DAILY_CSV_DIR, list(parsed_files())[0]+'_t'+str(i)+'.csv')).readline())
 		lifetime.close()
 
 	# append new csvs to lifetime csvs
