@@ -1,58 +1,152 @@
--- Missing data is modeled as the empty string.
-==> ../data/lifetime_csv/table_1.csv <==
-CREATE TABLE _t2 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "account" TEXT NOT NULL,
-is_total,close_today,open_today,open_mo,open_fy,footnote
-  "type" TEXT NOT NULL,
-  "subtype" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);
+-- Import the lifetime CSV files to sqlite
 
-==> ../data/lifetime_csv/table_2.csv <==
-table,date,day,account,type,subtype,item,is_total,today,mtd,fytd,footnote
-CREATE TABLE _t2 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "account" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "subtype" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);
-
-==> ../data/lifetime_csv/table_3.csv <==
-table,date,day,account,type,subtype,item,is_total,today,mtd,fytd,footnote
-
-==> ../data/lifetime_csv/table_4.csv <==
-table,date,day,surtype,type,subtype,item,is_total,today,mtd,fytd,footnote
-
-==> ../data/lifetime_csv/table_5.csv <==
-table,date,day,surtype,type,subtype,item,is_total,today,mtd,fytd,footnote
-
-==> ../data/lifetime_csv/table_6.csv <==
-table,date,day,type,item,is_total,close_today,open_today,open_mo,open_fy,footnote
-
-==> ../data/lifetime_csv/table_7.csv <==
-table,date,day,type,classification,is_total,today,mtd,fytd,footnote
-
-==> ../data/lifetime_csv/table_8.csv <==
-table,date,day,type,classification,is_total,today,mtd,fytd,footnote
+-- CSV
 .separator ','
 
+-- Missing data is modeled as the empty string.
 
-.import '../data/lifetime_csv/table_2.csv' _t2
-DROP TABLE IF EXISTS t2;
-ALTER TABLE _t2 RENAME TO t2;
+CREATE TABLE _t1 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "account" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "close_today" FLOAT NOT NULL,
+  "open_today" FLOAT NOT NULL,
+  "open_mo" FLOAT NOT NULL,
+  "open_fy" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t2 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "account" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "subtype" TEXT NOT NULL,
+  "item" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t3 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "account" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "subtype" TEXT NOT NULL,
+  "item" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t4 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "surtype" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "subtype" TEXT NOT NULL,
+  "item" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t4 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "surtype" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "subtype" TEXT NOT NULL,
+  "item" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t6 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "item" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "close_today" FLOAT NOT NULL,
+  "open_today" FLOAT NOT NULL,
+  "open_mo" FLOAT NOT NULL,
+  "open_fy" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t7 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "classification" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
+  "footnote"
+);
+
+CREATE TABLE _t8 (
+  "table" TEXT NOT NULL,
+  "date" TEXT NOT NULL,
+  "day" TEXT NOT NULL,
+  "type" TEXT NOT NULL,
+  "classification" TEXT NOT NULL,
+  "is_total" TEXT NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
+  "footnote"
+);
+
+
+.import '../data/lifetime_csv/table_1.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t1 RENAME TO t;
+
+.import '../data/lifetime_csv/table_2.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t2 RENAME TO t;
+
+.import '../data/lifetime_csv/table_3.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t3 RENAME TO t;
+
+.import '../data/lifetime_csv/table_4.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t4 RENAME TO t;
+
+.import '../data/lifetime_csv/table_5.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t5 RENAME TO t;
+
+.import '../data/lifetime_csv/table_6.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t6 RENAME TO t;
+
+.import '../data/lifetime_csv/table_7.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t7 RENAME TO t;
+
+.import '../data/lifetime_csv/table_8.csv' _t1
+DROP TABLE IF EXISTS t;
+ALTER TABLE _t8 RENAME TO t;
