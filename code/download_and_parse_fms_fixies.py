@@ -10,9 +10,9 @@ import pandas as pd
 if not os.path.split(os.getcwd())[-1] == 'code':
 	raise Exception('This file has to be run from the "code" directory!')
 
-FIXIE_DIR = '../data/fixie/'
-DAILY_CSV_DIR = '../data/daily_csv/'
-LIFETIME_CSV_DIR = '../data/lifetime_csv/'
+FIXIE_DIR = os.path.join('..', 'data', 'fixie')
+DAILY_CSV_DIR = os.path.join('..', 'data', 'daily_csv')
+LIFETIME_CSV_DIR = os.path.join('..', 'data', 'lifetime_csv')
 
 # test for existence of fixies; if none, start from THE BEGINNING
 test_fixies = [f for f in os.listdir(FIXIE_DIR) if '.txt' in f]
@@ -36,7 +36,7 @@ new_files = list(downloaded_files.difference(parsed_files()))
 # PARSE THEM
 for f in new_files:
 	if len(f) == 0: continue
-	fname = '../data/fixie/' + f + '.txt'
+	fname = os.path.join(FIXIE_DIR, f+'.txt')
 	print '\n', fname
 	dfs = parse_fms_fixies_2.parse_file(fname)
 

@@ -227,12 +227,14 @@ def parse_page(page, page_index, date, day):
 	for row in table:
 		try:
 			row['footnote'] = footnotes[row['footnote']]
-		except KeyError: pass
+		except KeyError:
+			pass
 		try:
 			if row['item'].lower().strip() == 'total issues':
 				surtype_index = table.index(row)
 				row['surtype'] = 'issue'
-		except KeyError: pass
+		except KeyError:
+			pass
 
 	# after-the-fact surtype assignment
 	if surtype_index != -1:

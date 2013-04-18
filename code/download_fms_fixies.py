@@ -6,7 +6,7 @@ import pandas as pd
 import sys
 
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
-SAVE_DIR = '../data/fixie/'
+SAVE_DIR = os.path.join('..', 'data', 'fixie')
 
 ################################################################################
 def check_dates(start_date, end_date):
