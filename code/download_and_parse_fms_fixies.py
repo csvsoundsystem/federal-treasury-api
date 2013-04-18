@@ -1,11 +1,13 @@
 #!/usr/bin/env python2
 
-import download_fms_fixies
-import parse_fms_fixies_2
 import datetime
+import download_fms_fixies
 import os
-import sys
 import pandas as pd
+import pandas.io.sql as pd_sql
+import parse_fms_fixies_2
+import sqlite3 as sql
+import sys
 
 if not os.path.split(os.getcwd())[-1] == 'code':
 	raise Exception('This file has to be run from the "code" directory!')
@@ -73,6 +75,10 @@ for i in range(1,9):
 		for line in daily:
 			lifetime.write(line)
 		daily.close()
+
+# we'll figure it out
+#sqlcon = sql.connect(os.path.join('..', 'data', 'lifetime_csv', 'NAME.db'))
+#pd_sql.write_frame(df, "tbldata2", sqlcon)
 
 
 
