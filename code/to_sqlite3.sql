@@ -1,3 +1,4 @@
+-- Missing data is modeled as the empty string.
 CREATE TABLE _t2 (
   "table" TEXT NOT NULL,
   "date" TEXT NOT NULL,
@@ -7,9 +8,9 @@ CREATE TABLE _t2 (
   "subtype" TEXT NOT NULL,
   "item" TEXT NOT NULL,
   "is_total" TEXT NOT NULL,
-  "today" INTEGER NOT NULL,
-  "mtd" INTEGER NOT NULL,
-  "fytd" INTEGER NOT NULL,
+  "today" FLOAT NOT NULL,
+  "mtd" FLOAT NOT NULL,
+  "fytd" FLOAT NOT NULL,
   "footnote"
 );
 .separator ','
