@@ -11,18 +11,14 @@ SAVE_DIR = os.path.join('..', 'data', 'fixie')
 
 ################################################################################
 def check_dates(start_date, end_date):
+	# fixie files not available before this date
+	# PDFs *are* available, for the brave soul who wants to parse them
 	earliest_date = datetime.date(2005, 6, 9)
-	#latest_date = datetime.date.today() - datetime.timedelta(days=4)
-	# first available fixie file
 	if start_date < earliest_date:
 		print '\n**WARNING:', start_date, 'before earliest available date (',
 		print str(earliest_date), ')'
 		print '... setting start_date to', str(earliest_date)
 		start_date = earliest_date
-	# safety margin of four days for treasury to post latest fixie
-	#if end_date > latest_date:
-	#    print 'ERROR:', end_date, 'after last available date (', str(latest_date), ')'
-	#    sys.exit()
 	if start_date > end_date:
 		temp = start_date
 		start_date = end_date
