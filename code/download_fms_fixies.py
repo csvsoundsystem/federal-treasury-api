@@ -1,9 +1,9 @@
 
 import codecs
 import datetime
-import requests
 import os
 import pandas as pd
+import requests
 import sys
 
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'

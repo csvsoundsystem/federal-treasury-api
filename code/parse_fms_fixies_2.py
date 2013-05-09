@@ -1,9 +1,7 @@
 
 import collections
 import datetime
-import numpy as np
 import pandas as pd
-from pprint import pprint
 import re
 import StringIO
 

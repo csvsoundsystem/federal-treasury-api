@@ -9,12 +9,21 @@ import parse_fms_fixies_2
 import sqlite3 as sql
 import sys
 
+# script must be run from fms_parser/code directory
 if not os.path.split(os.getcwd())[-1] == 'code':
-	raise Exception('This file has to be run from the "code" directory!')
+	if os.path.split(os.getcwd())[-1] == 'fms_parser':
+		os.chdir('code')
+		print '\n*INFO: current working directory set to', os.getcwd()
+	else:
+		raise Exception('This script must be run from the fms_parser/code directory!')
 
+# auto-make data directories, if not present
 FIXIE_DIR = os.path.join('..', 'data', 'fixie')
 DAILY_CSV_DIR = os.path.join('..', 'data', 'daily_csv')
 LIFETIME_CSV_DIR = os.path.join('..', 'data', 'lifetime_csv')
+os.system('mkdir -pv ' + FIXIE_DIR)
+os.system('mkdir -pv ' + DAILY_CSV_DIR)
+os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
 
 # test for existence of fixies; if none, start from THE BEGINNING
 test_fixies = [f for f in os.listdir(FIXIE_DIR) if '.txt' in f]
