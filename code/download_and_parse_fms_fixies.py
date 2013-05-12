@@ -115,163 +115,49 @@ print csv_txt
 print soundsystem_txt
 print '*http://csvsoundsystem.com/'
 
-
-# we'll figure it out
-connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
 TABLES = [
     {
         'raw-table': 1,
         'new-table': 't1',
-        'schema': '''
-CREATE TABLE _t1 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "account" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "close_today" FLOAT NOT NULL,
-  "open_today" FLOAT NOT NULL,
-  "open_mo" FLOAT NOT NULL,
-  "open_fy" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 2,
         'new-table': 't2a',
-        'schema': '''
-CREATE TABLE _t2 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "account" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "subtype" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 3,
         'new-table': 't2b',
-        'schema': '''
-CREATE TABLE _t3 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "account" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "subtype" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 4,
         'new-table': 't3a',
-        'schema': '''
-CREATE TABLE _t4 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "surtype" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "subtype" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 5,
         'new-table': 't3b',
-        'schema': '''
-CREATE TABLE _t5 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "surtype" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "subtype" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 6,
         'new-table': 't3c',
-        'schema': '''
-CREATE TABLE _t6 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "item" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "close_today" FLOAT NOT NULL,
-  "open_today" FLOAT NOT NULL,
-  "open_mo" FLOAT NOT NULL,
-  "open_fy" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 7,
         'new-table': 't4_t5',
-        'schema': '''
-CREATE TABLE _t7 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "classification" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
     {
         'raw-table': 8,
         'new-table': 't6',
-        'schema': '''
-CREATE TABLE _t8 (
-  "table" TEXT NOT NULL,
-  "date" TEXT NOT NULL,
-  "day" TEXT NOT NULL,
-  "type" TEXT NOT NULL,
-  "classification" TEXT NOT NULL,
-  "is_total" TEXT NOT NULL,
-  "today" FLOAT NOT NULL,
-  "mtd" FLOAT NOT NULL,
-  "fytd" FLOAT NOT NULL,
-  "footnote"
-);'''
     },
 ]
 
+connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
+connection.text_factory = str # bad, but pandas doesn't work otherwise
+
 for table in TABLES:
-    connection.execute(table['schema'])
     df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%d.csv' % table['raw-table']))
     pandas.io.sql.write_frame(df, '_t%d' % table['raw-table'], connection)
     connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
-    connection.execute('ALTER TABLE "_t%d" RENAME TO "%s";' % (table['raw-table'], table['new-table'])
+    connection.execute('ALTER TABLE "_t%d" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
 
 # Table 4 and table 5 views
 connection.execute('''
