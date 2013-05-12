@@ -51,7 +51,7 @@ def get_footnote(line):
 ################################################################################
 def parse_file(f_name, verbose=True):
 
-	f = open(f_name, 'r').read()
+	f = open(f_name, 'rb').read()
 	raw_pages = re.split(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d\s{2}', f)
 	pages = []
 	for raw_page in raw_pages:
@@ -67,12 +67,12 @@ def parse_file(f_name, verbose=True):
 	dfs = {}
 	for page in pages[1:]:
 		page_index = pages.index(page)
-		dfs[page_index] = parse_page(page, page_index, date, day)
+		dfs[page_index] = parse_page(page, page_index, date, day, verbose=verbose)
 
 	return dfs
 
 ################################################################################
-def parse_page(page, page_index, date, day):
+def parse_page(page, page_index, date, day, verbose=True):
 
 	# page defaults
 	indent = 0
@@ -259,6 +259,27 @@ def parse_page(page, page_index, date, day):
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif page_index in [7,8]:
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+
+	# table: string
+	# date: string, in standard YYYY-MM-DD format
+	# day: string, full name of day
+	# account: string, name of associated account
+	# surtype: string, e.g. 'issue' or 'redemption'
+	# type: string, e.g. 'deposit' or 'withdrawal'
+	# subtype: string, e.g. 'deposits by states' or 'other withdrawals'
+	# classification: string, class of taxes
+	# item: string, name of line item, e.g. 'Energy Department programs' or 'Postal service'
+	# account: string
+	# is_total: int, 0 if False (is not a total) and 1 if True (is a total)
+	# today: int
+	# mtd: int, month-to-date
+	# ytd: int, year-to-date
+	# fytd: int, fiscal-year-to-date
+	# close_today: int
+	# open_today: int
+	# open_mo: int
+	# open_fy: int
+	# footnote: string
 
 	return df
 

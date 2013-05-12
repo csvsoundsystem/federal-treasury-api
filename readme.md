@@ -1,14 +1,25 @@
-## Scheduling
-Run this to schedule the thingy to download and parse daily.
+## Running
+Install dependencies.
 
-    ./crontab.sh | crontab
+    pip install -r requirements.pip
+
+This one command downloads the (new) fixies and converts them to an SQLite3 database.
+
+    ./run
+
+Then serve the web api like so.
+
+    ./api.py
+
+## Scheduling
+Run this to schedule the above script to run daily.
+
+    crontab -l > /tmp/crontab
+    ./crontab.sh >> /tmp/crontab
+    cat /tmp/crontab | crontab
+    rm /tmp/crontab
 
 Run `crontab -e` to edit the schedule later.
-
-## Converting to SQLite
-    
-    cd code
-    sqlite3 ../data/fms.db < to_sqlite3.sql
 
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
