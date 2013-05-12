@@ -215,10 +215,11 @@ for i, fp in enumerate(filepaths):
     except:
         pass
 
-
+cols = ['date', 'filepath', 'table', 'var_test', 'result', 'null_count', 'total_count']
 # output to csv.
 with open("test_output/test-2013-05-13.csv", "wb") as f:
     writer = csv.writer(f)
+    writer.writerow(cols)
     writer.writerows(o)
 
 
