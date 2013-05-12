@@ -1,6 +1,3 @@
 {
-  "displayName": "Federal Treasury API",
-  "description": "Daily deposits and withdrawals for the United States Treasury",
   "publish_token": "47d80ae900e04f2",
-  "database": "data/fms.db"
 }
