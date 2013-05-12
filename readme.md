@@ -8,15 +8,27 @@ Install dependencies.
 
     pip install -r requirements.pip
 
+### POSIX
 This one command downloads the (new) fixies and converts them to an SQLite3 database.
 
-    ./run
+    ./run.sh
 
 Then serve the web api like so.
 
     ./api.py
 
+### Windows
+Run everything
+
+    run.bat
+
+Serve the API locally.
+
+    python api.py
+
 ## Scheduling
+
+### POSIX
 Run this to schedule the above script to run daily.
 
     crontab -l > /tmp/crontab
@@ -25,6 +37,9 @@ Run this to schedule the above script to run daily.
     rm /tmp/crontab
 
 Run `crontab -e` to edit the schedule later.
+
+### Windows
+In the Task Scheduler, set `run.bat` to run every day at 5 pm.
 
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
