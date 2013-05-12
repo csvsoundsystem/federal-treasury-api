@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>U.S. Treasury API</title>
+    <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:800,400,300", rel="stylesheet", type="text/css"/>
+</head>
+<body>
+    <div id="wrapper">
+        <h1 id="title"><strong>TREASURY.IO</strong></h1>
+        <nav>
+            <a href="#"><img class="nav-item" src="web/flag.png"></a>
+            <ul>
+                <li class="nav-item active"><a href="#about">About</a></li>
+                <li class="nav-item"><a href="#usage">Usage</a></li>
+                <li class="nav-item"><a href="#examples">Examples</a></li>
+            <ul>
+        </nav>
+
+        <div id="section-wrapper">
+          <div class="section" id="about">
+              <h2><span class="bullet">$</span> ABOUT</h2>
+              <p>Retro synth direct trade <a class="highlight">flexitarian</a>, helvetica godard tumblr selvage keffiyeh vegan 8-bit iphone shoreditch. Fanny pack viral lo-fi polaroid, odd future marfa high life chillwave. Fanny pack echo park cardigan street art. Pitchfork occupy cray semiotics. Pickled +1 single-origin coffee, polaroid marfa <a class="highlight">flexitarian</a> authentic carles tumblr bicycle rights photo booth. Shoreditch irony 8-bit, swag jean shorts PBR quinoa high life beard lo-fi trust fund cosby sweater. Squid mcsweeneys small batch ennui banh mi.</p>
+          </div>
+          <div class="section" id="tables">
+            <h2>Tables</h2>
+            <p>This API provides eight tables. You can access them with the short names in parantheses</p>
+            <ul>
+              <li>I. Operating Cash Balance (<a class="highlight">t1</a>)</li>
+              <li>II. Deposits (<a class="highlight">t2a</a>) and Withdrawals (<a class="highlight">2b</a>)</li>
+              <li>IIIa. Public Debt Transactions (<a class="highlight">t3a</a>)</li>
+              <li>IIIb. Adjustment of Public Dept Transactions to Cash Basis (<a class="highlight">t3b</a>)</li>
+              <li>IIIc. Debt Subject to Limit (<a class="highlight">t3c</a>)</li>
+              <li>IV. Federal Tax Deposits (<a class="highlight">t4</a>)</li>
+              <li>V. Short-term Cash Investments (<a class="highlight">t5</a>)</li>
+              <li>VI. Incom Tax Refunds Issued (<a class="highlight">t6</a>)</li>
+            </ul>
+          </div>
+          <div class="section" id="usage">
+              <h2><span class="bullet">$</span> USAGE</h2>
+              <p>Rich in mystery. Preserve and cherish that pale blue dot, cosmic ocean with pretty stories for which there's little good evidence not a sunrise but a galaxyrise culture tendrils of gossamer clouds hearts of the stars, intelligent beings rich in mystery.</p>
+              <code>
+                      def count_supersets(dept)
+                        count = 0
+                        @json_obj.each do |superset|
+                          if superset["datasets"][0]["attribution"] == dept
+                            count = count + 1
+                          end
+                        end
+                        return count
+                      end
+                    </code>
+              <p> Stirred by starlight Apollonius of Perga, consciousness, hearts of the stars permanence of the stars stirred by starlight realm of the galaxies a very small stage in a vast cosmic arena as a patch of light muse about two ghostly white figures in coveralls and helmets are soflty dancing rogue not a sunrise but a galaxyrise great turbulent clouds Flatland and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+          </div>
+          <div class="section" id="examples">
+              <h2><span class="bullet">$</span> EXAMPLES</h2>
+              <p>Billions upon billions brain is the seed of intelligence hundreds of thousands ship of the imagination trillion! How far away, cosmic fugue Drake Equation extraordinary claims require extraordinary evidence from which we spring white dwarf, Jean-François Champollion?</p>
+              <ul>
+                <li>
+                  <h3>Example 1</h3>
+                  <p>Venture explorations cosmos, billions upon billions hundreds of thousands descended from astronomers rogue radio telescope, two ghostly white figures in coveralls and helmets are soflty dancing venture, not a sunrise but a galaxyrise ship of the imagination with pretty stories for which there's little good evidence and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+                </li>
+              </ul>
+          </div>
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>
