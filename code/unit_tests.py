@@ -6,29 +6,6 @@ import types
 import re
 import csv
 
-data_path = "/Users/brian/Dropbox/code/fms_parser/"
-os.chdir(data_path)
-# test_paths = [
-#     "11011400_t1.csv",
-#     "11102100_t2.csv",
-#     "11102100_t3.csv",
-#     "12080100_t4.csv",
-#     "11072000_t5.csv",
-#     "12042700_t6.csv",
-#     "12042700_t7.csv",
-#     "13020700_t8.csv"
-# ]
-# fps = [root+f for f in test_paths]
-
-# t1 = pd.read_csv(fps[0])
-# t2 = pd.read_csv(fps[1])
-# t3 = pd.read_csv(fps[2])
-# t4 = pd.read_csv(fps[3])
-# t5 = pd.read_csv(fps[4])
-# t6 = pd.read_csv(fps[5])
-# t7 = pd.read_csv(fps[6])
-# t8 = pd.read_csv(fps[7])
-
 # extract table_index
 def extract_tab_index(fp):
     fp_re = re.compile(r"[0-9]+_([a-z0-9]{2,3})\.csv")
@@ -219,7 +196,7 @@ cols = ['date', 'filepath', 'table', 'var_test', 'result', 'null_count', 'total_
 # output to csv.
 with open("test_output/test-2013-05-13.csv", "wb") as f:
     writer = csv.writer(f)
-    writer.writerow(cols)
+    writer.writerow()
     writer.writerows(o)
 
 
