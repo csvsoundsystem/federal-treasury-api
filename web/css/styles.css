@@ -127,6 +127,10 @@
           text-decoration: none;
           color: black;
         }
+
+        li a {
+          display: block;
+        }
         li:active, img:active {
           -moz-box-shadow: 0px 0px 0px 0px;
           -webkit-box-shadow: 0px 0px 0px 0px;
