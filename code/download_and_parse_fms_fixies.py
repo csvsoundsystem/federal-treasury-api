@@ -52,7 +52,7 @@ new_files = sorted(list(downloaded_files.difference(parsed_files())))
 # parse all teh fixies!
 for f in new_files:
 	fname = os.path.join(FIXIE_DIR, f+'.txt')
-	print '\n', fname
+	#print '\n', fname
 	dfs = parse_fms_fixies_2.parse_file(fname, verbose=False)
 
 	# each table for each date stored in separate csv files
