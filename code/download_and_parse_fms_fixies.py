@@ -271,7 +271,7 @@ for table in TABLES:
     df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%d.csv' % table['raw-table']))
     pandas.io.sql.write_frame(df, '_t%d' % table['raw-table'], connection)
     connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
-    connection.execute('ALTER TABLE "_t%d" RENAME TO "%s";' % (table['raw-table'], table['new-table'])
+    connection.execute('ALTER TABLE "_t%d" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
 
 # Table 4 and table 5 views
 connection.execute('''
