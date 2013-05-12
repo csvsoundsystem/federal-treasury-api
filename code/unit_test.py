@@ -57,7 +57,7 @@ def is_date(val):
         return None
     if isinstance(val, DATE):
         return True
-    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9{1,2}")==val.strftime("%Y-%m-%d"):
+    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}", datetime.strptime("%Y-%m-%d")):
         return True
     else:
         False
@@ -94,7 +94,7 @@ def test_wkdy(wkdy):
 
     if is_none(wkdy):
         return None
-    elif wkdy.strip() in WKDYS:
+    elif wkdy.strip() in frozenset(WKDYS):
         return True
     else:
         return False
@@ -105,10 +105,13 @@ def test_text_field(text):
 
 
 def test_col_match(tab, expected):
-    return [TRUE if c in frozenset(expected) else False for c in tab.columns()]
+    return all([TRUE if c in frozenset(expected) else False for c in tab.columns()])
+
+def apply_test(val, fx):
+    return all[fx(v) for v in val if v is not None and v is not ""]
 
 
-def test_table_columns(tab, tab_index, expected_cols):
+def test_table_columns(tab, tab_index):
 
     T1_COLS = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
     T2_COLS = T3_COLS = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
@@ -131,13 +134,40 @@ def test_table_columns(tab, tab_index, expected_cols):
         raise ValueError("tab index must be in \"t1\":\"t8\"")
 
 
-
-    for c in expected_cols:
+def test_table(tab, tab_index):
+    cols = [
+        'open_today',
+        'surtype',
+        'account',
+        'close_today',
+        'classification',
+        'item',
+        'footnote',
+        'open_fy',
+        'open_mo',
+        'subtype',
+        'mtd',
+        'is_total',
+        'date',
+        'table',
+        'type',
+        'day',
+        'today',
+        'fytd'
+    ]
+    tests = []
+    for c in cols:
         if c=="table":
-            tests.append(not all([test_table_name(v) for v in value]))
+            if tab_index=="t3":
+                tests.append(None)
+            else:
+                tests.append(apply_test[tab[c]])
         elif c=="date":
-            i t.
-            tests.append(is_date(t['table']))
+            tests.append(apply_test(tab['date'], is_date))
+        elif c=="open_today":
+            tests.append(is_num(v) for v in value if v is not None or v is not "")
+        elif c=="surtype":
+            tests.append()
 
 # split up
 bri_cols = [
@@ -152,15 +182,7 @@ bri_cols = [
     'open_mo',
 ]
 bur_cols = [
-    'subtype',
-    'mtd',
-    'is_total',
-    'date',
-    'table',
-    'type',
-    'day',
-    'today',
-    'fytd'
+
 
 
 # all fields
