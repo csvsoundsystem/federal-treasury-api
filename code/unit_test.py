@@ -1,6 +1,8 @@
 from datetime import datetime, date
 import pandas as pd
 import os
+from collections import defaultdict
+
 
 test_paths = [
     "11011400_t1.csv",
@@ -37,45 +39,35 @@ def is_none(val):
         False
 
 def is_str(val):
-    if is_none(val):
-        return None
-    elif isinstance(val, STR):
+    if isinstance(val, STR):
         return True
     else:
         return False
 
 def is_num(val):
-    if is_none(val):
-        return None
-    elif isinstance(val, NUM):
+    if isinstance(val, NUM):
         return True
     else:
         return False
 
 def is_date(val):
-    if is_none(val):
-        return None
     if isinstance(val, DATE):
         return True
-    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}", datetime.strptime("%Y-%m-%d")):
+    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}", datetime.strptime(val, "%Y-%m-%d")):
         return True
     else:
         False
 
 def is_bool(val):
-    if is_none(val):
-        return None
-    elif val in [0,1]:
+    if val in [0,1]:
         return True
     elif val in[True, False]:
         return True
     else:
         return False
 
-def test_table_name(table_name):
-    if is_none(table_name):
-        return None
-    if re.match("TABLE.*", table_name):
+def test_table_name(val):
+    if re.match("TABLE.*", val):
         return True
     else:
         return False
@@ -101,11 +93,14 @@ def test_wkdy(wkdy):
 
 def test_text_field(text):
     if is_str(text):
-        if re.match("[A-Za-z0-9_-]+", text):
+        if re.match("[A-Za-z0-9_-: ]+", text):
+            return True
+        else:
+            return False
 
 
 def test_col_match(tab, expected):
-    return all([TRUE if c in frozenset(expected) else False for c in tab.columns()])
+    return all([True if c in frozenset(expected) else False for c in tab.columns()])
 
 def apply_test(val, fx):
     return all[fx(v) for v in val if v is not None and v is not ""]
@@ -155,37 +150,81 @@ def test_table(tab, tab_index):
         'today',
         'fytd'
     ]
-    tests = []
+
+    tests = defaultdict(list)
+
     for c in cols:
+        the_key = "%s_%s" % tab_index, c
         if c=="table":
             if tab_index=="t3":
-                tests.append(None)
+                tests[].append(None)
             else:
-                tests.append(apply_test[tab[c]])
+                tests.append( apply_test[tab[c], is_table] )
+
         elif c=="date":
-            tests.append(apply_test(tab['date'], is_date))
+            tests.append(apply_test(tab[c], is_date))
+
         elif c=="open_today":
-            tests.append(is_num(v) for v in value if v is not None or v is not "")
+            tests.append(apply_test(tab[c], is_num))
+
         elif c=="surtype":
-            tests.append()
+            tests.append(apply_test(tab[c], is_str))
 
-# split up
-bri_cols = [
-    'open_today',
-    'surtype',
-    'account',
-    'close_today',
-    'classification',
-    'item',
-    'footnote',
-    'open_fy',
-    'open_mo',
-]
-bur_cols = [
+        elif c=="account":
+            tests.append(apply_test(tab[c], is_str))
+
+        elif c=="close_today":
+            tests[].append(apply_test(tab[c], is_num))
+
+        elif c=="classification":
+            tests[].append(apply_test(tab[c], is_str))
+
+        elif c=="item":
+            tests[].append(apply_test(tab[c], is_str))
+
+        elif c=="item":
+            tests[].append(apply_test(tab[c], is_str))
+
+        elif c=="footnote":
+            tests[].append(apply_test(tab[c], is_str))
+
+        elif c=="open_fy":
+            tests[the_key].append(apply_test(tab[c], is_num))
+
+        elif c=="open_mo":
+            tests[the_key].append(apply_test(tab[c], is_num))
+
+        elif c=="subtype":
+            tests[the_key].append(apply_test(tab[c], is_str))
+
+        elif c=="mtd":
+            tests[the_key].append(apply_test(tab[c], is_num))
+
+        elif c=="mtd":
+            tests[the_key].append(apply_test(tab[c], is_bool))
+
+        elif c=="day":
+            tests[the_key].append(apply_test(tab[c]), is_wkdy)
+
+        elif c=="type"
+            tests[the_key].append(apply_test(tab[c], is_str))
+
+        elif c=="today":
+            tests[the_key].append(apply_test(tab[c], is_num))
+
+        elif c=="fytd":
+             tests[the_key].append(apply_test(tab[c], is_num))
+
+        tests[tab_index+ "_cols"].append(test_table_columns(tab, tab_index))
+
+    return tests_for_table
 
 
 
-# all fields
+
+
+
+
 
 
 
