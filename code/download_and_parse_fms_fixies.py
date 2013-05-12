@@ -90,6 +90,26 @@ for i in range(1,9):
 			lifetime.write(line)
 		daily.close()
 
+
+csv_txt = r"""
+  ,----..    .--.--.               
+ /   /   \  /  /    '.       ,---. 
+|   :     :|  :  /`. /      /__./| 
+.   |  ;. /;  |  |--`  ,---.;  ; | 
+.   ; /--` |  :  ;_   /___/ \  | | 
+;   | ;     \  \    `.\   ;  \ ' | 
+|   : |      `----.   \\   \  \: | 
+.   | '___   __ \  \  | ;   \  ' . 
+'   ; : .'| /  /`--'  /  \   \   ' 
+'   | '/  :'--'.     /    \   `  ; 
+|   :    /   `--'---'      :   \ | 
+ \   \ .'                   '---"  
+  `---`                                                            
+"""
+print csv_txt
+print 'SOUNDSYSTEM'
+
+
 # we'll figure it out
 #sqlcon = sql.connect(os.path.join('..', 'data', 'lifetime_csv', 'NAME.db'))
 #pd_sql.write_frame(df, "tbldata2", sqlcon)
