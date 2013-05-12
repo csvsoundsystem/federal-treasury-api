@@ -41,7 +41,7 @@ def normalize_page_text(page):
 
 ################################################################################
 def get_footnote(line):
-	footnote = re.search(r'^\s*(\d)\/(.*)', line)
+	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
@@ -59,8 +59,7 @@ def parse_file(f_name, verbose=False):
 	# file metadata
 	date = get_date_and_day(f_name)[0]
 	day = get_date_and_day(f_name)[1]
-	print f_name
-	print date, ',', day
+	print f_name, '=>', date
 
 	dfs = {}
 	for page in pages[1:]:
@@ -114,8 +113,8 @@ def parse_page(page, page_index, date, day, verbose=False):
 			footnotes[footnote[0]] = footnote[1]
 			continue
 		# note rows with footnote markers for later assignment
-		if re.search(r'\d+\/ ', line):
-			row['footnote'] = re.search(r'(\d+)\/ ', line).group(1)
+		if re.search(r'\d+\/', line):
+			row['footnote'] = re.search(r'(\d+)\/', line).group(1)
 
 		# separate digits and words
 		digits = re.findall(r'(\d+)', line)
@@ -150,9 +149,9 @@ def parse_page(page, page_index, date, day, verbose=False):
 				try:
 					next_line = page[index + 1]
 					# check for footnotes, then note and erase them if present!
-					if re.search(r'\d+\/ ', next_line):
-						row['footnote'] = re.search(r'(\d+)\/ ', next_line).group(1)
-						next_line = re.sub(r'\d+\/ ', '', next_line)
+					if re.search(r'\d+\/', next_line):
+						row['footnote'] = re.search(r'(\d+)\/', next_line).group(1)
+						next_line = re.sub(r'\d+\/', '', next_line)
 					next_digits = re.findall(r'(\d+)', next_line)
 					next_words = re.findall(r'[^\W\d]+:?', next_line)
 					if len(next_digits) != 0:
@@ -227,14 +226,11 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 		table.append(row)
 
-
-	print footnotes
-
 	# assign footnotes to rows
 	# and split table III-a by surtype
 	for row in table:
 		if row.get('footnote'):
-			row['footnote'] = footnotes[row['footnote']]
+			row['footnote'] = footnotes.get(row['footnote'])
 		if row.get('item'):
 			if row['item'].lower().strip() == 'total issues':
 				surtype_index = table.index(row)
