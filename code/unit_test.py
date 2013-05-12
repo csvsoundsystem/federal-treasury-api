@@ -25,9 +25,7 @@ t5 = pd.read_csv(fps[4])
 t6 = pd.read_csv(fps[5])
 t7 = pd.read_csv(fps[6])
 
-
-NUM = (int, long, float, complex)
-STR = (str, unicode)
+NUM = (int, long, float)
 NONE = (types.NoneType)
 DATE = (datetime.date, datetime.datetime)
 SIMPLE = (int, long, float, complex, str, unicode, types.NoneType)
@@ -39,7 +37,7 @@ def is_none(val):
         False
 
 def is_str(val):
-    if isinstance(val, STR):
+    if isinstance(val, basestring):
         return True
     else:
         return False
