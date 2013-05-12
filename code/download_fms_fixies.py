@@ -70,7 +70,7 @@ def request_all_fixies(fnames):
 		for alt_fname in alt_fnames:
 			fixie = request_fixie(alt_fname)
 			if fixie:
-				f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'w', 'utf-8')
+				f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'wb', 'utf-8')
 				f.write(fixie)
 				f.close()
 				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
