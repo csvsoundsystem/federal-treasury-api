@@ -114,9 +114,11 @@ def execute_query(sql, dbname):
 
 @route('/')
 def index():
-    return 'GET /sql/SELECT+*+FROM+t1;'
+    return 'To query the database, go to <a href="/sql">/sql/:query</a>, where <em>query</em> is url-encoded. For example, you could run <a href="/sql/SELECT%20*%20FROM%20t1%20LIMIT%208;">SELECT * FROM t1 LIMIT 8;</a>.'
 
-@route('/sql/:sql')
+@route('/sql')
+@route('/sql/')
+@route('/sql/<sql>')
 def sql(sql='SELECT * FROM sqlite_master;'):
     dbname=os.path.join('data', 'fms.db')
     try:
