@@ -51,7 +51,7 @@ def get_footnote(line):
 ################################################################################
 def parse_file(f_name, verbose=True):
 
-	f = open(f_name, 'r').read()
+	f = open(f_name, 'rb').read()
 	raw_pages = re.split(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d\s{2}', f)
 	pages = []
 	for raw_page in raw_pages:
@@ -67,12 +67,12 @@ def parse_file(f_name, verbose=True):
 	dfs = {}
 	for page in pages[1:]:
 		page_index = pages.index(page)
-		dfs[page_index] = parse_page(page, page_index, date, day)
+		dfs[page_index] = parse_page(page, page_index, date, day, verbose=verbose)
 
 	return dfs
 
 ################################################################################
-def parse_page(page, page_index, date, day):
+def parse_page(page, page_index, date, day, verbose=True):
 
 	# page defaults
 	indent = 0

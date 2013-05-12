@@ -69,7 +69,7 @@ for i in range(1,9):
 
 	# if it doesn't exist
 	if not os.path.isfile(lifetime_csv):
-		lifetime = open(lifetime_csv, 'a')
+		lifetime = open(lifetime_csv, 'ab')
 		# add the header
 		lifetime.write(open(os.path.join(DAILY_CSV_DIR, list(parsed_files())[0]+'_t'+str(i)+'.csv')).readline())
 		lifetime.close()
@@ -82,8 +82,8 @@ for i in range(1,9):
 
 		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_t'+str(i)+'.csv')
 
-		lifetime = open(lifetime_csv, 'a')
-		daily = open(daily_csv, 'r')
+		lifetime = open(lifetime_csv, 'ab')
+		daily = open(daily_csv, 'rb')
 
 		daily.readline() # burn header
 		for line in daily:
