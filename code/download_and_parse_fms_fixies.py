@@ -115,9 +115,6 @@ print csv_txt
 print soundsystem_txt
 print '*http://csvsoundsystem.com/'
 
-
-# we'll figure it out
-connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
 TABLES = [
     {
         'raw-table': 1,
@@ -266,8 +263,11 @@ CREATE TABLE _t8 (
     },
 ]
 
+connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
+connection.text_factory = str # bad, but pandas doesn't work otherwise
+
 for table in TABLES:
-    connection.execute(table['schema'])
+    # connection.execute(table['schema'])
     df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%d.csv' % table['raw-table']))
     pandas.io.sql.write_frame(df, '_t%d' % table['raw-table'], connection)
     connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
