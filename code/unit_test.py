@@ -1,6 +1,7 @@
 from datetime import datetime, date
 import pandas as pd
 import os
+import types
 
 test_paths = [
     "11011400_t1.csv",
@@ -23,15 +24,14 @@ t5 = pd.read_csv(fps[4])
 t6 = pd.read_csv(fps[5])
 t7 = pd.read_csv(fps[6])
 
-
-NUM = (int, long, float, complex)
-STR = (str, unicode)
+NUM = (int, long, float)
+#STR = (str, unicode)
 NONE = (types.NoneType)
 DATE = (datetime.date, datetime.datetime)
-SIMPLE = (int, long, float, complex, str, unicode, types.NoneType)
+SIMPLE = (int, long, float, complex, basestring, types.NoneType)
 
 def is_none(val):
-    if isinstance(val, NONE) or val=="":
+    if val is None or val=="":
         return True
     else:
         False
@@ -39,7 +39,7 @@ def is_none(val):
 def is_str(val):
     if is_none(val):
         return None
-    elif isinstance(val, STR):
+    elif isinstance(val, basestring):
         return True
     else:
         return False
@@ -57,7 +57,7 @@ def is_date(val):
         return None
     if isinstance(val, DATE):
         return True
-    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9{1,2}")==val.strftime("%Y-%m-%d"):
+    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9]{1,2}", val.strftime("%Y-%m-%d")):
         return True
     else:
         False
@@ -67,7 +67,7 @@ def is_bool(val):
         return None
     elif val in [0,1]:
         return True
-    elif val in[True, False]:
+    elif val in [True, False]:
         return True
     else:
         return False
