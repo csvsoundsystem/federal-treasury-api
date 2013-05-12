@@ -103,8 +103,35 @@ def test_text_field(text):
     if is_str(text):
         if re.match("[A-Za-z0-9_-]+", text):
 
-def test_table(t, expected_cols):
-    tests = []
+
+def test_col_match(tab, expected):
+    return [TRUE if c in frozenset(expected) else False for c in tab.columns()]
+
+
+def test_table_columns(tab, tab_index, expected_cols):
+
+    T1_COLS = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
+    T2_COLS = T3_COLS = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+    T4_COLS = T5_COLS =  ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+    T6_COLS = ['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
+    T7_COLS = T8_COLS = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+
+    # text indiviable tables for proper columns
+    if tab_index=="t1":
+        return test_col_match(tab, T1_COLS)
+    elif tab_index in ["t2", "t3"]:
+        return test_col_match(tab, T2_COLS)
+    elif tab_index in ["t4", "t5"]:
+        return test_col_match(tab, T5_COLS)
+    elif tab_index=="t6":
+        return test_col_match(tab, T6_COLS)
+    elif tab_index in ["t7", "t8"]:
+        return test_col_match(tab, T7_COLS)
+    else:
+        raise ValueError("tab index must be in \"t1\":\"t8\"")
+
+
+
     for c in expected_cols:
         if c=="table":
             tests.append(not all([test_table_name(v) for v in value]))
@@ -138,11 +165,7 @@ bur_cols = [
 
 # all fields
 
-t1_cols = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
-t2_cols = t3_cols = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
-t4_cols = t5_cols =  ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
-t6_cols = ['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
-t7_cols = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+
 
 
 
