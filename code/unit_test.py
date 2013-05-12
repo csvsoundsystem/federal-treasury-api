@@ -1,19 +1,36 @@
-import datetime.datetime
-import datetime.date
+from datetime import datetime, date
+import pandas as pd
 
-import nose.tools as n
+test_paths = [
+    "11011400_t1.csv",
+    "11102100_t2.csv",
+    "11102100_t3.csv",
+    "12080100_t4.csv",
+    "11072000_t5.csv",
+    "12042700_t6.csv",
+    "12042700_t7.csv",
+    "13020700_t8.csv"
+]
+root = "fms_parser_data/daily_csv/"
+fps = list(os.listdir(root))
+fps = [root+f for f in test_paths]
 
-def test_get_table_name():
-	observed = get_table_name('jklsdfljkdsfjlkdsf')
-	expected = 'jlsdfnfnsllnksfnnenjo3494oiw3iow4io'
-	n.assert_string_equal(observed, expected)
+t1 = pd.read_csv(fps[0])
+t2 = pd.read_csv(fps[1])
+t3 = pd.read_csv(fps[2])
+t4 = pd.read_csv(fps[3])
+t5 = pd.read_csv(fps[4])
+t6 = pd.read_csv(fps[5])
+t7 = pd.read_csv(fps[6])
 
-from foo import parse_fixie
+    test(fixture)
 
-def test(datestamp):
-    observed = parse_fixie('data/fixies/' + datestamp)
-    expected = pandas.read_csv('data/fixtures/' + datestamp)
-    assert observed == expected, datestamp
+t1_cols = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
+t2_cols = t3_cols = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+t4_cols = t5_cols =  ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+t6_cols = ['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
+t7_cols = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+
 
 NUM = (int, long, float, complex)
 STR = (str, unicode)
@@ -21,31 +38,31 @@ NONE = (types.NoneType)
 DATE = (datetime.date, datetime.datetime)
 SIMPLE = (int, long, float, complex, str, unicode, types.NoneType)
 
-def test_none(val):
+def is_none(val):
     is isinstance(val, NONE) or val=="":
         return True
     else:
         False
 
-def test_str(val):
-    if test_none(val):
+def is_str(val):
+    if is_none(val):
         return None
     elif isinstance(val, STR):
         return True
     else:
         return False
 
-def test_num(val):
-    if test_none(val):
+def is_num(val):
+    if is_none(val):
         return None
     elif isinstance(val, NUM):
         return True
     else:
         return False
 
-def test_date(val):
-    if test_none(val):
-        return
+def is_date(val):
+    if is_none(val):
+        return None
     is isinstance(val, DATE):
         return True
     elif: re.match("[0-9]{4}-[0-9]{1,2}-[0-9{1,2}")==val.strftime("%Y-%m-%d"):
@@ -53,8 +70,8 @@ def test_date(val):
     else:
         False
 
-def test_bool(val):
-    if test_none(val):
+def is_bool(val):
+    if is_none(val):
         return None
     elif val in [0,1]:
         return True
@@ -64,21 +81,34 @@ def test_bool(val):
         return False
 
 def test_table_name(table_name):
+    is is_none(table_name):
+        return None
     if re.match("TABLE.*", table_name):
         return True
     else:
         return False
 
+def test_wkdy(wkdy):
+    WXDYS = [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Satuday",
+        "Sunday"
+    ]
+    if is_none(wkdy):
+        return None
+    elif wkdy.strip() in WKDYS:
+        return True
+    else:
+        return False
+
+def test_text_field(text):
+    if is_str(text):
+        if re.match()
 
 
-    test(fixture)
-if page_index == 1:
-    df = df.reindex(columns=['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
-if page_index in [2,3]:
-    df = df.reindex(columns=['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
-elif page_index in [4,5]:
-    df = df.reindex(columns=['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
-elif page_index == 6:
-    df = df.reindex(columns=['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
-elif page_index in [7,8]:
-    df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+
+
