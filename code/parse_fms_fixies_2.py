@@ -49,7 +49,7 @@ def get_footnote(line):
 	return footnote
 
 ################################################################################
-def parse_file(f_name):
+def parse_file(f_name, verbose=True):
 
 	f = open(f_name, 'r').read()
 	raw_pages = re.split(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d\s{2}', f)
@@ -187,7 +187,8 @@ def parse_page(page, page_index, date, day):
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 		elif page_index in [2, 3]:
 			try:
 				row['item'] = text
@@ -201,7 +202,8 @@ def parse_page(page, page_index, date, day):
 				elif page_index == 3:
 					row['type'] = 'withdrawal'
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 		elif page_index in [4, 5]:
 			try:
 				row['item'] = text
@@ -209,7 +211,8 @@ def parse_page(page, page_index, date, day):
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 		elif page_index in [7,8]:
 			try:
 				row['classification'] = text
@@ -217,7 +220,8 @@ def parse_page(page, page_index, date, day):
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 
 		table.append(row)
 

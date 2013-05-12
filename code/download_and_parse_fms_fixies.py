@@ -53,7 +53,7 @@ new_files = sorted(list(downloaded_files.difference(parsed_files())))
 for f in new_files:
 	fname = os.path.join(FIXIE_DIR, f+'.txt')
 	print '\n', fname
-	dfs = parse_fms_fixies_2.parse_file(fname)
+	dfs = parse_fms_fixies_2.parse_file(fname, verbose=False)
 
 	# each table for each date stored in separate csv files
 	for i, df in dfs.items():
@@ -89,6 +89,26 @@ for i in range(1,9):
 		for line in daily:
 			lifetime.write(line)
 		daily.close()
+
+
+csv_txt = r"""
+  ,----..    .--.--.               
+ /   /   \  /  /    '.       ,---. 
+|   :     :|  :  /`. /      /__./| 
+.   |  ;. /;  |  |--`  ,---.;  ; | 
+.   ; /--` |  :  ;_   /___/ \  | | 
+;   | ;     \  \    `.\   ;  \ ' | 
+|   : |      `----.   \\   \  \: | 
+.   | '___   __ \  \  | ;   \  ' . 
+'   ; : .'| /  /`--'  /  \   \   ' 
+'   | '/  :'--'.     /    \   `  ; 
+|   :    /   `--'---'      :   \ | 
+ \   \ .'                   '---"  
+  `---`                                                            
+"""
+print csv_txt
+print 'SOUNDSYSTEM'
+
 
 # we'll figure it out
 #sqlcon = sql.connect(os.path.join('..', 'data', 'lifetime_csv', 'NAME.db'))
