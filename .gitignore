@@ -2,3 +2,4 @@
 data/fms.db
 data/fms.db-journal
 *.pyc
+fms_parser_data/*
