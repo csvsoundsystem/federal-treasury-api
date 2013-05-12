@@ -6,7 +6,7 @@ import json
 import sqlite3
 
 import dumptruck
-from bottle import route, run, response
+from bottle import route, run, response, static_file
 
 class QueryError(Exception):
     """Exception during query processing."""
@@ -130,6 +130,10 @@ def sql(sql='SELECT * FROM sqlite_master;'):
     response.set_header('Content-Type', 'application/json; charset=utf-8')
     body = json.dumps(body,sort_keys=True,indent=2)
     return body
+
+@route('/csv/<filename>')
+def server_static(filename):
+    return static_file(filename, root=os.path.join('data', 'lifetime_csv'))
 
 # run(host='localhost', port=8080)
 
