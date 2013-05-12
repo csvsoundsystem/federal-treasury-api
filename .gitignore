@@ -3,3 +3,13 @@ data/fms.db
 data/fms.db-journal
 *.pyc
 fms_parser_data/*
+
+# ScraperWiki box
+.bash_history
+.lesshst
+.pip/
+.ssh/
+.viminfo
+env/
+scraperwiki.sqlite
+.sqlite_history

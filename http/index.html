@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>U.S. Treasury API</title>
+    <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
+    <style>
+        /* http://meyerweb.com/eric/tools/css/reset/
+           v2.0 | 20110126
+           License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        body{
+            background:url(
+                data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHElEQVQIW2Nkiaqr/7OsqZEBChhhDAwBmEoMFQBP1QgFqojs0QAAAABJRU5ErkJggg==
+                ) repeat;
+            background-color:#0992CC;
+            color:white;
+            font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
+        }
+      /*  h1 { background: #0992CC; font-size: 4rem; padding: 1.2rem;
+            color: #fff; font-family: "Blue Highway"; "Arial Black", sans-serif;
+            text-align: center; letter-spacing: 1rem;
+            text-shadow:0 .01em 0px #dededa,
+             0 .015em 0 #dededa,
+             0 .02em  0 #dededa,
+             0 .028em 0 #dededa,
+             0 .035em 0 #dededa,
+             0 .04em  0 #dededa,
+             0 .045em 0 #dbdbd6,
+             0 .055em 0 #dbdbd6,
+             0 .06em  0 #dbdbd6,
+             0 .065em 0 #d9d9d4,
+             0 .07em  0 #d9d9d4,
+             0 .08em  0 #d8d8d3,
+             0 .085em 0 #d8d8d3,
+             0 .09em  0 #d8d8d3,
+             0 .095em 0 #d6d6d1,
+             0 .105em 0 #d6d6d1,
+             0 .06em .06rem rgba(104, 104, 92, 0.15),
+             .07em .105em .04em rgba(0, 0, 0, .015),
+             -.02em .09em .05em rgba(104, 104, 92, 0.25),
+             -.03em .07em .065em rgba(104, 104, 92, 0.1),
+             -.075em .08em .09em rgba(104, 104, 92, 0.06),
+             -.09em .06em .195em rgba(104, 104, 92, 0.095);
+            }*/
+        ::selection {
+            background: #ffd700; /* Safari */
+            }
+        ::-moz-selection {
+            background: #ffd700; /* Firefox */
+        }
+        #wrapper{
+            width:960px;
+        }
+        #title{
+            position:fixed;
+            top: 40px;
+            left: 18px;
+            color:white;
+            letter-spacing: 1px;
+            font-size: 22px;
+            font-weight: bold;
+            font-family: "Open Sans", Helvetica, sans-serif;
+        }
+        nav{
+            position: fixed;
+            top: 110px;
+            left:90px;
+        }
+        ul li:nth-child(1), ul li:nth-child(2){
+          margin: 10px 0;
+        }
+        #section-wrapper{
+            margin-left:250px;
+            margin-top:102px;
+        }
+        .section{
+            font-size:15px;
+            line-height: 24px;
+            margin: 20px;
+        }
+        .section h2, h3{
+            letter-spacing: 2;
+            font-weight:bold;
+            margin: 20px 0;
+            font-family: "Open Sans", Helvetica, sans-serif;
+            font-size: 30px;
+            letter-spacing: 2px;
+        }
+        h3 {
+          font-size: 15px;
+          letter-spacing: 1px;
+        }
+        .nav-item {
+          font-family: "Open Sans", sans-serif;
+          font-weight: 800;
+          letter-spacing: 2px;
+          color: black;
+          text-transform: uppercase;
+          border: 3px solid;
+          padding: 0.5em 0.75em;
+          -moz-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          -webkit-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          position: relative; 
+          background: #d7d7d7;
+          display: block;
+          text-align: center;
+        }
+
+        .nav-item:hover {
+          background: white;
+        }
+        a {
+          text-decoration: none;
+          color: black;
+        }
+        li:active {
+          -moz-box-shadow: 0px 0px 0px 0px;
+          -webkit-box-shadow: 0px 0px 0px 0px;
+          box-shadow: 0px 0px 0px 0px;
+          top: 5px;
+          left: 5px; 
+        }
+        .nav-item.active {
+          background-color: white;
+          color: black;
+        }
+        code {
+          background-color: white;
+          border: 3px solid black;
+          color: black;
+          display: block;
+          padding: 10px 15px;
+          margin: 10px -15px;
+          font-family: monospace;
+        }
+
+        .section li {
+          margin-left: 20px;
+        }
+
+        .highlight {
+          background: white;
+          font-weight: 700;
+          color: black;
+          padding: 3px 5px;
+        }
+
+        .highlight:hover {
+          background: black;
+          color: white;
+        }
+
+        img.nav-item {
+          background: white;
+          border: 3px black solid;
+          width: 150px;
+          padding: 0;
+        }
+}
+    </style>
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:800,400,300", rel="stylesheet", type="text/css"/>
+</head>
+<body>
+    <div id="wrapper">
+        <h1 id="title"><strong>U.S. Treasury API</strong></h1>
+        <nav>
+            <a href="#"><img class="nav-item" src="flag.png"></a>
+            <ul>
+                <li class="nav-item active"><a href="#about">About</a></li>
+                <li class="nav-item"><a href="#usage">Usage</a></li>
+                <li class="nav-item"><a href="#examples">Examples</a></li>
+            <ul>
+        </nav>
+
+        <div id="section-wrapper">
+          <div class="section" id="about">
+              <h2>ABOUT</h2>
+              <p>Retro synth direct trade <a class="highlight">flexitarian</a>, helvetica godard tumblr selvage keffiyeh vegan 8-bit iphone shoreditch. Fanny pack viral lo-fi polaroid, odd future marfa high life chillwave. Fanny pack echo park cardigan street art. Pitchfork occupy cray semiotics. Pickled +1 single-origin coffee, polaroid marfa <a class="highlight">flexitarian</a> authentic carles tumblr bicycle rights photo booth. Shoreditch irony 8-bit, swag jean shorts PBR quinoa high life beard lo-fi trust fund cosby sweater. Squid mcsweeneys small batch ennui banh mi.</p>
+          </div>
+          <div class="section" id="tables">
+            <h2>Tables</h2>
+            <p>This API provides eight tables. You can access them with the short names in parantheses</p>
+            <ul>
+              <li>I. Operating Cash Balance (<a class="highlight">t1</a>)</li>
+              <li>II. Deposits (<a class="highlight">t2a</a>) and Withdrawals (<a class="highlight">2b</a>)</li>
+              <li>IIIa. Public Debt Transactions (<a class="highlight">t3a</a>)</li>
+              <li>IIIb. Adjustment of Public Dept Transactions to Cash Basis (<a class="highlight">t3b</a>)</li>
+              <li>IIIc. Debt Subject to Limit (<a class="highlight">t3c</a>)</li>
+              <li>IV. Federal Tax Deposits (<a class="highlight">t4</a>)</li>
+              <li>V. Short-term Cash Investments (<a class="highlight">t5</a>)</li>
+              <li>VI. Incom Tax Refunds Issued (<a class="highlight">t6</a>)</li>
+            </ul>
+          </div>
+          <div class="section" id="usage">
+              <h2>USAGE</h2>
+              <p>Rich in mystery. Preserve and cherish that pale blue dot, cosmic ocean with pretty stories for which there's little good evidence not a sunrise but a galaxyrise culture tendrils of gossamer clouds hearts of the stars, intelligent beings rich in mystery. Stirred by starlight Apollonius of Perga, consciousness, hearts of the stars permanence of the stars stirred by starlight realm of the galaxies a very small stage in a vast cosmic arena as a patch of light muse about two ghostly white figures in coveralls and helmets are soflty dancing rogue not a sunrise but a galaxyrise great turbulent clouds Flatland and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+          </div>
+          <div class="section" id="examples">
+              <h2>EXAMPLES</h2>
+              <p>Billions upon billions brain is the seed of intelligence hundreds of thousands ship of the imagination trillion! How far away, cosmic fugue Drake Equation extraordinary claims require extraordinary evidence from which we spring white dwarf, Jean-François Champollion?</p>
+              <ul>
+                <li>
+                  <h3>Example 1</h3>
+                  <p>Venture explorations cosmos, billions upon billions hundreds of thousands descended from astronomers rogue radio telescope, two ghostly white figures in coveralls and helmets are soflty dancing venture, not a sunrise but a galaxyrise ship of the imagination with pretty stories for which there's little good evidence and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+                    <code>
+                      def count_supersets(dept)
+                        count = 0
+                        @json_obj.each do |superset|
+                          if superset["datasets"][0]["attribution"] == dept
+                            count = count + 1
+                          end
+                        end
+                        return count
+                      end
+                    </code>
+                </li>
+              </ul>
+          </div>
+        </div>
+
+
+
+    </div>
+
+</body>
+</html>

@@ -41,15 +41,13 @@ def normalize_page_text(page):
 
 ################################################################################
 def get_footnote(line):
-	try:
-		footnote_match = re.search(r'^\s?(\d)\/(.*)', line)
-		footnote = [footnote_match.group(1), footnote_match.group(2)]
-	except AttributeError:
-		footnote = None
-	return footnote
+	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
+	if footnote:
+		return [footnote.group(1), footnote.group(2)]
+	return None
 
 ################################################################################
-def parse_file(f_name, verbose=True):
+def parse_file(f_name, verbose=False):
 
 	f = open(f_name, 'rb').read()
 	raw_pages = re.split(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d\s{2}', f)
@@ -61,8 +59,7 @@ def parse_file(f_name, verbose=True):
 	# file metadata
 	date = get_date_and_day(f_name)[0]
 	day = get_date_and_day(f_name)[1]
-	print f_name
-	print date, ',', day
+	print f_name, '=>', date
 
 	dfs = {}
 	for page in pages[1:]:
@@ -72,7 +69,7 @@ def parse_file(f_name, verbose=True):
 	return dfs
 
 ################################################################################
-def parse_page(page, page_index, date, day, verbose=True):
+def parse_page(page, page_index, date, day, verbose=False):
 
 	# page defaults
 	indent = 0
@@ -115,9 +112,9 @@ def parse_page(page, page_index, date, day, verbose=True):
 			footnote = get_footnote(line)
 			footnotes[footnote[0]] = footnote[1]
 			continue
-		# note rows with footnotes for later assignment
-		if re.search(r'\d\/ ', line):
-			row['footnote'] = re.search(r'(\d)\/ ', line).group(1)
+		# note rows with footnote markers for later assignment
+		if re.search(r'\d+\/', line):
+			row['footnote'] = re.search(r'(\d+)\/', line).group(1)
 
 		# separate digits and words
 		digits = re.findall(r'(\d+)', line)
@@ -151,6 +148,10 @@ def parse_page(page, page_index, date, day, verbose=True):
 			if two_line_delta == 1 or page_index != 1:
 				try:
 					next_line = page[index + 1]
+					# check for footnotes, then note and erase them if present!
+					if re.search(r'\d+\/', next_line):
+						row['footnote'] = re.search(r'(\d+)\/', next_line).group(1)
+						next_line = re.sub(r'\d+\/', '', next_line)
 					next_digits = re.findall(r'(\d+)', next_line)
 					next_words = re.findall(r'[^\W\d]+:?', next_line)
 					if len(next_digits) != 0:
@@ -226,17 +227,14 @@ def parse_page(page, page_index, date, day, verbose=True):
 		table.append(row)
 
 	# assign footnotes to rows
+	# and split table III-a by surtype
 	for row in table:
-		try:
-			row['footnote'] = footnotes[row['footnote']]
-		except KeyError:
-			pass
-		try:
+		if row.get('footnote'):
+			row['footnote'] = footnotes.get(row['footnote'])
+		if row.get('item'):
 			if row['item'].lower().strip() == 'total issues':
 				surtype_index = table.index(row)
 				row['surtype'] = 'issue'
-		except KeyError:
-			pass
 
 	# after-the-fact surtype assignment
 	if surtype_index != -1:
