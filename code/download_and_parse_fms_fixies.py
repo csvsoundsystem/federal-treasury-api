@@ -113,6 +113,7 @@ soundsystem_txt = r"""
 """
 print csv_txt
 print soundsystem_txt
+print '*http://csvsoundsystem.com/'
 
 
 # we'll figure it out
