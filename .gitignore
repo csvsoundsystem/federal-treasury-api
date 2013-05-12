@@ -12,3 +12,4 @@ fms_parser_data/*
 .viminfo
 env/
 scraperwiki.sqlite
+.sqlite_history
