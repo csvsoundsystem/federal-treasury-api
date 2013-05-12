@@ -36,6 +36,6 @@ There are eight tables.
 * IIIa. Public Debt Transactions (`t3a`)
 * IIIb. Adjustment of Public Dept Transactions to Cash Basis (`t3b`)
 * IIIc. Debt Subject to Limit (`t3c`)
-* IV. Federal Tax Deposits (first half of `t4_t5`)
-* V. Short-term Cash Investments (second half of `t4_t5`)
+* IV. Federal Tax Deposits (`t4`)
+* V. Short-term Cash Investments (`t5`)
 * VI. Incom Tax Refunds Issued (`t6`)
