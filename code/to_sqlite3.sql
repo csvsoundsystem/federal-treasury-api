@@ -63,7 +63,7 @@ CREATE TABLE _t4 (
   "footnote"
 );
 
-CREATE TABLE _t4 (
+CREATE TABLE _t5 (
   "table" TEXT NOT NULL,
   "date" TEXT NOT NULL,
   "day" TEXT NOT NULL,
