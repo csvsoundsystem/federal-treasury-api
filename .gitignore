@@ -11,5 +11,4 @@ fms_parser_data/*
 .ssh/
 .viminfo
 env/
-scraperwiki.sqlite
 .sqlite_history
