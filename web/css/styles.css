@@ -174,3 +174,14 @@
         .bullet {
           color: black;
         }
+
+        footer {
+          background: black;
+          color: white;
+          padding:20px;
+          margin-top: 100px;
+        }
+
+        footer p {
+          margin-top: 40px;
+        }
