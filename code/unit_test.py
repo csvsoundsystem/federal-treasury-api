@@ -1,5 +1,6 @@
 from datetime import datetime, date
 import pandas as pd
+import os
 
 test_paths = [
     "11011400_t1.csv",
@@ -12,7 +13,6 @@ test_paths = [
     "13020700_t8.csv"
 ]
 root = "fms_parser_data/daily_csv/"
-fps = list(os.listdir(root))
 fps = [root+f for f in test_paths]
 
 t1 = pd.read_csv(fps[0])
@@ -23,14 +23,6 @@ t5 = pd.read_csv(fps[4])
 t6 = pd.read_csv(fps[5])
 t7 = pd.read_csv(fps[6])
 
-    test(fixture)
-
-t1_cols = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
-t2_cols = t3_cols = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
-t4_cols = t5_cols =  ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
-t6_cols = ['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
-t7_cols = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
-
 
 NUM = (int, long, float, complex)
 STR = (str, unicode)
@@ -39,7 +31,7 @@ DATE = (datetime.date, datetime.datetime)
 SIMPLE = (int, long, float, complex, str, unicode, types.NoneType)
 
 def is_none(val):
-    is isinstance(val, NONE) or val=="":
+    if isinstance(val, NONE) or val=="":
         return True
     else:
         False
@@ -63,9 +55,9 @@ def is_num(val):
 def is_date(val):
     if is_none(val):
         return None
-    is isinstance(val, DATE):
+    if isinstance(val, DATE):
         return True
-    elif: re.match("[0-9]{4}-[0-9]{1,2}-[0-9{1,2}")==val.strftime("%Y-%m-%d"):
+    elif re.match("[0-9]{4}-[0-9]{1,2}-[0-9{1,2}")==val.strftime("%Y-%m-%d"):
         return True
     else:
         False
@@ -81,7 +73,7 @@ def is_bool(val):
         return False
 
 def test_table_name(table_name):
-    is is_none(table_name):
+    if is_none(table_name):
         return None
     if re.match("TABLE.*", table_name):
         return True
@@ -89,6 +81,7 @@ def test_table_name(table_name):
         return False
 
 def test_wkdy(wkdy):
+
     WXDYS = [
         "Monday",
         "Tuesday",
@@ -98,6 +91,7 @@ def test_wkdy(wkdy):
         "Satuday",
         "Sunday"
     ]
+
     if is_none(wkdy):
         return None
     elif wkdy.strip() in WKDYS:
@@ -107,8 +101,48 @@ def test_wkdy(wkdy):
 
 def test_text_field(text):
     if is_str(text):
-        if re.match()
+        if re.match("[A-Za-z0-9_-]+", text):
 
+def test_table(t, expected_cols):
+    tests = []
+    for c in expected_cols:
+        if c=="table":
+            tests.append(not all([test_table_name(v) for v in value]))
+        elif c=="date":
+            i t.
+            tests.append(is_date(t['table']))
+
+# split up
+bri_cols = [
+    'open_today',
+    'surtype',
+    'account',
+    'close_today',
+    'classification',
+    'item',
+    'footnote',
+    'open_fy',
+    'open_mo',
+]
+bur_cols = [
+    'subtype',
+    'mtd',
+    'is_total',
+    'date',
+    'table',
+    'type',
+    'day',
+    'today',
+    'fytd'
+
+
+# all fields
+
+t1_cols = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
+t2_cols = t3_cols = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+t4_cols = t5_cols =  ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+t6_cols = ['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
+t7_cols = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
 
 
 
