@@ -1,4 +1,9 @@
 ## Running
+Optionally set up a virtualenv. (You need this on ScraperWiki.)
+Run this from the root of the current repository.
+
+    virtualenv env
+
 Install dependencies.
 
     pip install -r requirements.pip
