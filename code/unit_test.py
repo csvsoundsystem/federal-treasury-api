@@ -1,8 +1,8 @@
-from datetime import datetime, date
+from datetime import datetime
 import pandas as pd
 import os
 from collections import defaultdict
-
+import types
 
 test_paths = [
     "11011400_t1.csv",
@@ -24,10 +24,13 @@ t4 = pd.read_csv(fps[3])
 t5 = pd.read_csv(fps[4])
 t6 = pd.read_csv(fps[5])
 t7 = pd.read_csv(fps[6])
+t8 = pd.read_csv(fps[7])
 
-NUM = (int, long, float)
+# TYPES
+NUM = (int, long, float, complex)
+STR = (str, unicode)
 NONE = (types.NoneType)
-DATE = (datetime.date, datetime.datetime)
+DATE = (datetime)
 SIMPLE = (int, long, float, complex, str, unicode, types.NoneType)
 
 def is_none(val):
@@ -37,7 +40,7 @@ def is_none(val):
         False
 
 def is_str(val):
-    if isinstance(val, basestring):
+    if isinstance(val, STR):
         return True
     else:
         return False
@@ -96,33 +99,32 @@ def test_text_field(text):
         else:
             return False
 
-
 def test_col_match(tab, expected):
-    return all([True if c in frozenset(expected) else False for c in tab.columns()])
+    return all([True if c in frozenset(expected) else False for c in tab.keys()])
 
 def apply_test(val, fx):
-    return all[fx(v) for v in val if v is not None and v is not ""]
+    return all([fx(v) for v in val if not is_none(v)])
 
 
 def test_table_columns(tab, tab_index):
 
     T1_COLS = ['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
-    T2_COLS = T3_COLS = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
-    T4_COLS = T5_COLS =  ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+    T23_COLS = ['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+    T45_COLS = ['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
     T6_COLS = ['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote']
-    T7_COLS = T8_COLS = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+    T78_COLS = ['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
 
     # text indiviable tables for proper columns
     if tab_index=="t1":
         return test_col_match(tab, T1_COLS)
     elif tab_index in ["t2", "t3"]:
-        return test_col_match(tab, T2_COLS)
+        return test_col_match(tab, T23_COLS)
     elif tab_index in ["t4", "t5"]:
-        return test_col_match(tab, T5_COLS)
+        return test_col_match(tab, T45_COLS)
     elif tab_index=="t6":
         return test_col_match(tab, T6_COLS)
     elif tab_index in ["t7", "t8"]:
-        return test_col_match(tab, T7_COLS)
+        return test_col_match(tab, T78_COLS)
     else:
         raise ValueError("tab index must be in \"t1\":\"t8\"")
 
@@ -152,39 +154,37 @@ def test_table(tab, tab_index):
     tests = defaultdict(list)
 
     for c in cols:
-        the_key = "%s_%s" % tab_index, c
+        the_key = "%s_%s" % (tab_index, c)
+
         if c=="table":
             if tab_index=="t3":
-                tests[].append(None)
+                tests[the_key].append(None)
             else:
-                tests.append( apply_test[tab[c], is_table] )
+                tests[the_key].append(apply_test(tab[c], is_table))
 
         elif c=="date":
-            tests.append(apply_test(tab[c], is_date))
+            tests[the_key].append(apply_test(tab[c], is_date))
 
         elif c=="open_today":
-            tests.append(apply_test(tab[c], is_num))
+            tests[the_key].append(apply_test(tab[c], is_num))
 
         elif c=="surtype":
-            tests.append(apply_test(tab[c], is_str))
+            tests[the_key].append(apply_test(tab[c], test_text_field))
 
         elif c=="account":
-            tests.append(apply_test(tab[c], is_str))
+            tests[the_key].append(apply_test(tab[c], test_text_field))
 
         elif c=="close_today":
-            tests[].append(apply_test(tab[c], is_num))
+            tests[the_key].append(apply_test(tab[c], is_num))
 
         elif c=="classification":
-            tests[].append(apply_test(tab[c], is_str))
+            tests[the_key].append(apply_test(tab[c], is_str))
 
         elif c=="item":
-            tests[].append(apply_test(tab[c], is_str))
-
-        elif c=="item":
-            tests[].append(apply_test(tab[c], is_str))
+            tests[the_key].append(apply_test(tab[c], is_str))
 
         elif c=="footnote":
-            tests[].append(apply_test(tab[c], is_str))
+            tests[the_key].append(apply_test(tab[c], is_str))
 
         elif c=="open_fy":
             tests[the_key].append(apply_test(tab[c], is_num))
@@ -204,7 +204,7 @@ def test_table(tab, tab_index):
         elif c=="day":
             tests[the_key].append(apply_test(tab[c]), is_wkdy)
 
-        elif c=="type"
+        elif c=="type":
             tests[the_key].append(apply_test(tab[c], is_str))
 
         elif c=="today":
@@ -213,9 +213,10 @@ def test_table(tab, tab_index):
         elif c=="fytd":
              tests[the_key].append(apply_test(tab[c], is_num))
 
-        tests[tab_index+ "_cols"].append(test_table_columns(tab, tab_index))
 
-    return tests_for_table
+        tests[tab_index+"_cols"].append(test_table_columns(tab, tab_index))
+
+    return tests
 
 
 
