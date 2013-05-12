@@ -1,0 +1,24 @@
+rm(list=ls())
+setwd("~/Dropbox/code/fms_parser")
+library("plyr")
+d = read.csv("test_output/test-2013-05-13.csv", header=TRUE, as.is=TRUE)
+head(d)
+
+
+plot_data <- ddply(d, "date", function(x) {
+    nulls <- sum(na.omit(x$null_count[x$var_test]))
+    # ratio = nulls / sum(na.omit(x$total_count))
+    return(nulls)
+    })
+plot_data$date <- as.Date(plot_data$date)
+plot(plot_data$date, plot_data$V1, type="l")
+
+for (t in unique(d$table)){
+    df = d[d$table==t,]
+
+
+t = ddply(d, "var_test", function(x) {
+    nrow(x[which(x$null_count>0),]) / nrow(x)
+    })
+par(cex=0.5)
+barplot(t$V1, names.arg=t$var_test, main="percentage of tables in which variables have 1 or more null value")
