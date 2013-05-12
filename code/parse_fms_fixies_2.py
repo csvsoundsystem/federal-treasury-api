@@ -260,5 +260,26 @@ def parse_page(page, page_index, date, day):
 	elif page_index in [7,8]:
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 
+	# table: string
+	# date: string, in standard YYYY-MM-DD format
+	# day: string, full name of day
+	# account: string, name of associated account
+	# surtype: string, e.g. 'issue' or 'redemption'
+	# type: string, e.g. 'deposit' or 'withdrawal'
+	# subtype: string, e.g. 'deposits by states' or 'other withdrawals'
+	# classification: string, class of taxes
+	# item: string, name of line item, e.g. 'Energy Department programs' or 'Postal service'
+	# account: string
+	# is_total: int, 0 if False (is not a total) and 1 if True (is a total)
+	# today: int
+	# mtd: int, month-to-date
+	# ytd: int, year-to-date
+	# fytd: int, fiscal-year-to-date
+	# close_today: int
+	# open_today: int
+	# open_mo: int
+	# open_fy: int
+	# footnote: string
+
 	return df
 
