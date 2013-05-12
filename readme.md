@@ -1,7 +1,15 @@
 ## Running
+Install dependencies.
+
+    pip install -r requirements.pip
+
 This one command downloads the (new) fixies and converts them to an SQLite3 database.
 
     ./run
+
+Then serve the web api like so.
+
+    ./api.py
 
 ## Scheduling
 Run this to schedule the above script to run daily.
