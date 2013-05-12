@@ -71,24 +71,26 @@
         #title{
             position:fixed;
             top: 40px;
-            left: 18px;
+            left: 50px;
             color:white;
             letter-spacing: 1px;
-            font-size: 22px;
-            font-weight: bold;
+            font-size: 80px;
+            font-weight: 800;
             font-family: "Open Sans", Helvetica, sans-serif;
+            text-shadow: 6px 6px black, 5px 5px black, 4px 4px black, 3px 3px black, 2px 2px black, 1px 1px black;
+            -webkit-text-stroke: 3px black;
         }
         nav{
             position: fixed;
-            top: 110px;
+            top: 150px;
             left:90px;
         }
         ul li:nth-child(1), ul li:nth-child(2){
           margin: 10px 0;
         }
         #section-wrapper{
-            margin-left:250px;
-            margin-top:102px;
+            margin-left:280px;
+            margin-top:180px;
         }
         .section{
             font-size:15px;
@@ -174,13 +176,17 @@
           width: 150px;
           padding: 0;
         }
+
+        .bullet {
+          color: black;
+        }
 }
     </style>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:800,400,300", rel="stylesheet", type="text/css"/>
 </head>
 <body>
     <div id="wrapper">
-        <h1 id="title"><strong>U.S. Treasury API</strong></h1>
+        <h1 id="title"><strong>TREASURY.IO</strong></h1>
         <nav>
             <a href="#"><img class="nav-item" src="flag.png"></a>
             <ul>
@@ -192,21 +198,13 @@
 
         <div id="section-wrapper">
           <div class="section" id="about">
-              <h2>ABOUT</h2>
+              <h2><span class="bullet">$</span> ABOUT</h2>
               <p>Retro synth direct trade <a class="highlight">flexitarian</a>, helvetica godard tumblr selvage keffiyeh vegan 8-bit iphone shoreditch. Fanny pack viral lo-fi polaroid, odd future marfa high life chillwave. Fanny pack echo park cardigan street art. Pitchfork occupy cray semiotics. Pickled +1 single-origin coffee, polaroid marfa <a class="highlight">flexitarian</a> authentic carles tumblr bicycle rights photo booth. Shoreditch irony 8-bit, swag jean shorts PBR quinoa high life beard lo-fi trust fund cosby sweater. Squid mcsweeneys small batch ennui banh mi.</p>
           </div>
           <div class="section" id="usage">
-              <h2>USAGE</h2>
-              <p>Rich in mystery. Preserve and cherish that pale blue dot, cosmic ocean with pretty stories for which there's little good evidence not a sunrise but a galaxyrise culture tendrils of gossamer clouds hearts of the stars, intelligent beings rich in mystery. Stirred by starlight Apollonius of Perga, consciousness, hearts of the stars permanence of the stars stirred by starlight realm of the galaxies a very small stage in a vast cosmic arena as a patch of light muse about two ghostly white figures in coveralls and helmets are soflty dancing rogue not a sunrise but a galaxyrise great turbulent clouds Flatland and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
-          </div>
-          <div class="section" id="examples">
-              <h2>EXAMPLES</h2>
-              <p>Billions upon billions brain is the seed of intelligence hundreds of thousands ship of the imagination trillion! How far away, cosmic fugue Drake Equation extraordinary claims require extraordinary evidence from which we spring white dwarf, Jean-François Champollion?</p>
-              <ul>
-                <li>
-                  <h3>Example 1</h3>
-                  <p>Venture explorations cosmos, billions upon billions hundreds of thousands descended from astronomers rogue radio telescope, two ghostly white figures in coveralls and helmets are soflty dancing venture, not a sunrise but a galaxyrise ship of the imagination with pretty stories for which there's little good evidence and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
-                    <code>
+              <h2><span class="bullet">$</span> USAGE</h2>
+              <p>Rich in mystery. Preserve and cherish that pale blue dot, cosmic ocean with pretty stories for which there's little good evidence not a sunrise but a galaxyrise culture tendrils of gossamer clouds hearts of the stars, intelligent beings rich in mystery.</p>
+              <code>
                       def count_supersets(dept)
                         count = 0
                         @json_obj.each do |superset|
@@ -217,6 +215,15 @@
                         return count
                       end
                     </code>
+              <p> Stirred by starlight Apollonius of Perga, consciousness, hearts of the stars permanence of the stars stirred by starlight realm of the galaxies a very small stage in a vast cosmic arena as a patch of light muse about two ghostly white figures in coveralls and helmets are soflty dancing rogue not a sunrise but a galaxyrise great turbulent clouds Flatland and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+          </div>
+          <div class="section" id="examples">
+              <h2><span class="bullet">$</span> EXAMPLES</h2>
+              <p>Billions upon billions brain is the seed of intelligence hundreds of thousands ship of the imagination trillion! How far away, cosmic fugue Drake Equation extraordinary claims require extraordinary evidence from which we spring white dwarf, Jean-François Champollion?</p>
+              <ul>
+                <li>
+                  <h3>Example 1</h3>
+                  <p>Venture explorations cosmos, billions upon billions hundreds of thousands descended from astronomers rogue radio telescope, two ghostly white figures in coveralls and helmets are soflty dancing venture, not a sunrise but a galaxyrise ship of the imagination with pretty stories for which there's little good evidence and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
                 </li>
               </ul>
           </div>
