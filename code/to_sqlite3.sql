@@ -63,7 +63,7 @@ CREATE TABLE _t4 (
   "footnote"
 );
 
-CREATE TABLE _t4 (
+CREATE TABLE _t5 (
   "table" TEXT NOT NULL,
   "date" TEXT NOT NULL,
   "day" TEXT NOT NULL,
@@ -119,33 +119,41 @@ CREATE TABLE _t8 (
 );
 
 .import '../data/lifetime_csv/table_1.csv' _t1
+DELETE FROM _t1 WHERE rowid = 1;
 DROP TABLE IF EXISTS t1;
 ALTER TABLE _t1 RENAME TO t1;
 
 .import '../data/lifetime_csv/table_2.csv' _t2
+DELETE FROM _t2 WHERE rowid = 1;
 DROP TABLE IF EXISTS t2;
 ALTER TABLE _t2 RENAME TO t2;
 
 .import '../data/lifetime_csv/table_3.csv' _t3
+DELETE FROM _t3 WHERE rowid = 1;
 DROP TABLE IF EXISTS t3a;
 ALTER TABLE _t3 RENAME TO t3a;
 
 .import '../data/lifetime_csv/table_4.csv' _t4
+DELETE FROM _t4 WHERE rowid = 1;
 DROP TABLE IF EXISTS t3b;
 ALTER TABLE _t4 RENAME TO t3b;
 
 .import '../data/lifetime_csv/table_5.csv' _t5
+DELETE FROM _t5 WHERE rowid = 1;
 DROP TABLE IF EXISTS t3c;
 ALTER TABLE _t5 RENAME TO t3c;
 
 .import '../data/lifetime_csv/table_6.csv' _t6
+DELETE FROM _t6 WHERE rowid = 1;
 DROP TABLE IF EXISTS t4;
 ALTER TABLE _t6 RENAME TO t4;
 
 .import '../data/lifetime_csv/table_7.csv' _t7
+DELETE FROM _t7 WHERE rowid = 1;
 DROP TABLE IF EXISTS t5;
 ALTER TABLE _t7 RENAME TO t5;
 
 .import '../data/lifetime_csv/table_8.csv' _t8
+DELETE FROM _t8 WHERE rowid = 1;
 DROP TABLE IF EXISTS t6;
 ALTER TABLE _t8 RENAME TO t6;

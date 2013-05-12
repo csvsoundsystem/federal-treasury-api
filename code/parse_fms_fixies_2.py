@@ -1,9 +1,7 @@
 
 import collections
 import datetime
-import numpy as np
 import pandas as pd
-from pprint import pprint
 import re
 import StringIO
 
@@ -51,7 +49,7 @@ def get_footnote(line):
 	return footnote
 
 ################################################################################
-def parse_file(f_name):
+def parse_file(f_name, verbose=True):
 
 	f = open(f_name, 'r').read()
 	raw_pages = re.split(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d\s{2}', f)
@@ -189,7 +187,8 @@ def parse_page(page, page_index, date, day):
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 		elif page_index in [2, 3]:
 			try:
 				row['item'] = text
@@ -203,7 +202,8 @@ def parse_page(page, page_index, date, day):
 				elif page_index == 3:
 					row['type'] = 'withdrawal'
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 		elif page_index in [4, 5]:
 			try:
 				row['item'] = text
@@ -211,7 +211,8 @@ def parse_page(page, page_index, date, day):
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 		elif page_index in [7,8]:
 			try:
 				row['classification'] = text
@@ -219,7 +220,8 @@ def parse_page(page, page_index, date, day):
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 			except:
-				print "WARNING:", line
+				if verbose is True:
+					print "WARNING:", line
 
 		table.append(row)
 
@@ -257,6 +259,27 @@ def parse_page(page, page_index, date, day):
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif page_index in [7,8]:
 		df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+
+	# table: string
+	# date: string, in standard YYYY-MM-DD format
+	# day: string, full name of day
+	# account: string, name of associated account
+	# surtype: string, e.g. 'issue' or 'redemption'
+	# type: string, e.g. 'deposit' or 'withdrawal'
+	# subtype: string, e.g. 'deposits by states' or 'other withdrawals'
+	# classification: string, class of taxes
+	# item: string, name of line item, e.g. 'Energy Department programs' or 'Postal service'
+	# account: string
+	# is_total: int, 0 if False (is not a total) and 1 if True (is a total)
+	# today: int
+	# mtd: int, month-to-date
+	# ytd: int, year-to-date
+	# fytd: int, fiscal-year-to-date
+	# close_today: int
+	# open_today: int
+	# open_mo: int
+	# open_fy: int
+	# footnote: string
 
 	return df
 

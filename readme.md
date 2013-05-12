@@ -1,14 +1,17 @@
-## Scheduling
-Run this to schedule the thingy to download and parse daily.
+## Running
+This one command downloads the (new) fixies and converts them to an SQLite3 database.
 
-    ./crontab.sh | crontab
+    ./run
+
+## Scheduling
+Run this to schedule the above script to run daily.
+
+    crontab -l > /tmp/crontab
+    ./crontab.sh >> /tmp/crontab
+    cat /tmp/crontab | crontab
+    rm /tmp/crontab
 
 Run `crontab -e` to edit the schedule later.
-
-## Converting to SQLite
-If we want to convert to SQLite, we should write a schema and then use
-`.import`. Hmm. Actually, we could also do it within Python with Pandas
-or DumpTruck or just sqlite.
 
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
