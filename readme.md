@@ -1,14 +1,17 @@
-## Scheduling
-Run this to schedule the thingy to download and parse daily.
+## Running
+This one command downloads the (new) fixies and converts them to an SQLite3 database.
 
-    ./crontab.sh | crontab
+    ./run
+
+## Scheduling
+Run this to schedule the above script to run daily.
+
+    crontab -l > /tmp/crontab
+    ./crontab.sh >> /tmp/crontab
+    cat /tmp/crontab | crontab
+    rm /tmp/crontab
 
 Run `crontab -e` to edit the schedule later.
-
-## Converting to SQLite
-    
-    cd code
-    sqlite3 ../data/fms.db < to_sqlite3.sql
 
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
