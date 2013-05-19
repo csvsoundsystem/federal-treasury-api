@@ -41,6 +41,11 @@ Run `crontab -e` to edit the schedule later.
 ### Windows
 In the Task Scheduler, set `run.bat` to run every day at 5 pm.
 
+### Testing
+To make sure that the script is still running on ScraperWiki, run
+
+    ./is_it_running.py
+
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
 is linked (for ScraperWiki compatibility). `fixie` contains the original files,
