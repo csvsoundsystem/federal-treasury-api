@@ -94,7 +94,7 @@
             position: fixed;
             left: 40px;
         }
-        ul li:nth-child(1), ul li:nth-child(2){
+        ul li:nth-child(1), ul li:nth-child(2), ul li:nth-child(3) {
           margin: 10px 0;
         }
         #section-wrapper{
@@ -203,4 +203,8 @@
 
         footer p {
           margin-top: 40px;
+        }
+
+        .tables li a {
+          display: inline;
         }
