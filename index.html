@@ -5,11 +5,28 @@
     <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:800,400,300", rel="stylesheet", type="text/css"/>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
+    <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
+    <script>
+      $(window).load(function(){
+      $(function() {
+      $('#navmenu').scrollSpy()
+        
+      $('#navmenu ul li a').bind('click', function(e) {
+          e.preventDefault();
+          target = this.hash;
+          console.log(target);
+          $.scrollTo(target, 1000, {offset:-200});
+        });
+      });
+    });
+    </script>
 </head>
-<body>
-    <div id="wrapper">
+<body data-spy="scroll" data-target="#navmenu"> 
+    <div id="container-fluid">
         <h1 id="title"><strong>TREASURY.IO</strong></h1>
-        <nav>
+        <nav id="navmenu">
             <a href="#"><img class="nav-item" src="web/flag.png"></a>
             <ul id="menu">
                 <li class="nav-item active"><a href="#about">About</a></li>
