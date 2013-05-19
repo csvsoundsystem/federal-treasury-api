@@ -1,72 +1,15 @@
-tsplot(plot_data$date, plot_data$V1, type="l")
-plot_data$date as.Date(plot_data$date)
-plot_data$date <- as.Date(plot_data$date)
-plot_data <- ddply(d, "date", function(x) {
-ratio = sum(na.omit(x$total_count))
-return(ratio)
-})
-plot_data$date <- as.Date(plot_data$date)
+df1 = data.frame(a=1, b=2)
+df2 = data.frame(a=2, b=6)
 rm(list=ls())
 setwd("~/Dropbox/code/fms_parser")
 library("plyr")
-d = read.csv("test_output/test-2013-05-13.csv", header=TRUE)
+d = read.csv("test_output/test-2013-05-13.csv", header=TRUE, as.is=TRUE)
 head(d)
-plot_data <- ddply(d, "date", function(x) {
-ratio = sum(na.omit(x$total_count))
-return(ratio)
-})
-plot_data$date <- as.Date(plot_data$date)
-plot(plot_data$V1~plot_data$date, type="l")
-plot_data <- ddply(d, "date", function(x) {
-ratio = sum(na.omit(x$null_count)) / sum(na.omit(x$total_count))
-return(ratio)
-})
-plot_data$date <- as.Date(plot_data$date)
-plot(plot_data$date, plot_data$V1, type="l")
-plot_data <- ddply(d, "date", function(x) {
-nulls <- na.omit(x$null_count[x$var_test!="footnotes"])
-ratio = nulls / sum(na.omit(x$total_count))
-return(ratio)
-})
-plot_data$date <- as.Date(plot_data$date)
-plot(plot_data$date, plot_data$V1, type="l")
-d$null_count[d$var_test!="footnotes"]
-plot_data <- ddply(d, "date", function(x) {
-nulls <- sum(na.omit(x$null_count[x$var_test!="footnotes"]))
-ratio = nulls / sum(na.omit(x$total_count))
-return(ratio)
-})
-plot_data$date <- as.Date(plot_data$date)
-plot(plot_data$date, plot_data$V1, type="l")
-sum(na.omit(d$null_count[d$var_test!="footnotes"]))
 rm(list=ls())
 setwd("~/Dropbox/code/fms_parser")
 library("plyr")
-d = read.csv("test_output/test-2013-05-13.csv", header=TRUE)
+d = read.csv("test_output/test-2013-05-13.csv", header=TRUE, as.is=TRUE)
 head(d)
-plot_data <- ddply(d, "date", function(x) {
-nulls <- sum(na.omit(x$null_count[x$var_test]))
-ratio = nulls / sum(na.omit(x$total_count))
-return(nulls)
-})
-plot_data$date <- as.Date(plot_data$date)
-plot(plot_data$date, plot_data$V1, type="l")
-head(d)
-table(d$var_test)
-ddply(d, "var_test", function(x){
-return len(x$result=="False") / len(x)
-})
-ddply(d, "var_test", function(x) {
-return(len(x$result=="False") / len(x))
-})
-ddply(d, "var_test", function(x) {
-return(length(x$result=="False") / length(x))
-})
-ddply(d, "var_test", function(x) {
-return(length(x$result=="False") / nrow(x))
-})
-d$result[0]==TRUE
-d$result[0]
 rm(list=ls())
 setwd("~/Dropbox/code/fms_parser")
 library("plyr")
@@ -81,63 +24,8 @@ plot_data$date <- as.Date(plot_data$date)
 plot(plot_data$date, plot_data$V1, type="l")
 for (t in unique(d$table)){
 df = d[d$table==t,]
-ddply(d, "var_test", function(x) {
-return(length(x$result=="False") / nrow(x))
-})
-d$result[0]
-)
-ddply(d, "var_test", function(x) {#
-    return(length(x$result=="False") / nrow(x))#
-    })
-d = read.csv("test_output/test-2013-05-13.csv", header=TRUE, as.is=TRUE)
-ddply(d, "var_test", function(x) {
-nrow(x)
-})
-nrow(d[which(d$result=="False"),])
-ddply(d, "var_test", function(x) {
-x[which(x$result=="False"),] / nrow(x)
-})
-ddply(d, "var_test", function(x) {
-nrow(x[which(x$result=="False"),]) / nrow(x)
-})
-ddply(d, "var_test", function(x) {
-nrow(x[which(x$null_count>0),]) / nrow(x)
-})
-barplot(ddply(d, "var_test", function(x) {
-nrow(x[which(x$null_count>0),]) / nrow(x)
-}))
-t = ddply(d, "var_test", function(x) {
-nrow(x[which(x$null_count>0),]) / nrow(x)
-})
-table(t)
-head(t)
-barploy(t$var_test, t$v1)
-barplot(t$var_test, t$v1)
-barplot(t$v1. labels=t$var_test)
-barplot(t$v1, labels=t$var_test)
-barplot(t$V1, labels=t$var_test)
-barplot(t$V1, names.arg=t$var_test)
-barplot(t$V1, names.arg=t$var_test, cex=0.5)
-barplot(t$V1, names.arg=t$var_test, cex=0.5)
-par(cex-0.6)
-par(cex=0.6)
-barplot(t$V1, names.arg=t$var_test, cex=0.5)
-barplot(t$V1, names.arg=t$var_test)
-par(cex=0.5)
-barplot(t$V1, names.arg=t$var_test)
 t = ddply(d, "var_test", function(x) {
 nrow(x[which(x$null_count>0),]) / nrow(x)
 })
 par(cex=0.5)
-barplot(t$V1, names.arg=t$var_test)
-t = ddply(d, "var_test", function(x) {
-nrow(x[which(x$null_count>1),]) / nrow(x)
-})
-par(cex=0.5)
-barplot(t$V1, names.arg=t$var_test)
-t = ddply(d, "var_test", function(x) {
-nrow(x[which(x$null_count>0),]) / nrow(x)
-})
-par(cex=0.5)
-barplot(t$V1, names.arg=t$var_test)
 barplot(t$V1, names.arg=t$var_test, main="percentage of tables in which variables have 1 or more null value")

@@ -103,7 +103,7 @@ def apply_test(val, fx):
     else:
         a_t = 0
 
-    return [n_p, n_m, n_f, at]
+    return [n_p, n_m, n_f, a_t]
 
 def get_missing_cols(tab, expected):
     return [c for c in tab.keys() if c not in frozenset(expected)]
@@ -137,14 +137,10 @@ def extract_ti(fp):
 
 #Columns to output in testing
 
-cols = [
-    'tab_index', 'filepath', 'row_count', 'date', 'missing_cols',
-    'variable', 'n_pass', 'n_miss', 'n_fail', 'all_true'
-]
 
 def test_table(fp):
     tab = pd.read_csv(fp) # read in csv
-    ti = extract_tab_index(fp) # extract tab index from filepath
+    ti = extract_ti(fp) # extract tab index from filepath
     l = len(tab['table']) # number of rows for this table
     d = tab['date'][0] # the date this file was released
     missing_cols = " ".join(test_table_columns(tab, ti)).strip() # a string of missing columns
@@ -206,8 +202,8 @@ def test_table(fp):
 
         elif c=="fytd":
              tests.append(attr + [c] + apply_test(tab[c], is_num))
-        else:
-            raise ValueError("%s has keys that shouldn't be in the Data Set ")
+        # else:
+        #     raise ValueError("%s has keys that shouldn't be in the Data Set" % fp)
 
     return tests
 
@@ -218,13 +214,14 @@ for i, fp in enumerate(filepaths):
     print str(i), "of", str(len(filepaths))
     try:
         o.extend(test_table(fp))
-    except:
+    except IndexError:
         pass
-
-# output to csv.
-with open("test_output/test-2013-05-14.csv", "wb") as f:
-    writer = csv.writer(f)
-    writer.writerows(cols.extend(o))
+cols = [
+    'tab_index', 'filepath', 'row_count', 'date', 'missing_cols',
+    'variable', 'n_pass', 'n_miss', 'n_fail', 'all_true'
+]
+df = pd.DataFrame(o, columns=cols)
+df.to_csv("test_output/test-2013-05-14-pd.csv")
 
 
 
