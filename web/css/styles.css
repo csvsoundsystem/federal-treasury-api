@@ -51,7 +51,7 @@
                 ) repeat;
             background-color:#0992CC;
             color:white;
-            font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
+            font-family: 'Droid Sans', Helvetica, Arial, sans-serif;
         }
         ::selection {
             background: #ffd700; /* Safari */
@@ -77,24 +77,30 @@
         }
 
         #title{
+            z-index: 1;
             width: 100%;
             color:white;
             display: block;
             position: fixed;
-            top: 40px;
-            left: 40px;
+            top: 0;
+            left: 0;
             letter-spacing: 1px;
             font-size: 80px;
             font-weight: 800;
             font-family: "Open Sans", Helvetica, sans-serif;
-            text-shadow: 6px 6px black, 5px 5px black, 4px 4px black, 3px 3px black, 2px 2px black, 1px 1px black;
-            -webkit-text-stroke: 3px black;
+            text-shadow: 8px 8px black, 7px 7px black, 6px 6px black, 5px 5px black, 4px 4px black, 3px 3px black, 2px 2px black, 1px 1px black, -1px -1px 0 #000, -2px -2px 0 #000, -3px -3px 0 #000, 1px -1px 0 #000, 2px -2px 0 #000, 3px -3px 0 #000, -1px 1px 0 #000, -2px 2px 0 #000, -3px 3px 0 #000, 1px 1px 0 #000;              
+            /*-webkit-text-stroke: 3px black;*/
+            background:url(
+                data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHElEQVQIW2Nkiaqr/7OsqZEBChhhDAwBmEoMFQBP1QgFqojs0QAAAABJRU5ErkJggg==
+                ) repeat;
+            background-color:#0992CC;
+            padding: 50px;
         }
         nav{
             position: fixed;
             left: 40px;
         }
-        ul li:nth-child(1), ul li:nth-child(2){
+        #navmenu ul li:nth-child(1), ul li:nth-child(2), ul li:nth-child(3), ul li:nth-child(4) {
           margin: 10px 0;
         }
         #section-wrapper{
@@ -118,7 +124,7 @@
           font-size: 15px;
           letter-spacing: 1px;
         }
-        .nav-item {
+        .btn {
           font-family: "Open Sans", sans-serif;
           font-weight: 800;
           letter-spacing: 2px;
@@ -131,20 +137,17 @@
           box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
           position: relative; 
           background: #d7d7d7;
-          display: block;
           text-align: center;
         }
-
-        .nav-item:hover {
+        .nav-item{
+          display: block;
+        }
+        .btn:hover {
           background: white;
         }
         a {
           text-decoration: none;
           color: black;
-        }
-
-        li a {
-          display: block;
         }
         li:active, img:active {
           -moz-box-shadow: 0px 0px 0px 0px;
@@ -153,22 +156,30 @@
           top: 5px;
           left: 5px; 
         }
-        .nav-item.active {
+        .btn:active {
+          -moz-box-shadow: 0px 0px 0px 0px;
+          -webkit-box-shadow: 0px 0px 0px 0px;
+          box-shadow: 0px 0px 0px 0px;
+          top: 5px;
+          left: 5px; 
+        }
+        li {
+          display: inline;
+        }
+        .btn.active {
           background-color: white;
           color: black;
         }
         code {
           background-color: white;
-          border: 3px solid black;
+          border: 3px dashed black;
           color: black;
-          display: block;
           padding: 10px 15px;
-          margin: 10px -15px;
           font-family: monospace;
         }
 
-        .section li {
-          margin-left: 20px;
+        form {
+          padding: 20px;
         }
 
         .highlight {
@@ -204,3 +215,31 @@
         footer p {
           margin-top: 40px;
         }
+
+        .tables li {
+          display: block;
+        }
+        .optional-filter{
+            display:none;
+        }
+        #query-string {
+          display: block;
+        }
+        #query-string-wrapper {
+          margin-bottom: 20px;
+        }
+        fieldset legend {
+          display: none;
+        }
+
+#builder {
+  background: rgba(255,255,255,.5);
+  padding: 20px;
+  padding-bottom: 50px;
+}   
+.btn-group {
+  float: right;
+}     
+ol li {
+  display: block;
+}
