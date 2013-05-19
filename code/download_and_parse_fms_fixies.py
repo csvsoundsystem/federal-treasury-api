@@ -171,3 +171,7 @@ SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE V%";
 
 # Commit
 connection.commit()
+
+
+# Brian's tests go here. Look at is_it_running.py if you want to make the date stuff fancier.
+t1 = pandas.io.sql.read_frame('''SELECT * FROM "t1" WHERE date = '%s';''' % datetime.date.today().isoformat(), connection)
