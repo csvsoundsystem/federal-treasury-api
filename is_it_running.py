@@ -1,4 +1,5 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python
+# Tested by Tom on Python 2.7.5 and Python 3.3.1 running on Arch Linux
 'Run this script to see whether the script on ScraperWiki is running daily.'
 
 import json
