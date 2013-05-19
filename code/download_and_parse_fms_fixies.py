@@ -4,9 +4,9 @@ import datetime
 import download_fms_fixies
 import os
 import pandas as pd
-import pandas.io.sql as pd_sql
+import pandas.io.sql
 import parse_fms_fixies_2
-import sqlite3 as sql
+import sqlite3
 import sys
 
 # script must be run from fms_parser/code directory
@@ -52,7 +52,7 @@ new_files = sorted(list(downloaded_files.difference(parsed_files())))
 # parse all teh fixies!
 for f in new_files:
 	fname = os.path.join(FIXIE_DIR, f+'.txt')
-	print '\n', fname
+	#print '\n', fname
 	dfs = parse_fms_fixies_2.parse_file(fname, verbose=False)
 
 	# each table for each date stored in separate csv files
@@ -92,38 +92,82 @@ for i in range(1,9):
 
 
 csv_txt = r"""
-      ,----..    .--.--.               
-     /   /   \  /  /    '.       ,---. 
-    |   :     :|  :  /`. /      /__./| 
-    .   |  ;. /;  |  |--`  ,---.;  ; | 
-    .   ; /--` |  :  ;_   /___/ \  | | 
-    ;   | ;     \  \    `.\   ;  \ ' | 
-    |   : |      `----.   \\   \  \: | 
-    .   | '___   __ \  \  | ;   \  ' . 
-    '   ; : .'| /  /`--'  /  \   \   ' 
-    '   | '/  :'--'.     /    \   `  ; 
-    |   :    /   `--'---'      :   \ | 
-     \   \ .'                   '---"  
-      `---`                                                            
+      ,----..    .--.--.
+     /   /   \  /  /    '.       ,---.
+    |   :     :|  :  /`. /      /__./|
+    .   |  ;. /;  |  |--`  ,---.;  ; |
+    .   ; /--` |  :  ;_   /___/ \  | |
+    ;   | ;     \  \    `.\   ;  \ ' |
+    |   : |      `----.   \\   \  \: |
+    .   | '___   __ \  \  | ;   \  ' .
+    '   ; : .'| /  /`--'  /  \   \   '
+    '   | '/  :'--'.     /    \   `  ;
+    |   :    /   `--'---'      :   \ |
+     \   \ .'                   '---"
+      `---`
 """
 soundsystem_txt = r"""
-.-. .-. . . . . .-. .-. . . .-. .-. .-. .  . 
-`-. | | | | |\| |  )`-.  |  `-.  |  |-  |\/| 
-`-' `-' `-' ' ` `-' `-'  `  `-'  '  `-' '  ` 
+.-. .-. . . . . .-. .-. . . .-. .-. .-. .  .
+`-. | | | | |\| |  )`-.  |  `-.  |  |-  |\/|
+`-' `-' `-' ' ` `-' `-'  `  `-'  '  `-' '  `
 """
 print csv_txt
 print soundsystem_txt
 print '*http://csvsoundsystem.com/'
 
+TABLES = [
+    {
+        'raw-table': 1,
+        'new-table': 't1',
+    },
+    {
+        'raw-table': 2,
+        'new-table': 't2a',
+    },
+    {
+        'raw-table': 3,
+        'new-table': 't2b',
+    },
+    {
+        'raw-table': 4,
+        'new-table': 't3a',
+    },
+    {
+        'raw-table': 5,
+        'new-table': 't3b',
+    },
+    {
+        'raw-table': 6,
+        'new-table': 't3c',
+    },
+    {
+        'raw-table': 7,
+        'new-table': 't4_t5',
+    },
+    {
+        'raw-table': 8,
+        'new-table': 't6',
+    },
+]
 
-# we'll figure it out
-#sqlcon = sql.connect(os.path.join('..', 'data', 'lifetime_csv', 'NAME.db'))
-#pd_sql.write_frame(df, "tbldata2", sqlcon)
+connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
+connection.text_factory = str # bad, but pandas doesn't work otherwise
 
+for table in TABLES:
+    df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%d.csv' % table['raw-table']))
+    pandas.io.sql.write_frame(df, '_t%d' % table['raw-table'], connection)
+    connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
+    connection.execute('ALTER TABLE "_t%d" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
 
+# Table 4 and table 5 views
+connection.execute('''
+CREATE VIEW IF NOT EXISTS t4 AS
+SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE IV%";
+''')
+connection.execute('''
+CREATE VIEW IF NOT EXISTS t5 AS
+SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE V%";
+''')
 
-
-
-
-
-
+# Commit
+connection.commit()

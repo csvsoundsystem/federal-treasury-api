@@ -1,0 +1,191 @@
+/* http://meyerweb.com/eric/tools/css/reset/
+           v2.0 | 20110126
+           License: none (public domain)
+        */
+
+        html, body, div, span, applet, object, iframe,
+        h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+        a, abbr, acronym, address, big, cite, code,
+        del, dfn, em, img, ins, kbd, q, s, samp,
+        small, strike, strong, sub, sup, tt, var,
+        b, u, i, center,dl, dt, dd, ol, ul, li,
+        fieldset, form, label, legend,
+        table, caption, tbody, tfoot, thead, tr, th, td,
+        article, aside, canvas, details, embed,
+        figure, figcaption, footer, header, hgroup,
+        menu, nav, output, ruby, section, summary,
+        time, mark, audio, video {
+            margin: 0;
+            padding: 0;
+            border: 0;
+            font-size: 100%;
+            font: inherit;
+            vertical-align: baseline;
+        }
+        /* HTML5 display-role reset for older browsers */
+        article, aside, details, figcaption, figure,
+        footer, header, hgroup, menu, nav, section {
+            display: block;
+        }
+        body {
+            line-height: 1;
+        }
+        ol, ul {
+            list-style: none;
+        }
+        blockquote, q {
+            quotes: none;
+        }
+        blockquote:before, blockquote:after,
+        q:before, q:after {
+            content: '';
+            content: none;
+        }
+        table {
+            border-collapse: collapse;
+            border-spacing: 0;
+        }
+        body{
+            background:url(
+                data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAAECAYAAACp8Z5+AAAAHElEQVQIW2Nkiaqr/7OsqZEBChhhDAwBmEoMFQBP1QgFqojs0QAAAABJRU5ErkJggg==
+                ) repeat;
+            background-color:#0992CC;
+            color:white;
+            font-family: 'Lucida Grande', Helvetica, Arial, sans-serif;
+        }
+        ::selection {
+            background: #ffd700; /* Safari */
+            }
+        ::-moz-selection {
+            background: #ffd700; /* Firefox */
+        }
+        #wrapper{
+            width:960px;
+        }
+        #title{
+            position:fixed;
+            top: 40px;
+            left: 50px;
+            color:white;
+            letter-spacing: 1px;
+            font-size: 80px;
+            font-weight: 800;
+            font-family: "Open Sans", Helvetica, sans-serif;
+            text-shadow: 6px 6px black, 5px 5px black, 4px 4px black, 3px 3px black, 2px 2px black, 1px 1px black;
+            -webkit-text-stroke: 3px black;
+        }
+        nav{
+            position: fixed;
+            top: 150px;
+            left:90px;
+        }
+        ul li:nth-child(1), ul li:nth-child(2){
+          margin: 10px 0;
+        }
+        #section-wrapper{
+            margin-left:280px;
+            margin-top:180px;
+        }
+        .section{
+            font-size:15px;
+            line-height: 24px;
+            margin: 20px;
+        }
+        .section h2, h3{
+            letter-spacing: 2;
+            font-weight:bold;
+            margin: 20px 0;
+            font-family: "Open Sans", Helvetica, sans-serif;
+            font-size: 30px;
+            letter-spacing: 2px;
+        }
+        h3 {
+          font-size: 15px;
+          letter-spacing: 1px;
+        }
+        .nav-item {
+          font-family: "Open Sans", sans-serif;
+          font-weight: 800;
+          letter-spacing: 2px;
+          color: black;
+          text-transform: uppercase;
+          border: 3px solid;
+          padding: 0.5em 0.75em;
+          -moz-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          -webkit-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+          position: relative; 
+          background: #d7d7d7;
+          display: block;
+          text-align: center;
+        }
+
+        .nav-item:hover {
+          background: white;
+        }
+        a {
+          text-decoration: none;
+          color: black;
+        }
+
+        li a {
+          display: block;
+        }
+        li:active, img:active {
+          -moz-box-shadow: 0px 0px 0px 0px;
+          -webkit-box-shadow: 0px 0px 0px 0px;
+          box-shadow: 0px 0px 0px 0px;
+          top: 5px;
+          left: 5px; 
+        }
+        .nav-item.active {
+          background-color: white;
+          color: black;
+        }
+        code {
+          background-color: white;
+          border: 3px solid black;
+          color: black;
+          display: block;
+          padding: 10px 15px;
+          margin: 10px -15px;
+          font-family: monospace;
+        }
+
+        .section li {
+          margin-left: 20px;
+        }
+
+        .highlight {
+          background: white;
+          font-weight: 700;
+          color: black;
+          padding: 3px 5px;
+        }
+
+        .highlight:hover {
+          background: black;
+          color: white;
+        }
+
+        img.nav-item {
+          background: white;
+          border: 3px black solid;
+          width: 150px;
+          padding: 0;
+        }
+
+        .bullet {
+          color: black;
+        }
+
+        footer {
+          background: black;
+          color: white;
+          padding:20px;
+          margin-top: 100px;
+        }
+
+        footer p {
+          margin-top: 40px;
+        }
