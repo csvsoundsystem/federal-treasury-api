@@ -59,14 +59,30 @@
         ::-moz-selection {
             background: #ffd700; /* Firefox */
         }
-        #wrapper{
-            width:960px;
+        .container-fluid {
+          padding-right: 20px;
+          padding-left: 20px;
+          *zoom: 1;
         }
+
+        .container-fluid:before,
+        .container-fluid:after {
+          display: table;
+          line-height: 0;
+          content: "";
+        }
+
+        .container-fluid:after {
+          clear: both;
+        }
+
         #title{
-            position:fixed;
-            top: 40px;
-            left: 50px;
+            width: 100%;
             color:white;
+            display: block;
+            position: fixed;
+            top: 40px;
+            left: 40px;
             letter-spacing: 1px;
             font-size: 80px;
             font-weight: 800;
@@ -76,14 +92,13 @@
         }
         nav{
             position: fixed;
-            top: 150px;
-            left:90px;
+            left: 40px;
         }
         ul li:nth-child(1), ul li:nth-child(2){
           margin: 10px 0;
         }
         #section-wrapper{
-            margin-left:280px;
+            margin-left:220px;
             margin-top:180px;
         }
         .section{
