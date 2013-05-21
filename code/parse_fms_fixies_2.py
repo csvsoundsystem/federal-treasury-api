@@ -23,6 +23,10 @@ def get_table_name(line):
 
 ################################################################################
 def normalize_page_text(page):
+	# remove unicode errors
+
+	page = unicode(page, errors='ignore')
+
 	# split on line breaks
 	lines = re.split(r'\r\n', page)
 	# get rid of pipe delimiters and divider lines
