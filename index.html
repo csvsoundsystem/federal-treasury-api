@@ -2,10 +2,12 @@
 <html>
 <head>
     <title>U.S. Treasury API</title>
+    <link href="web/css/reset.css" rel='stylesheet' type='text/css'/>
     <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
     <link href='http://fonts.googleapis.com/css?family=Droid+Sans:400,700' rel='stylesheet' type='text/css'>
     <link href="http://fonts.googleapis.com/css?family=Open+Sans:800,400,300", rel="stylesheet", type="text/css"/>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+    <script src="web/js/jquery.formalize.min.js"></script>
     <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
     <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
     <script>
@@ -23,12 +25,12 @@
     });
     </script>
 </head>
-<body data-spy="scroll" data-target="#navmenu"> 
+<body class="bluedots" data-spy="scroll" data-target="#navmenu"> 
     <div id="container-fluid">
-        <h1 id="title">TREASURY.IO</h1>
+        <h1 class="bluedots" id="title">TREASURY.IO</h1>
         <nav id="navmenu">
-            <a href="#"><img class="nav-item btn" src="web/flag.png"></a>
             <ul id="menu">
+                <li class="nav-item btn" id="logo"><a href="#"><img src="web/images/flag.png"></a></li>
                 <li class="nav-item btn"><a href="#about">Query</a></li>
                 <li class="nav-item btn"><a href="#about">About</a></li>
                 <li class="nav-item btn"><a href="#tables">Tables</a></li>
@@ -46,7 +48,7 @@
               <legend>Query Builder</legend>
               <ol id="query-builder">
                 <li>
-                    <label for="table-select">I want to know the</label>
+                    <label for="table-select">I want the data for</label>
                     <select id="table-select">
                         <option value="">...</option>
                         <option value="t1">Operating Cash Balance</option>
@@ -61,13 +63,72 @@
                     </select>
                 </li>
                 <li class="optional-filter">
-                    <label for="filter">of the</label>
-                    <select class="line-items" id="filter">
-                        <option value="">Choose an account...</option>
-                        <option data-line-item-type="account" value="account|Federal Reserve Account">Federal Reserve Account</option>
-                    </select>
+                    <span>filtered where:</span>
+                    <br/>
+                      <ul>
+                        <li>
+                          <label for="filter"> - account</label>
+                          <select class="line-items" id="filter">
+                            <option value="">is</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">is not</option>
+                          </select>
+                          <select class="line-items" id="filter">
+                            <option value="">Federal Reserve Account</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">Federal Reserve Account</option>
+                          </select>
+                          <select class="line-items" id="filter">
+                            <option value="">and</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
+                          </select>
+                          <a href="" class="remove">x</a>
+                        </li>
+                        <li>
+                          <label for="filter"> - date</label>
+                          <select class="line-items" id="filter">
+                            <option value="">is</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">is between</option>
+                          </select>
+                          <select class="line-items" id="filter">
+                            <option value="">2003-03-12</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">2003-03-12</option>
+                          </select>
+                          <select class="line-items" id="filter">
+                            <option value="">and</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
+                          </select>
+                          <a href="" class="remove">x</a>
+                        </li>
+                        <li>
+                          <label for="filter"> - is total</label>
+                          <select class="line-items" id="filter">
+                            <option value="">is</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">is between</option>
+                          </select>
+                          <select class="line-items" id="filter">
+                            <option value="">0</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">1</option>
+                          </select>
+                          <select class="line-items" id="filter">
+                            <option value="">and</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
+                          </select>
+                          <a href="" class="remove">x</a>
+                        </li>
+                        <li>
+                          <label for="filter"> - closing today</label>
+                          <select class="line-items" id="filter">
+                            <option value="">is</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">is between</option>
+                          </select>
+                          <input type="text-field" id="filter">
+                          <select class="line-items" id="filter">
+                            <option value="">and</option>
+                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
+                          </select>
+                          <a href="" class="remove">x</a>
                 </li>
-            </ol>
+                <a href="#">+ add another field</a>
+            </ul>
           </fieldset>
         </form>
         <div id="query-string-wrapper">
