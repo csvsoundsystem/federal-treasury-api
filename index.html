@@ -24,6 +24,11 @@
       });
     });
     </script>
+    <!-- RED QUERY -->
+    <script src="web/RedQueryBuilder/RedQueryBuilder.nocache.js" type="text/javascript" language="javascript">//</script>
+    <link href="web/RedQueryBuilder/gwt/dark/dark.css" rel="stylesheet" type="text/css" />
+    <script src="web/RedQueryBuilder/RedQueryBuilderFactory.nocache.js" type="text/javascript" language="javascript">//</script>
+
 </head>
 <body class="bluedots" data-spy="scroll" data-target="#navmenu"> 
   <!--[if lt IE 9]>
@@ -41,99 +46,11 @@
                 <li class="nav-item btn"><a href="#examples">Examples</a></li>
             <ul>
         </nav>
-
         <div id="section-wrapper">
           <div id="query" class="section">
             <h2><span class="bullet">$</span> QUERY BUILDER</h2>
             <div id="builder">
-            <form>
-            <fieldset>
-              <legend>Query Builder</legend>
-              <ol id="query-builder">
-                <li>
-                    <label for="table-select">I want the data for</label>
-                    <select id="table-select">
-                        <option value="">...</option>
-                        <option value="t1">Operating Cash Balance</option>
-                        <option value="t2a">Deposits</option>
-                        <option value="t2b">Withdrawals</option>
-                        <option value="t3a">Public Debt Transactions</option>
-                        <option value="t3b">Adjustment of Public Debt Transactions to Cash Balance</option>
-                        <option value="t3c">Debt Subject to Limit</option>
-                        <option value="t4">Federal Tax Deposits</option>
-                        <option value="t5">Short-term Cash Investments</option>
-                        <option value="t6">Income Tax Refunds Issued</option>
-                    </select>
-                </li>
-                <li class="optional-filter">
-                    <span>filtered where:</span>
-                    <br/>
-                      <ul>
-                        <li>
-                          <label for="filter"> - account</label>
-                          <select class="line-items" id="filter">
-                            <option value="">is</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">is not</option>
-                          </select>
-                          <select class="line-items" id="filter">
-                            <option value="">Federal Reserve Account</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">Federal Reserve Account</option>
-                          </select>
-                          <select class="line-items" id="filter">
-                            <option value="">and</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
-                          </select>
-                          <a href="" class="remove">x</a>
-                        </li>
-                        <li>
-                          <label for="filter"> - date</label>
-                          <select class="line-items" id="filter">
-                            <option value="">is</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">is between</option>
-                          </select>
-                          <select class="line-items" id="filter">
-                            <option value="">2003-03-12</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">2003-03-12</option>
-                          </select>
-                          <select class="line-items" id="filter">
-                            <option value="">and</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
-                          </select>
-                          <a href="" class="remove">x</a>
-                        </li>
-                        <li>
-                          <label for="filter"> - is total</label>
-                          <select class="line-items" id="filter">
-                            <option value="">is</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">is between</option>
-                          </select>
-                          <select class="line-items" id="filter">
-                            <option value="">0</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">1</option>
-                          </select>
-                          <select class="line-items" id="filter">
-                            <option value="">and</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
-                          </select>
-                          <a href="" class="remove">x</a>
-                        </li>
-                        <li>
-                          <label for="filter"> - closing today</label>
-                          <select class="line-items" id="filter">
-                            <option value="">is</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">is between</option>
-                          </select>
-                          <input type="text-field" placeholder="placeholder" id="filter">
-                          <select class="line-items" id="filter">
-                            <option value="">and</option>
-                            <option data-line-item-type="account" value="account|Federal Reserve Account">or</option>
-                          </select>
-                          <a href="" class="remove">x</a>
-                </li>
-                <a href="#">+ add another field</a>
-            </ul>
-          </fieldset>
-        </form>
+              <div id="rqb">&nbsp;</div>
         <div id="query-string-wrapper">
             <p>
               <span>SQL Query</span>
@@ -183,7 +100,244 @@
     </div>
     <footer>
       <p>Made lovingly by the <a href="http://csvsoundsystem.com" class="highlight">CSV soundsystem team</a>, in fulfillment of a grant from the <a href="http://www.knightfoundation.org" class="highlight">Knight Foundation.</a></p>
+      <textarea id="debug" cols="80" rows="10">debug output</textarea>
     </footer>
+        <script>
+RedQueryBuilderFactory.create({
+    meta : {
+        tables : [ {
+            "name" : "Operating Cash Balance",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },
+        {
+            "name" : "Deposits",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },
+        {
+            "name" : "Withdrawals",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },
+        {
+            "name" : "Public Debt Transactions",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },
+        {
+            "name" : "Adjustment of Public Debt Transactions to Cash Balance",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },{
+            "name" : "Debt Subject to Limit",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },{
+            "name" : "Federal Tax Deposits",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },{
+            "name" : "Short-term Cash Investments",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        },{
+            "name" : "Income Tax Refunds Issued",
+            "columns" : [ {
+                "name" : "ACCOUNT",
+                "label" : "account",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "DATE",
+                "label" : "date",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "TOTAL",
+                "label" : "total",
+                "type" : "STRING",
+                "size" : 10
+            },{
+                "name" : "CLOSING TODAY",
+                "label" : "closing_today",
+                "type" : "STRING",
+                "size" : 10
+            }],
+            fks : []
+        } ],
+        types : [ {
+            "name" : "STRING",
+            "editor" : "TEXT",
+            "operators" : [ {
+                "name" : "=",
+                "label" : "is",
+                "cardinality" : "ONE"
+            }]
+        }]
+    }
+});
+        </script>
         <script>
         (function(){
 

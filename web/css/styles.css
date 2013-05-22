@@ -173,7 +173,11 @@ footer p {
   margin-top: 40px;
 }
 
-input, select {
+#rqb {
+  margin-bottom: 60px;
+}
+
+/*input, select {
   background: white;
   padding:  0.875rem;
   border: none;
@@ -184,4 +188,4 @@ input, select {
   margin-bottom:  0.875rem;
   -webkit-appearance: none;
   border-radius: 0;
-}
+}*/
