@@ -64,3 +64,8 @@ There are eight tables.
 * IV. Federal Tax Deposits (`t4`)
 * V. Short-term Cash Investments (`t5`)
 * VI. Incom Tax Refunds Issued (`t6`)
+
+## Frontend
+    python -m SimpleHTTPServer
+
+then visit http://localhost:8000
