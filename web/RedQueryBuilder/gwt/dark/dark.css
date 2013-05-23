@@ -32,14 +32,14 @@
   font-size: small;
   cursor: pointer;
   cursor: hand;
-  background: url("images/hborder.png") repeat-x 0px -27px;
-  border: 1px outset #000;
+  background: black;
+  color: white;
 }
 .gwt-Button:active {
-  border: 1px inset #000;
+  background: #666666;
 }
 .gwt-Button:hover {
-  border: 1px outset #24d3ff;
+  background: #666666;
 }
 .gwt-Button[disabled] {
   cursor: default;
@@ -215,6 +215,15 @@
 }
 
 .gwt-ListBox {
+  background: white;
+  padding:  5px !important;
+  border: none;
+  -webkit-font-smoothing: antialiased;
+  color: black;
+  font-weight: bold;
+  outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 
 .gwt-MenuBar {
@@ -836,7 +845,15 @@
 }
 
 .gwt-TextBox {
-  padding: 2px;
+  background: white;
+  padding:  5px !important;
+  border: none;
+  -webkit-font-smoothing: antialiased;
+  color: black;
+  font-weight: bold;
+  outline: none;
+  -webkit-appearance: none;
+  border-radius: 0;
 }
 .gwt-TextBox-readonly {
   color: #888;

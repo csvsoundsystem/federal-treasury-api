@@ -41,10 +41,10 @@
             content: '';
             content: none;
         }
-        table {
+        /*table {
             border-collapse: collapse;
             border-spacing: 0;
-        }
+        }*/
 
 /*Reset Webkit User Agent Styles*/
 /** {

@@ -173,13 +173,13 @@ footer p {
   margin-top: 40px;
 }
 
-#rqb {
+/*#rqb {
   margin-bottom: 60px;
-}
+}*/
 
 /*input, select {
   background: white;
-  padding:  0.875rem;
+  padding:  5px !important;
   border: none;
   -webkit-font-smoothing: antialiased;
   color: black;
