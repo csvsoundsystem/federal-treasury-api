@@ -357,7 +357,7 @@ RedQueryBuilderFactory.create({
       }
       out += '\r\n';
     }
-    document.getElementById("sql").value = out;
+    document.getElementById("sql").value = out.replace(/\"x0\"\.?/g, '');
   },
 });
         </script>
