@@ -17,7 +17,7 @@
           e.preventDefault();
           target = this.hash;
           console.log(target);
-          $.scrollTo(target, 1000, {offset:-200});
+          $.scrollTo(target, 1000, {offset:-320});
         });
       });
     });
@@ -26,15 +26,23 @@
     <script src="web/RedQueryBuilder/RedQueryBuilder.nocache.js" type="text/javascript" language="javascript">//</script>
     <link href="web/RedQueryBuilder/gwt/dark/dark.css" rel="stylesheet" type="text/css" />
     <script src="web/RedQueryBuilder/RedQueryBuilderFactory.nocache.js" type="text/javascript" language="javascript">//</script>
-      <link href="web/css/reset.css" rel='stylesheet' type='text/css'/>
+    <!-- end red query -->
+    <link href="web/css/reset.css" rel='stylesheet' type='text/css'/>
     <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
+    <script src="web/js/makeitrain.js"></script>
 </head>
 <body class="bluedots" data-spy="scroll" data-target="#navmenu"> 
   <!--[if lt IE 9]>
       <p class="chromeframe" style="margin: 40px auto 0; width: 600px; font-size: 24px; line-height: 1.4em;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
     <div id="container-fluid">
-        <h1 class="bluedots" id="title">TREASURY.IO</h1>
+        <div id="hero">
+          <div>
+            <canvas id="canvas"/>
+          </div>
+            <h1 id="title">TREASURY.IO</h1>
+            <h2 id="subtitle">SHOW ME THE MONEY</h2>
+        </div>
         <nav id="navmenu">
             <ul id="menu">
                 <li class="nav-item btn" id="logo"><a href="#"><img src="web/images/flag.png"></a></li>
@@ -97,6 +105,7 @@
           </div>
         </div>
     </div>
+    <image src="web/images/money.png" id="image"/>
     <footer>
       <p>Made lovingly by the <a href="http://csvsoundsystem.com" class="highlight">CSV soundsystem team</a>, in fulfillment of a grant from the <a href="http://www.knightfoundation.org" class="highlight">Knight Foundation.</a></p>
       <textarea id="debug" cols="80" rows="10">debug output</textarea>
@@ -337,30 +346,5 @@ RedQueryBuilderFactory.create({
     }
 });
         </script>
-        <script>
-        (function(){
-
-            var CONFIG = {
-                query_string_a: 'SELECT * FROM ',
-                query_string_w: ' WHERE'
-
-            }
-            $('#table-select').change(function(){
-                var v = $(this).val();
-                var q = CONFIG.query_string_a + v;
-                if(q != ''){
-                    $('#query-string-wrapper').show();
-                }
-                $('.'+v).show();
-                $('#query-string').html(q)
-            });
-
-            $('.optional-filter select').change(function(){
-                var where_column   = $(this).val().split('|')[0];
-                var filter_on     = $(this).val().split('|')[1];
-
-            });
-        }).call(this)
-    </script>
 </body>
 </html>
