@@ -1,9 +1,6 @@
 $(function() {
-        $("#image").load(
-          function() {
             var y = 0, a = 0, b = 0, vb = 4, vy = 2, va = 3, canvas, context, image, height, width;
      
-            image = $("#image")[0];
             canvas = $("#canvas")[0];
             width = $(document).width();
             context = canvas.getContext("2d");
@@ -56,6 +53,4 @@ $(function() {
                 b = 0;
               }
             }
-          }  
-        );
       });
