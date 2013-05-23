@@ -199,7 +199,12 @@ footer p {
   margin-top: 40px;
 }
 
-
+textarea {
+  display: block;
+  width: 100%;
+  border: none;
+  font-family: Courier, monospace;
+}
 
 /*#rqb {
   margin-bottom: 60px;

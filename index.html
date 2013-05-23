@@ -26,6 +26,12 @@
     <script src="web/RedQueryBuilder/RedQueryBuilder.nocache.js" type="text/javascript" language="javascript">//</script>
     <link href="web/RedQueryBuilder/gwt/dark/dark.css" rel="stylesheet" type="text/css" />
     <script src="web/RedQueryBuilder/RedQueryBuilderFactory.nocache.js" type="text/javascript" language="javascript">//</script>
+    <script>
+      $(function sqlChange(sql, args) {
+        $('#sql').text(sql);
+        $('#searches').attr('value', '');
+      });
+    </script>
     <!-- end red query -->
     <link href="web/css/reset.css" rel='stylesheet' type='text/css'/>
     <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
@@ -58,16 +64,19 @@
             <h2><span class="bullet">$</span> QUERY BUILDER</h2>
             <div id="builder">
               <div id="rqb">&nbsp;</div>
-        <div id="query-string-wrapper">
-            <p>
-              <span>SQL Query</span>
-              <code id="query-string"></code>
-            </p>
-        </div>
-        <div class="btn-group">
-            <a class="btn" href="#">Download .csv</a>
-            <a class="btn" href="#">Preview Data</a>
-        </div>
+              <div id="query-string-wrapper">
+                <fieldset>
+                  <span>SQL Query</span>
+                  <code id="query-string">
+                    <textarea id="sql">Not set yet</textarea>
+                  </code>
+                </fieldset>
+              </div>
+            <div class="btn-group">
+              <a class="btn" href="#">Download .csv</a>
+              <a class="btn" href="#">Preview Data</a>
+            </div>
+          </div>
       </div>
       </div>
           <div class="section" id="about">
@@ -342,7 +351,21 @@ RedQueryBuilderFactory.create({
                 "cardinality" : "ONE"
             }]
         }]
+    },
+    onSqlChange : function(sql, args) {
+    var out = sql + '\r\n';
+    for (var i = 0; i < args.length; i++) {
+      var arg = args[i];
+      out += 'arg' + i;
+      if (arg != null) {
+        out += ' type=' + Object.prototype.toString.call(arg) + ' toString=' + arg;
+      } else {
+        out += ' null';
+      }
+      out += '\r\n';
     }
+    document.getElementById("sql").value = out;
+  },
 });
         </script>
 </body>
