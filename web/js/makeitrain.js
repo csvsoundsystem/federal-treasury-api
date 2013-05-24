@@ -2,7 +2,7 @@ $(function() {
             var y = 0, a = 0, b = 0, vb = 4, vy = 2, va = 3, canvas, context, image, height, width;
      
             canvas = $("#canvas")[0];
-            width = $(document).width();
+            width = $(document).width()+10;
             context = canvas.getContext("2d");
             
             setInterval(draw, 1000/24);
