@@ -13,15 +13,23 @@
         var con = $("#container-fluid"),
         canvas = $("#canvas")[0],
         width = con.width(),
-        height = con.height(),
-        aspect = canvas.height/canvas.width;
+        aspect = 300/canvas.width;
 
+        
         canvas.width = width;
         canvas.height = Math.round(width * aspect);
       }
       window.onresize = resizeCanvas;
       window.onload = resizeCanvas;
     $(window).load(function(){
+      var con = $("#container-fluid"),
+        canvas = $("#canvas")[0],
+        width = con.width(),
+        aspect = 300/canvas.width;
+
+        
+        canvas.width = width;
+        canvas.height = Math.round(width * aspect);
       $(function() {
         $('#navmenu').scrollSpy()
         
@@ -40,15 +48,15 @@
  
           var windowTop = $(window).scrollTop(); // returns number
  
-        if (stickyTop < windowTop - 200) {
+        if (stickyTop < windowTop - 30) {
           $('.sticky').css({ position: 'fixed', top: 0 });
           $('#title').addClass('bluedots');
         }
         else {
-          $('.sticky').css({ position: 'fixed', top: 80 });
+          $('.sticky').css({ position: 'absolute', top: 80 });
           $('#title').removeClass('bluedots');
         }
-        if (stickyTop < windowTop - 260) {
+        if (stickyTop < windowTop - 120) {
           $('nav').fadeIn('slow');
         }
         else {
