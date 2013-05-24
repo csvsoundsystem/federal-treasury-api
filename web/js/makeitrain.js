@@ -25,7 +25,7 @@ $(function() {
               context.fillText("$", 530, y-90);
               context.fill();
               y += vy;
-              if(y > canvas.height + 60) {
+              if(y > canvas.height + 220) {
                 y = 0;
               }
               context.beginPath();
@@ -45,7 +45,7 @@ $(function() {
               context.fillText("$", 800, a-90);
               context.fill();
               a += va;
-              if(a > canvas.height + 60) {
+              if(a > canvas.height + 220) {
                 a = 0;
               }
               context.beginPath();
@@ -62,7 +62,7 @@ $(function() {
               context.fillText("$", 500, b-105);
               context.fill();
               b += vb;
-              if(b > canvas.height + 60) {
+              if(b > canvas.height + 220) {
                 b = 0;
               }
             }
