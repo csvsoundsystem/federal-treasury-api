@@ -218,6 +218,8 @@ textarea {
   width: 100%;
   border: none;
   font-family: Courier, monospace;
+  height:50px;
+  overflow: auto;
 }
 
 /*#rqb {
