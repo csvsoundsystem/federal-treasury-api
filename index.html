@@ -12,9 +12,9 @@
       function resizeCanvas(){
         var con = $("#container-fluid"),
         canvas = $("#canvas")[0],
-        aspect = canvas.height/canvas.width,
         width = con.width(),
-        height = con.height();
+        height = con.height(),
+        aspect = canvas.height/canvas.width;
 
         canvas.width = width;
         canvas.height = Math.round(width * aspect);
