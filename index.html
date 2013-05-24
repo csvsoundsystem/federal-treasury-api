@@ -9,11 +9,23 @@
     <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
     <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
     <script>
-      $(window).load(function(){
+      function resizeCanvas(){
+        var con = $("#container-fluid"),
+        canvas = $("#canvas")[0],
+        aspect = canvas.height/canvas.width,
+        width = con.width(),
+        height = con.height();
+
+        canvas.width = width;
+        canvas.height = Math.round(width * aspect);
+      }
+      window.onresize = resizeCanvas;
+      window.onload = resizeCanvas;
+    $(window).load(function(){
       $(function() {
-      $('#navmenu').scrollSpy()
+        $('#navmenu').scrollSpy()
         
-      $('#navmenu ul li a').bind('click', function(e) {
+        $('#navmenu ul li a').bind('click', function(e) {
           e.preventDefault();
           target = this.hash;
           console.log(target);

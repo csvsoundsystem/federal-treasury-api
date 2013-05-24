@@ -8,48 +8,51 @@ $(function() {
             setInterval(draw, 1000/24);
 
             function draw() {
-              context.clearRect(0, 0, width, 300);
+              context.clearRect(0, 0, width, canvas.height);
               context.beginPath();
               context.fillStyle = "#339900";
-              context.font = "bold 20pt Helvetica";
+              context.font = "bold 40pt Helvetica";
               context.fillText("$", 10, y-10);
-              context.fillText("$", 30, y);
-              context.fillText("$", 80, y-30);
-              context.fillText("$", 110, y-20);
-              context.fillText("$", 200, y);
-              context.fillText("$", 400, y-15);
+              context.fillText("$", 50, y);
+              context.fillText("$", 110, y-30);
+              context.fillText("$", 150, y-20);
+              context.fillText("$", 280, y);
+              context.fillText("$", 360, y);
+              context.fillText("$", 490, y-15);
+              context.fillText("$", 530, y-15);
               context.fill();
               y += vy;
-              if(y > 300) {
+              if(y > canvas.height + 60) {
                 y = 0;
               }
               context.beginPath();
               context.fillStyle = "#CCFF00";
-              context.font = "bold 15pt Helvetica";
+              context.font = "bold 30pt Helvetica";
               context.fillText("$", 15, a-10);
-              context.fillText("$", 40, a);
-              context.fillText("$", 100, a-30);
-              context.fillText("$", 150, a);
-              context.fillText("$", 250, a-20);
-              context.fillText("$", 410, a-5);
-              context.fillText("$", 460, b-45);
+              context.fillText("$", 80, a);
+              context.fillText("$", 170, a-30);
+              context.fillText("$", 280, a);
+              context.fillText("$", 360, a-20);
+              context.fillText("$", 580, a-5);
+              context.fillText("$", 700, b-45);
+              context.fillText("$", 800, a-5);
               context.fill();
               a += va;
-              if(a > 300) {
+              if(a > canvas.height + 60) {
                 a = 0;
               }
               context.beginPath();
               context.fillStyle = "#006600";
-              context.font = "bold 26pt Helvetica";
-              context.fillText("$", 20, b-20);
-              context.fillText("$", 5, b);
-              context.fillText("$", 75, b-10);
-              context.fillText("$", 130, b);
-              context.fillText("$", 220, b);
-              context.fillText("$", 480, b-45);
+              context.font = "bold 50pt Helvetica";
+              context.fillText("$", 40, b-20);
+              context.fillText("$", 25, b);
+              context.fillText("$", 95, b-10);
+              context.fillText("$", 150, b);
+              context.fillText("$", 240, b);
+              context.fillText("$", 500, b-45);
               context.fill();
               b += vb;
-              if(b > 300) {
+              if(b > canvas.height + 60) {
                 b = 0;
               }
             }
