@@ -8,7 +8,7 @@ $(function() {
             setInterval(draw, 1000/24);
 
             function draw() {
-              context.clearRect(0, 0, width, canvas.height);
+              context.clearRect(0, 0, canvas.width, canvas.height);
               context.beginPath();
               context.fillStyle = "#339900";
               context.font = "bold 40pt Helvetica";
