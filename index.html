@@ -9,6 +9,7 @@
     <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
     <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
     <script>
+      //change size of canvas first load
       function resizeCanvas(){
         var con = $("#container-fluid"),
         canvas = $("#canvas")[0],
@@ -21,6 +22,7 @@
       }
       window.onresize = resizeCanvas;
       window.onload = resizeCanvas;
+      //change size of canvas on window resize
     $(window).load(function(){
       var con = $("#container-fluid"),
         canvas = $("#canvas")[0],
