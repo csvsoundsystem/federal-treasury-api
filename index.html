@@ -9,11 +9,23 @@
     <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
     <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
     <script>
-      $(window).load(function(){
+      function resizeCanvas(){
+        var con = $("#container-fluid"),
+        canvas = $("#canvas")[0],
+        width = con.width(),
+        height = con.height(),
+        aspect = canvas.height/canvas.width;
+
+        canvas.width = width;
+        canvas.height = Math.round(width * aspect);
+      }
+      window.onresize = resizeCanvas;
+      window.onload = resizeCanvas;
+    $(window).load(function(){
       $(function() {
-      $('#navmenu').scrollSpy()
+        $('#navmenu').scrollSpy()
         
-      $('#navmenu ul li a').bind('click', function(e) {
+        $('#navmenu ul li a').bind('click', function(e) {
           e.preventDefault();
           target = this.hash;
           console.log(target);
@@ -58,16 +70,18 @@
             <h2><span class="bullet">$</span> QUERY BUILDER</h2>
             <div id="builder">
               <div id="rqb">&nbsp;</div>
-        <div id="query-string-wrapper">
-            <p>
-              <span>SQL Query</span>
-              <code id="query-string"></code>
-            </p>
-        </div>
-        <div class="btn-group">
-            <a class="btn" href="#">Download .csv</a>
-            <a class="btn" href="#">Preview Data</a>
-        </div>
+              <div id="query-string-wrapper">
+                <fieldset>
+                  <span>SQL Query</span>
+                  <code id="query-string">
+                    <textarea id="sql">Not set yet</textarea>
+                  </code>
+                </fieldset>
+              </div>
+            <div class="btn-group">
+              <a class="btn" href="#">Download .csv</a>
+              <a class="btn" href="#">Preview Data</a>
+            </div>
       </div>
       </div>
           <div class="section" id="about">
@@ -105,7 +119,6 @@
           </div>
         </div>
     </div>
-    <image src="web/images/money.png" id="image"/>
     <footer>
       <p>Made lovingly by the <a href="http://csvsoundsystem.com" class="highlight">CSV soundsystem team</a>, in fulfillment of a grant from the <a href="http://www.knightfoundation.org" class="highlight">Knight Foundation.</a></p>
       <textarea id="debug" cols="80" rows="10">debug output</textarea>
@@ -343,7 +356,21 @@ RedQueryBuilderFactory.create({
                 "cardinality" : "ONE"
             }]
         }]
+    },
+    onSqlChange : function(sql, args) {
+    var out = sql + '\r\n';
+    for (var i = 0; i < args.length; i++) {
+      var arg = args[i];
+      out += 'arg' + i;
+      if (arg != null) {
+        out += ' type=' + Object.prototype.toString.call(arg) + ' toString=' + arg;
+      } else {
+        out += ' null';
+      }
+      out += '\r\n';
     }
+    document.getElementById("sql").value = out.replace(/\"x0\"\.?/g, '');
+  },
 });
         </script>
 </body>
