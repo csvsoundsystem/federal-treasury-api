@@ -9,19 +9,29 @@
     <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
     <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
     <script>
+      //change size of canvas first load
       function resizeCanvas(){
         var con = $("#container-fluid"),
         canvas = $("#canvas")[0],
         width = con.width(),
-        height = con.height(),
-        aspect = canvas.height/canvas.width;
+        aspect = 300/canvas.width;
 
+        
         canvas.width = width;
         canvas.height = Math.round(width * aspect);
       }
       window.onresize = resizeCanvas;
       window.onload = resizeCanvas;
+      //change size of canvas on window resize
     $(window).load(function(){
+      var con = $("#container-fluid"),
+        canvas = $("#canvas")[0],
+        width = con.width(),
+        aspect = 300/canvas.width;
+
+        
+        canvas.width = width;
+        canvas.height = Math.round(width * aspect);
       $(function() {
         $('#navmenu').scrollSpy()
         
@@ -29,9 +39,34 @@
           e.preventDefault();
           target = this.hash;
           console.log(target);
-          $.scrollTo(target, 1000, {offset:-320});
+          $.scrollTo(target, 1000, {offset:-140});
         });
       });
+      $(function(){ // document ready
+ 
+        var stickyTop = $('.sticky').offset().top; // returns number
+ 
+        $(window).scroll(function(){ // scroll event
+ 
+          var windowTop = $(window).scrollTop(); // returns number
+ 
+        if (stickyTop < windowTop - 30) {
+          $('.sticky').css({ position: 'fixed', top: 0 });
+          $('#title').addClass('bluedots');
+        }
+        else {
+          $('.sticky').css({ position: 'absolute', top: 80 });
+          $('#title').removeClass('bluedots');
+        }
+        if (stickyTop < windowTop - 120) {
+          $('nav').fadeIn('slow');
+        }
+        else {
+          $('nav').fadeOut('slow');
+        }
+  });
+ 
+});
     });
     </script>
     <!-- RED QUERY -->
@@ -43,7 +78,7 @@
     <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
     <script src="web/js/makeitrain.js"></script>
 </head>
-<body class="bluedots" data-spy="scroll" data-target="#navmenu"> 
+<body class="bluedots" data-spy="scroll" data-target="#navmenu" data-offset="80"> 
   <!--[if lt IE 9]>
       <p class="chromeframe" style="margin: 40px auto 0; width: 600px; font-size: 24px; line-height: 1.4em;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
@@ -52,13 +87,20 @@
           <div>
             <canvas id="canvas"/>
           </div>
-            <h1 id="title">TREASURY.IO</h1>
+            <h1 id="title" class="sticky">TREASURY.IO</h1>
             <h2 id="subtitle">SHOW ME THE MONEY</h2>
+            <h2 id="subsubtitle">
+              <a href="#query">
+                <img src="web/images/expanded.gif"/>
+                BUILD A QUERY
+                <img src="web/images/expanded.gif"/>
+              </a>
+            </h2>
         </div>
         <nav id="navmenu">
             <ul id="menu">
-                <li class="nav-item btn" id="logo"><a href="#"><img src="web/images/flag.png"></a></li>
-                <li class="nav-item btn"><a href="#about">Query</a></li>
+                <li class="nav-item btn" id="logo"><a href="#hero"><img src="web/images/flag.png"></a></li>
+                <li class="nav-item btn"><a href="#query">Query</a></li>
                 <li class="nav-item btn"><a href="#about">About</a></li>
                 <li class="nav-item btn"><a href="#tables">Tables</a></li>
                 <li class="nav-item btn"><a href="#usage">Usage</a></li>
@@ -121,7 +163,6 @@
     </div>
     <footer>
       <p>Made lovingly by the <a href="http://csvsoundsystem.com" class="highlight">CSV soundsystem team</a>, in fulfillment of a grant from the <a href="http://www.knightfoundation.org" class="highlight">Knight Foundation.</a></p>
-      <textarea id="debug" cols="80" rows="10">debug output</textarea>
     </footer>
         <script>
 RedQueryBuilderFactory.create({

@@ -31,10 +31,10 @@
   overflow: hidden;
   filter: glow(color=black,strength=5);
   /*-webkit-text-stroke: 3px black;*/
-  z-index: 1;
+  z-index: 5;
   width: 100%;
   display: block;
-  position: fixed;
+  position: absolute;
   top: 80px;
   left: 0;
   letter-spacing: 1px;
@@ -49,31 +49,45 @@
 
 #subtitle {
   font-family: "Open Sans", Helvetica, sans-serif;
-  color: black;
+  color: white;
   z-index: 1;
-  position: fixed;
-  top: 200px;
+  position: absolute;
+  top: 180px;
   left: 0;
   text-align: center;
   display: block;
   width: 100%;
-  background: rgba(255,255,255,.6);
+  background: black;
+  padding: 5px;
+}
+
+#subsubtitle {
+  font-family: "Open Sans", Helvetica, sans-serif;
+  color: black;
+  z-index: 1;
+  position: absolute;
+  top: 220px;
+  left: 0;
+  text-align: center;
+  display: block;
+  width: 100%;
+  background: white;
   padding: 5px;
 }
 
 canvas {
   background: #66CC00;
-  z-index: 1;
+  z-index: 2;
   width: 100%;
-  position: fixed;
-  top: 0px;
-  left: 0;
   overflow: hidden;
 }
 
 nav{
   position: fixed;
   left: 40px;
+  top:110px;
+  z-index: 0;
+  display: none;
 }
 #navmenu ul li{
   margin: 10px 0;
@@ -81,7 +95,7 @@ nav{
 }
 #section-wrapper{
   margin-left:220px;
-  margin-top: 330px;
+  /*mmargin-top: 330px;*/
   font-family: "Open Sans", Helvetica, sans-serif;
 }
 .section{
@@ -204,6 +218,8 @@ textarea {
   width: 100%;
   border: none;
   font-family: Courier, monospace;
+  height:50px;
+  overflow: auto;
 }
 
 /*#rqb {
