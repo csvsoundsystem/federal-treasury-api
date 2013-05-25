@@ -27,6 +27,11 @@
   clear: both;
 }
 
+#hero {
+  font-family: "Open Sans", Helvetica, sans-serif;
+  position:relative;
+  z-index:9999;
+}
 #title{
   overflow: hidden;
   filter: glow(color=black,strength=5);
@@ -34,19 +39,23 @@
   z-index: 5;
   width: 100%;
   display: block;
-  position: absolute;
-  top: 80px;
-  left: 0;
+  position: fixed;
+  top: 10px;
+  left: 3px;
   letter-spacing: 1px;
-  font-size: 80px;
+  font-size: 30px;
   font-weight: 800;
-  font-family: "Open Sans", Helvetica, sans-serif;
-  text-shadow: 8px 8px black, 7px 7px black, 6px 6px black, 5px 5px black, 4px 4px black, 3px 3px black, 2px 2px black, 1px 1px black, -1px -1px 0 #000, -2px -2px 0 #000, -3px -3px 0 #000, 1px -1px 0 #000, 2px -2px 0 #000, 3px -3px 0 #000, -1px 1px 0 #000, -2px 2px 0 #000, -3px 3px 0 #000, 1px 1px 0 #000;              
-  text-align: center;
+  text-shadow: 5px 5px #000, 4px 4px #000, 3px 3px #000, 2px 2px #000, 1px 1px #000, -1px -1px 0 #000, -2px -2px 0 #000,  1px -1px 0 #000;
+  text-align: left;
   padding: 20px 0 20px 10px;
-  margin-left: -10px;
 }
-
+#subhead {
+  position: fixed;
+  top: 75px;
+  left: 23px;
+  text-align: center;
+  font-size: 11px;
+}
 #subtitle {
   font-family: "Open Sans", Helvetica, sans-serif;
   color: white;
@@ -75,40 +84,54 @@
   padding: 5px;
 }
 
-canvas {
-  background: #66CC00;
-  z-index: 2;
-  width: 100%;
-  overflow: hidden;
-}
-
 nav{
   position: fixed;
   left: 40px;
   top:110px;
-  z-index: 0;
-  display: none;
+  z-index: 9999;
+
 }
 #navmenu ul li{
   margin: 10px 0;
   list-style: none;
+  position:relative;
+}
+#navmenu ul li a{
+  color:black;
+  /*line-height:40px;*/
 }
 #section-wrapper{
-  margin-left:220px;
+  margin-top:120px;
+  margin-left:240px;
   /*mmargin-top: 330px;*/
   font-family: "Open Sans", Helvetica, sans-serif;
 }
 .section{
-  font-size:15px;
+  font-size:13px;
   line-height: 24px;
   margin: 20px;
 }
 h2, h3{
+  position:relative;
   letter-spacing: 2;
   font-weight:bold;
   margin: 20px 0;
   font-size: 30px;
   letter-spacing: 2px;
+}
+h2 a {
+  color:white;
+}
+h2 a:hover{
+  text-decoration:underline;
+}
+.bullet{
+  position:absolute;
+  left:-25px;
+  /*display:none;*/
+}
+h2 a:hover .bullet{
+  display:block;
 }
 h3 {
   font-size: 15px;
@@ -125,29 +148,46 @@ h3 {
   -moz-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
   -webkit-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
   box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
-  position: relative; 
-  background: #d7d7d7;
+  position: relative;
+  background: #fff;
   text-align: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 .btn:hover {
-  background: white;
+  background: #FFFFE0;
 }
 .nav-item{
   display: block;
 }
 a {
   text-decoration: none;
-  color: black;
+  color: #FFFFAE;
+}
+a:hover{
+  cursor:pointer;
+  cursor:hand;
+  text-decoration: underline;
+}
+.btn-group .btn {
+  margin-left:20px;
+}
+.btn-group .btn:first-child{
+  margin-left:0 !important;
 }
 .btn:active {
   -moz-box-shadow: 0px 0px 0px 0px;
   -webkit-box-shadow: 0px 0px 0px 0px;
   box-shadow: 0px 0px 0px 0px;
   top: 5px;
-  left: 5px; 
+  left: 5px;
 }
 .btn.active {
-  background-color: white;
+  background-color: #FFFFFFFFC5AE;
   color: black;
 }
 #logo {
@@ -163,9 +203,9 @@ a {
 
 code {
   background-color: white;
-  border: 3px dashed black;
+  /*border: 3px dashed black;*/
   color: black;
-  padding: 10px 15px;
+  /*padding: 5px 7px;*/
   font-family: Courier, monospace;
 }
 form {
@@ -192,25 +232,25 @@ fieldset legend {
   background: white;
   font-weight: 700;
   color: black;
-  padding: 3px 5px;
+  padding: 0 2px;
 }
 .highlight:hover {
   background: black;
   color: white;
 }
 .bullet {
-  color: black;
+  color: #4FBAE7;
 }
 
 footer {
   font-family: "Open Sans", sans-serif;
   background: black;
   color: white;
-  padding:20px;
+  padding:20px 20px 35px 20px;
   margin-top: 100px;
 }
 footer p {
-  margin-top: 40px;
+  margin-top: 20px;
 }
 
 textarea {
@@ -219,6 +259,11 @@ textarea {
   border: none;
   font-family: Courier, monospace;
   height:50px;
+  overflow: auto;
+  padding:5px;
+}
+
+textarea:focus{
   overflow: auto;
 }
 

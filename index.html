@@ -8,67 +8,6 @@
     <script src="web/js/jquery.formalize.min.js"></script>
     <script type='text/javascript' src="http://twitter.github.com/bootstrap/1.4.0/bootstrap-scrollspy.js"></script>
     <script type='text/javascript' src="http://demos.flesler.com/jquery/scrollTo/js/jquery.scrollTo-min.js"></script>
-    <script>
-      //change size of canvas first load
-      function resizeCanvas(){
-        var con = $("#container-fluid"),
-        canvas = $("#canvas")[0],
-        width = con.width(),
-        aspect = 300/canvas.width;
-
-        
-        canvas.width = width;
-        canvas.height = Math.round(width * aspect);
-      }
-      window.onresize = resizeCanvas;
-      window.onload = resizeCanvas;
-      //change size of canvas on window resize
-    $(window).load(function(){
-      var con = $("#container-fluid"),
-        canvas = $("#canvas")[0],
-        width = con.width(),
-        aspect = 300/canvas.width;
-
-        
-        canvas.width = width;
-        canvas.height = Math.round(width * aspect);
-      $(function() {
-        $('#navmenu').scrollSpy()
-        
-        $('#navmenu ul li a').bind('click', function(e) {
-          e.preventDefault();
-          target = this.hash;
-          console.log(target);
-          $.scrollTo(target, 1000, {offset:-140});
-        });
-      });
-      $(function(){ // document ready
- 
-        var stickyTop = $('.sticky').offset().top; // returns number
- 
-        $(window).scroll(function(){ // scroll event
- 
-          var windowTop = $(window).scrollTop(); // returns number
- 
-        if (stickyTop < windowTop - 30) {
-          $('.sticky').css({ position: 'fixed', top: 0 });
-          $('#title').addClass('bluedots');
-        }
-        else {
-          $('.sticky').css({ position: 'absolute', top: 80 });
-          $('#title').removeClass('bluedots');
-        }
-        if (stickyTop < windowTop - 120) {
-          $('nav').fadeIn('slow');
-        }
-        else {
-          $('nav').fadeOut('slow');
-        }
-  });
- 
-});
-    });
-    </script>
     <!-- RED QUERY -->
     <script src="web/RedQueryBuilder/RedQueryBuilder.nocache.js" type="text/javascript" language="javascript">//</script>
     <link href="web/RedQueryBuilder/gwt/dark/dark.css" rel="stylesheet" type="text/css" />
@@ -76,31 +15,20 @@
     <!-- end red query -->
     <link href="web/css/reset.css" rel='stylesheet' type='text/css'/>
     <link href="web/css/styles.css" rel='stylesheet' type='text/css'/>
-    <script src="web/js/makeitrain.js"></script>
 </head>
-<body class="bluedots" data-spy="scroll" data-target="#navmenu" data-offset="80"> 
+<body class="bluedots" data-spy="scroll" data-target="#navmenu" data-offset="80">
   <!--[if lt IE 9]>
       <p class="chromeframe" style="margin: 40px auto 0; width: 600px; font-size: 24px; line-height: 1.4em;">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
     <![endif]-->
     <div id="container-fluid">
         <div id="hero">
-          <div>
-            <canvas id="canvas"/>
-          </div>
             <h1 id="title" class="sticky">TREASURY.IO</h1>
-            <h2 id="subtitle">SHOW ME THE MONEY</h2>
-            <h2 id="subsubtitle">
-              <a href="#query">
-                <img src="web/images/expanded.gif"/>
-                BUILD A QUERY
-                <img src="web/images/expanded.gif"/>
-              </a>
-            </h2>
+            <div id="subhead">A daily data feed for the U.S. Treasury</div>
         </div>
         <nav id="navmenu">
             <ul id="menu">
-                <li class="nav-item btn" id="logo"><a href="#hero"><img src="web/images/flag.png"></a></li>
-                <li class="nav-item btn"><a href="#query">Query</a></li>
+                <!-- <li class="nav-item btn" id="logo"><a href="#hero"><img src="web/images/flag.png"></a></li> -->
+                <li class="nav-item btn active"><a href="#query">Query</a></li>
                 <li class="nav-item btn"><a href="#about">About</a></li>
                 <li class="nav-item btn"><a href="#tables">Tables</a></li>
                 <li class="nav-item btn"><a href="#usage">Usage</a></li>
@@ -109,7 +37,7 @@
         </nav>
         <div id="section-wrapper">
           <div id="query" class="section">
-            <h2><span class="bullet">$</span> QUERY BUILDER</h2>
+            <h2><a href="query"><span class="bullet">$</span> <span class="internal-link">Query builder</span></a></h2>
             <div id="builder">
               <div id="rqb">&nbsp;</div>
               <div id="query-string-wrapper">
@@ -122,16 +50,16 @@
               </div>
             <div class="btn-group">
               <a class="btn" href="#">Download .csv</a>
-              <a class="btn" href="#">Preview Data</a>
+              <a class="btn" href="#">View JSON</a>
             </div>
       </div>
       </div>
           <div class="section" id="about">
-              <h2><span class="bullet">$</span> ABOUT</h2>
-              <p>Retro synth direct trade <a class="highlight">flexitarian</a>, helvetica godard tumblr selvage keffiyeh vegan 8-bit iphone shoreditch. Fanny pack viral lo-fi polaroid, odd future marfa high life chillwave. Fanny pack echo park cardigan street art. Pitchfork occupy cray semiotics. Pickled +1 single-origin coffee, polaroid marfa <a class="highlight">flexitarian</a> authentic carles tumblr bicycle rights photo booth. Shoreditch irony 8-bit, swag jean shorts PBR quinoa high life beard lo-fi trust fund cosby sweater. Squid mcsweeneys small batch ennui banh mi.</p>
+              <h2><a href="#about"><span class="bullet">$</span> <span class="internal-link">About</span></a></h2>
+              <p>Retro synth direct trade, helvetica godard tumblr selvage keffiyeh vegan 8-bit iphone shoreditch. Fanny pack viral lo-fi polaroid, <a href="" target="_blank">odd future marfa</a> life chillwave. Fanny pack echo park cardigan street art. Pitchfork occupy cray semiotics. Pickled +1 single-origin coffee, polaroid marfa  authentic carles tumblr bicycle rights photo booth. Shoreditch irony 8-bit, swag jean shorts PBR quinoa high life beard lo-fi trust fund cosby sweater. Squid mcsweeneys small batch ennui banh mi.</p>
           </div>
           <div class="section" id="tables">
-            <h2><span class="bullet">$</span> TABLES</h2>
+            <h2><a href="#tables"><span class="bullet">$</span> <span class="internal-link">Tables</span></a></h2>
             <p>This API provides eight tables. You can access them with the short names in parantheses</p>
             <ul class="tables">
               <li>I. Operating Cash Balance (<a class="">t1</a>)</li>
@@ -145,12 +73,12 @@
             </ul>
           </div>
           <div class="section" id="usage">
-              <h2><span class="bullet">$</span> USAGE</h2>
+              <h2><a href="#usage"><span class="bullet">$</span> <span class="internal-link">Usage</span></a></h2>
               <p>Rich in mystery. Preserve and cherish that pale blue dot, cosmic ocean with pretty stories for which there's little good evidence not a sunrise but a galaxyrise culture tendrils of gossamer clouds hearts of the stars, intelligent beings rich in mystery.</p>
               <p> Stirred by starlight Apollonius of Perga, consciousness, hearts of the stars permanence of the stars stirred by starlight realm of the galaxies a very small stage in a vast cosmic arena as a patch of light muse about two ghostly white figures in coveralls and helmets are soflty dancing rogue not a sunrise but a galaxyrise great turbulent clouds Flatland and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
           </div>
           <div class="section" id="examples">
-              <h2><span class="bullet">$</span> EXAMPLES</h2>
+              <h2><a href="#examples"><span class="bullet">$</span> <span class="internal-link">Examples</span></a></h2>
               <p>Billions upon billions brain is the seed of intelligence hundreds of thousands ship of the imagination trillion! How far away, cosmic fugue Drake Equation extraordinary claims require extraordinary evidence from which we spring white dwarf, Jean-François Champollion?</p>
               <ul>
                 <li>
@@ -162,8 +90,30 @@
         </div>
     </div>
     <footer>
-      <p>Made lovingly by the <a href="http://csvsoundsystem.com" class="highlight">CSV soundsystem team</a>, in fulfillment of a grant from the <a href="http://www.knightfoundation.org" class="highlight">Knight Foundation.</a></p>
+      <p>Made lovingly by <a href="http://csvsoundsystem.com" target="_blank" class="highlight">csv soundsystem</a> in fulfillment of a Code Sprint grant from <a href="http://www.mozillaopennews.org/" target="_blank"  class="highlight">knight-mozilla OpenNews</a>.</p><p><a href="http://dansinker.com/post/49856260511/opennews-code-sprints-do-some-spring-cleaning-on-data" target="_blank">I want to know more</a>.</p>
     </footer>
+        <script>
+          $(function() {
+            $('#navmenu').scrollSpy()
+
+            $('#navmenu ul li a').on('click', function(e) {
+                var that = this;
+                scrollThere(that, e);
+            });
+
+            $('h2 a').on('click', function(e) {
+                var that = this;
+                scrollThere(that, e);
+            });
+
+            function scrollThere(that, e){
+              e.preventDefault();
+              target = that.hash;
+              console.log(that.hash);
+              $.scrollTo(target, 300, {offset:-10});
+            }
+          });
+        </script>
         <script>
 RedQueryBuilderFactory.create({
     meta : {
