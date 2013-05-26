@@ -98,12 +98,11 @@ nav{
 }
 #navmenu ul li a{
   color:black;
-  /*line-height:40px;*/
 }
 #section-wrapper{
   margin-top:120px;
   margin-left:240px;
-  /*mmargin-top: 330px;*/
+  /*margin-top: 330px;*/
   font-family: "Open Sans", Helvetica, sans-serif;
 }
 .section{
@@ -193,6 +192,7 @@ a:hover{
 #logo {
   margin: 0;
   padding: 0;
+  height:148px;
 }
 #logo img{
   background: white;
