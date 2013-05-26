@@ -49,8 +49,8 @@
                 </fieldset>
               </div>
             <div class="btn-group">
-              <a class="btn" href="#">Download .csv</a>
-              <a class="btn" href="#">View JSON</a>
+              <a class="btn" id="download-csv" target="_blank" href="#">Download .csv</a>
+              <a class="btn" id="download-json" target="_blank" href="#">View JSON</a>
             </div>
       </div>
       </div>
@@ -360,7 +360,11 @@ RedQueryBuilderFactory.create({
       }
       out += '\r\n';
     }
-    document.getElementById("sql").value = out.replace(/\"x0\"\.?/g, '');
+    something = function(out) { return out.replace(/\"x0\"\.?/g, ''); }
+    query = function(out) { return 'https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=' + encodeURI(something(out)); }
+    document.getElementById("sql").value = something(out);
+    document.getElementById("download-csv").setAttribute('href', query(out));
+    document.getElementById("download-json").setAttribute('href', query(out));
   },
 });
         </script>
