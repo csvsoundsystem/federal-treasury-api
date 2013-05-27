@@ -82,8 +82,27 @@
               <p>Billions upon billions brain is the seed of intelligence hundreds of thousands ship of the imagination trillion! How far away, cosmic fugue Drake Equation extraordinary claims require extraordinary evidence from which we spring white dwarf, Jean-François Champollion?</p>
               <ul>
                 <li>
-                  <h3>Example 1</h3>
-                  <p>Venture explorations cosmos, billions upon billions hundreds of thousands descended from astronomers rogue radio telescope, two ghostly white figures in coveralls and helmets are soflty dancing venture, not a sunrise but a galaxyrise ship of the imagination with pretty stories for which there's little good evidence and billions upon billions upon billions upon billions upon billions upon billions upon billions.</p>
+                  <h3>Python</h3>
+                  <pre><code>from json import load
+from urllib import urlopen
+from urllib import urlencode
+
+from pandas import DataFrame
+
+def treasury(sql):
+    'Query treasury.io, and return the results as a pandas data frame.'
+    url = 'https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/'
+    query_string = urlencode({'q':sql})
+    handle = urlopen(url + '?' + query_string)
+    if handle.code == 200:
+        d = load(handle)
+        return DataFrame(d)
+    else:
+        raise ValueError(handle.read())
+
+if __name__ == '__main__':
+    print 'Operating cash balances for May 22, 2013'
+    print treasury('''SELECT * FROM "t1" WHERE "date" = '2013-05-22';''')</code></pre>
                 </li>
               </ul>
           </div>
