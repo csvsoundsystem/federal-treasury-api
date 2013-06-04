@@ -69,3 +69,7 @@ There are eight tables.
     python -m SimpleHTTPServer
 
 then visit http://localhost:8000
+
+## Downloaders
+`examples` contains some example downloader functions.
+[csv/json](https://github.com/csv/json) is a website that serves the data as csv.
