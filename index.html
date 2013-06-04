@@ -85,51 +85,11 @@
               <ul>
                 <li>
                   <h3>Python</h3>
-                  <pre><code>from json import load
-from urllib import urlopen
-from urllib import urlencode
-
-from pandas import DataFrame
-
-def treasury(sql):
-    'Query treasury.io, and return the results as a pandas data frame.'
-    url = 'https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/'
-    query_string = urlencode({'q':sql})
-    handle = urlopen(url + '?' + query_string)
-    if handle.code == 200:
-        d = load(handle)
-        return DataFrame(d)
-    else:
-        raise ValueError(handle.read())
-
-if __name__ == '__main__':
-    print 'Operating cash balances for May 22, 2013'
-    print treasury('''SELECT * FROM "t1" WHERE "date" = '2013-05-22';''')</code></pre>
+                  <pre><code id="python-example"></code></pre>
                 </li>
                 <li>
                   <h3>R</h3>
-                  <pre><code>library(plyr)
-library(utils)
-library(RJSONIO)
-
-treasury &lt;- function(sql) {
-  url = paste('https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=', URLencode(sql), sep = '')
-  handle &lt;- getCurlHandle()
-  body &lt;- getURL(url, curl = handle)
-  if (200 == getCurlInfo(handle)$response.code) {
-    ldply(
-      fromJSON(body),
-      function(row) {as.data.frame(t(row))}
-    )
-  } else {
-    stop(body)
-  }
-}
-
-if (interactive()) {
-  print('Operating cash balances for May 22, 2013')
-  print(treasury('SELECT * FROM "t1" WHERE "date" = \'2013-05-22\';'))
-}</code></pre>
+                  <pre><code id="r-example"></code></pre>
                 </li>
               </ul>
           </div>
@@ -140,6 +100,10 @@ if (interactive()) {
     </footer>
         <script>
           $(function() {
+            // Load the example scripts
+            $.get('examples/treasury.py', function(code) {$('#python-example').text(code)})
+            $.get('examples/treasury.r', function(code) {$('#r-example').text(code)})
+
             $('#navmenu').scrollSpy()
 
             $('#navmenu ul li a').on('click', function(e) {
