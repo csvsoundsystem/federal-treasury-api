@@ -371,10 +371,11 @@ RedQueryBuilderFactory.create({
       out += '\r\n';
     }
     something = function(out) { return out.replace(/\"x0\"\.?/g, ''); }
-    query = function(out) { return 'https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=' + encodeURI(something(out)); }
+    
+    query = function(base, out) { return base + encodeURI(something(out)); }
     document.getElementById("sql").value = something(out);
-    document.getElementById("download-csv").setAttribute('href', query(out));
-    document.getElementById("download-json").setAttribute('href', query(out));
+    document.getElementById("download-json").setAttribute('href', query('https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=', out));
+    document.getElementById("download-csv").setAttribute('href', query('http://jsonadapter.herakuapp.com/q=', out));
   },
 });
         </script>
