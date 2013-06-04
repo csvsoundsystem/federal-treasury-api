@@ -17,5 +17,5 @@ def treasury(sql):
         raise ValueError(handle.read())
 
 if __name__ == '__main__':
-    success = treasury('''SELECT * FROM "t1" WHERE "date" = '2013-05-22';''')
-    # failure = treasury('''SELEC-nhaoesaoeuhasouesnaouhsaoe2013-05-22';''')
+    print('Operating cash balances for May 22, 2013')
+    print(treasury('''SELECT * FROM "t1" WHERE "date" = '2013-05-22';'''))
