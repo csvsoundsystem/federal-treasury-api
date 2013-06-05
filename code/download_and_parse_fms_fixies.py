@@ -25,6 +25,7 @@ os.system('mkdir -pv ' + FIXIE_DIR)
 os.system('mkdir -pv ' + DAILY_CSV_DIR)
 os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
 
+
 ## DOWNLOAD! ##################################################################
 # test for existence of downloaded fixies
 test_fixies = sorted([f for f in os.listdir(FIXIE_DIR) if f.endswith('.txt')])
@@ -45,6 +46,7 @@ downloaded_files = set([fixie.split('.')[0] for fixie in os.listdir(FIXIE_DIR)
 	if fixie.endswith('.txt')])
 def parsed_files():
 	return set([csv.split('_')[0] for csv in os.listdir(DAILY_CSV_DIR) if csv.endswith('.csv')])
+
 
 ## PARSE! #####################################################################
 # fixies that have not yet been parsed into csvs
@@ -91,30 +93,7 @@ for i in range(1,9):
 		daily.close()
 
 
-csv_txt = r"""
-      ,----..    .--.--.
-     /   /   \  /  /    '.       ,---.
-    |   :     :|  :  /`. /      /__./|
-    .   |  ;. /;  |  |--`  ,---.;  ; |
-    .   ; /--` |  :  ;_   /___/ \  | |
-    ;   | ;     \  \    `.\   ;  \ ' |
-    |   : |      `----.   \\   \  \: |
-    .   | '___   __ \  \  | ;   \  ' .
-    '   ; : .'| /  /`--'  /  \   \   '
-    '   | '/  :'--'.     /    \   `  ;
-    |   :    /   `--'---'      :   \ |
-     \   \ .'                   '---"
-      `---`
-"""
-soundsystem_txt = r"""
-.-. .-. . . . . .-. .-. . . .-. .-. .-. .  .
-`-. | | | | |\| |  )`-.  |  `-.  |  |-  |\/|
-`-' `-' `-' ' ` `-' `-'  `  `-'  '  `-' '  `
-"""
-print csv_txt
-print soundsystem_txt
-print '*http://csvsoundsystem.com/'
-
+## SQL-IZE! ###################################################################
 TABLES = [
     {
         'raw-table': 1,
@@ -172,6 +151,31 @@ SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE V%";
 # Commit
 connection.commit()
 
+
+## CELEBRATE! #################################################################
+csv_txt = r"""
+      ,----..    .--.--.
+     /   /   \  /  /    '.       ,---.
+    |   :     :|  :  /`. /      /__./|
+    .   |  ;. /;  |  |--`  ,---.;  ; |
+    .   ; /--` |  :  ;_   /___/ \  | |
+    ;   | ;     \  \    `.\   ;  \ ' |
+    |   : |      `----.   \\   \  \: |
+    .   | '___   __ \  \  | ;   \  ' .
+    '   ; : .'| /  /`--'  /  \   \   '
+    '   | '/  :'--'.     /    \   `  ;
+    |   :    /   `--'---'      :   \ |
+     \   \ .'                   '---"
+      `---`
+"""
+soundsystem_txt = r"""
+.-. .-. . . . . .-. .-. . . .-. .-. .-. .  .
+`-. | | | | |\| |  )`-.  |  `-.  |  |-  |\/|
+`-' `-' `-' ' ` `-' `-'  `  `-'  '  `-' '  `
+"""
+print csv_txt
+print soundsystem_txt
+print '*http://csvsoundsystem.com/'
 
 # Brian's tests go here. Look at is_it_running.py if you want to make the date stuff fancier.
 t1 = pandas.io.sql.read_frame('''SELECT * FROM "t1" WHERE date = '%s';''' % datetime.date.today().isoformat(), connection)

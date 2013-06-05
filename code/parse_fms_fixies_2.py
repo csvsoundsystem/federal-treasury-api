@@ -63,7 +63,7 @@ def parse_file(f_name, verbose=False):
 	# file metadata
 	date = get_date_and_day(f_name)[0]
 	day = get_date_and_day(f_name)[1]
-	print f_name, '=>', date
+	print 'INFO: parsing', f_name, '(', date, ')'
 
 	dfs = {}
 	for page in pages[1:]:
@@ -97,7 +97,11 @@ def parse_page(page, page_index, date, day, verbose=False):
 		#print line
 		row = {}
 
+		# a variety of date formats -- for your convenience
 		row['date'] = date
+		row['year'] = date.year
+		row['month'] = date.month
+		row['year-month'] = datetime.date.strftime(date, '%Y-%m')
 		row['day'] = day
 
 		index = page.index(line)
@@ -252,15 +256,15 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 	# and pretty them up
 	if page_index == 1:
-		df = df.reindex(columns=['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	if page_index in [2,3]:
-		df = df.reindex(columns=['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif page_index in [4,5]:
-		df = df.reindex(columns=['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif page_index == 6:
-		df = df.reindex(columns=['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif page_index in [7,8]:
-		df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 
 	# table: string
 	# date: string, in standard YYYY-MM-DD format
