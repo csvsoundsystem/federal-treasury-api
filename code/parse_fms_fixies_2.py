@@ -125,7 +125,7 @@ def parse_page(page, page_index, date, day, verbose=False):
 			row['footnote'] = re.search(r'(\d+)\/', line).group(1)
 
 		# separate digits and words
-		digits = re.findall(r'(\d+)', line)
+		digits = re.findall(r'(-{,1}\d+)', line)
 		words = re.findall(r'[^\W\d]+:?', line)
 		text = ' '.join(words)
 
