@@ -23,10 +23,10 @@ def get_table_name(line):
 
 ################################################################################
 def normalize_page_text(page):
-	# remove unicode errors
-
+	# ignore unicode errors
+	# i.e. remove superscript 3 symbols ('\xc2\xb3') by way of ignoring their errors
+	# hopefully this doesn't have any undesirable side-effects
 	page = unicode(page, errors='ignore')
-
 	# split on line breaks
 	lines = re.split(r'\r\n', page)
 	# get rid of pipe delimiters and divider lines
@@ -127,7 +127,10 @@ def parse_page(page, page_index, date, day, verbose=False):
 		# separate digits and words
 		digits = re.findall(r'(-{,1}\d+)', line)
 		words = re.findall(r'[^\W\d]+:?', line)
-		text = ' '.join(words)
+		# bug fix, to remove the govt's arbitrary usage of 'r/' instead of '$'
+		# in front of particular dollar amounts
+		text = ' '.join(word for word in words if word != 'r')
+		#text = ' '.join(words)
 
 		# get type row
 		if len(digits) == 0 and text.endswith(':') and indent == 1:
