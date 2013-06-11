@@ -215,14 +215,14 @@
 }
 
 .gwt-ListBox {
-  background: white;
+  /*background: white;*/
   padding:  5px !important;
-  border: none;
+  /*border: none;*/
   -webkit-font-smoothing: antialiased;
-  color: black;
+  /*color: black;*/
   font-weight: bold;
-  outline: none;
-  -webkit-appearance: none;
+  /*outline: none;*/
+  /*-webkit-appearance: none;*/
   border-radius: 0;
 }
 
