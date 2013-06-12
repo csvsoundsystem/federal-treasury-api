@@ -116,8 +116,18 @@ def parse_page(page, page_index, date, day, verbose=False):
 		row['table'] = table_name
 
 		# save footnotes for later assignment to their rows
-		if get_footnote(line):
-			footnote = get_footnote(line)
+		footnote = get_footnote(line)
+		#if get_footnote(line):
+		if footnote is not None:
+			#footnote = get_footnote(line)
+			# if footnote does not end in valid sentence-ending punctuation...
+			if not re.search(r'[.!?]$', footnote[1]):
+				next_line = page[index + 1]
+				# and next line is not itself a new footnote...
+				if not get_footnote(next_line):
+					# add next line text to current footnote
+					footnote[1] = ''.join([footnote[1], next_line])
+					used_index = index + 1
 			footnotes[footnote[0]] = footnote[1]
 			continue
 		# note rows with footnote markers for later assignment
