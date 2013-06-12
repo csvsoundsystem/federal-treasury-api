@@ -26,7 +26,7 @@
 }
 
 .gwt-Button {
-  margin: 0;
+/*  margin: 0;
   padding: 3px 5px;
   text-decoration: none;
   font-size: small;
@@ -34,19 +34,19 @@
   cursor: hand;
   background: black;
   color: white;
-}
+*/}
 .gwt-Button:active {
-  background: #666666;
+  /*background: #666666;*/
 }
 .gwt-Button:hover {
-  background: #666666;
+  /*background: #666666;*/
 }
 .gwt-Button[disabled] {
-  cursor: default;
+/*  cursor: default;
   color: #777;
-}
+*/}
 .gwt-Button[disabled]:hover {
-  border: 1px outset #000;
+  /*border: 1px outset #000;*/
 }
 
 .gwt-CheckBox {
@@ -1095,4 +1095,10 @@ td.datePickerMonth {
 .gwt-SplitLayoutPanel-VDragger {
   background: #00CCFF url(images/splitPanelThumb.png) center center no-repeat;
   cursor: row-resize;
+}
+.rqbComparison,.rqbAndOrOp{
+  border-radius:3px !important;
+  border-width:4px !important;
+  background-color: #464444 !important;
+  border-color: #464444 !important;
 }
