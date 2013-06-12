@@ -105,7 +105,7 @@ def parse_page(page, page_index, date, day, verbose=False):
 		row['day'] = day
 
 		index = page.index(line)
-		if index == used_index : continue
+		if index <= used_index : continue
 		indent = len(re.search(r'^\s*', line).group())
 
 		# skip table header rows
@@ -117,19 +117,33 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 		# save footnotes for later assignment to their rows
 		footnote = get_footnote(line)
-		#if get_footnote(line):
 		if footnote is not None:
-			#footnote = get_footnote(line)
-			# if footnote does not end in valid sentence-ending punctuation...
-			if not re.search(r'[.!?]$', footnote[1]):
-				next_line = page[index + 1]
+			# while footnote does not end in valid sentence-ending punctuation...
+			i = 1
+			while not re.search(r'[.!?]$', footnote[1]):
+				# get next line, if it exists
+				try:
+					next_line = page[index + i]
+				except IndexError:
+					break
 				# and next line is not itself a new footnote...
 				if not get_footnote(next_line):
 					# add next line text to current footnote
 					footnote[1] = ''.join([footnote[1], next_line])
-					used_index = index + 1
+					used_index = index + i
+					print used_index
+					i += 1
+			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]
-			continue
+			# if next line after footnote is not another footnote
+			# it is most assuredly extra comments we don't need
+			try:
+				last_line = page[index + i]
+			except IndexError:
+				break
+			if not get_footnote(last_line):
+				break
+
 		# note rows with footnote markers for later assignment
 		if re.search(r'\d+\/', line):
 			row['footnote'] = re.search(r'(\d+)\/', line).group(1)
