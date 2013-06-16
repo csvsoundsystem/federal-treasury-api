@@ -4,26 +4,26 @@
             "name": "Operating Cash Balance",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -34,26 +34,26 @@
             "name": "Deposits",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -64,26 +64,26 @@
             "name": "Withdrawals",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -94,26 +94,26 @@
             "name": "Public Debt Transactions",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -124,26 +124,26 @@
             "name": "Adjustment of Public Debt Transactions to Cash Balance",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -154,26 +154,26 @@
             "name": "Debt Subject to Limit",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -184,26 +184,26 @@
             "name": "Federal Tax Deposits",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -214,26 +214,26 @@
             "name": "Short-term Cash Investments",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -244,26 +244,26 @@
             "name": "Income Tax Refunds Issued",
             "columns": [
                 {
-                    "name": "ACCOUNT",
-                    "label": "account",
+                    "label": "Account",
+                    "name": "account",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "DATE",
                     "label": "date",
+                    "name": "DATE",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "name": "TOTAL",
-                    "label": "total",
-                    "type": "STRING",
+                    "label": "Total",
+                    "name": "total",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "name": "CLOSING TODAY",
-                    "label": "closing_today",
+                    "label": "Closing today",
+                    "name": "closing_today",
                     "type": "STRING",
                     "size": 10
                 }
@@ -279,6 +279,37 @@
                 {
                     "name": "=",
                     "label": "is",
+                    "cardinality": "ONE"
+                },
+                {
+                    "name": "<>",
+                    "label": "is not",
+                    "cardinality": "ONE"
+                }
+            ]
+        },
+        {
+            "name": "NUMERIC",
+            "editor": "TEXT",
+            "operators": [
+                {
+                    "name": "=",
+                    "label": "is",
+                    "cardinality": "ONE"
+                },
+                {
+                    "name": "<>",
+                    "label": "is not",
+                    "cardinality": "ONE"
+                },
+                {
+                    "name": "<",
+                    "label": "less than",
+                    "cardinality": "ONE"
+                },
+                {
+                    "name": ">",
+                    "label": "greater than",
                     "cardinality": "ONE"
                 }
             ]
