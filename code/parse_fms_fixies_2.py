@@ -285,3 +285,5 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 	return df
 
+def strip_table_name(table_name):
+    return re.sub('[^a-zA-Z]*$', '', table_name)
