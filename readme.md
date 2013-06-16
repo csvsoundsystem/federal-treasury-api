@@ -50,6 +50,14 @@ To make sure that the script is still running on ScraperWiki, run
 
     ./is_it_running.py
 
+To make sure that results are reasonable, run the integrity tests.
+
+    cd code
+    ./integrity_tests.py
+
+Results will appear in `data/test_output/%Y-%m-%d.csv`, named after today's
+date.
+
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
 is linked (for ScraperWiki compatibility). `fixie` contains the original files,
