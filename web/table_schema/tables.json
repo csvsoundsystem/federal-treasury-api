@@ -66,6 +66,12 @@
                 },
                 {
                     "label": "Open Month",
+                    "name": "open_mo",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Open Year",
                     "name": "open_fy",
                     "type": "NUMERIC",
                     "size": 10
@@ -74,32 +80,94 @@
             "fks": []
         },
         {
-            "name": "Deposits",
+            "label": "Deposits",
+            "name": "t2",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "Date",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "Total",
-                    "name": "total",
+                    "label": "Year-Month",
+                    "name": "year_month",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
+                    "label": "Month",
+                    "name": "month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Day",
+                    "name": "day",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Account",
+                    "name": "account",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "name": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Subtype",
+                    "name": "subtype",
                     "type": "STRING",
                     "size": 10
+                },
+                {
+                    "label": "Item",
+                    "name": "item",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is Total?",
+                    "name": "is_total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Today",
+                    "name": "today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Month-To-Date",
+                    "name": "mtd",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Year-To-Date",
+                    "name": "fytd",
+                    "type": "NUMERIC",
+                    "size": 10
                 }
+
             ],
             "fks": []
         },
