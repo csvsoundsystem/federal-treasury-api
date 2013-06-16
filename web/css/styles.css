@@ -226,7 +226,6 @@ form {
 #builder {
   background: rgba(255,255,255,.5);
   padding: 20px;
-  padding-bottom: 50px;
 }
 #query-string {
   margin-top:3px;
@@ -259,8 +258,12 @@ form {
   top: 0px;
   left: 1px;
 }
-#query-string-wrapper .btn.active:active{
-
+#query-asterisk-field{
+  margin-top:25px;
+}
+#query-asterisk-field p{
+  font-size: 9px;
+  letter-spacing: 1px;
 }
 fieldset legend {
   display: none;

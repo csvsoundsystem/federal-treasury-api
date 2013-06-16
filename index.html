@@ -43,7 +43,7 @@
               <button id="query-refresher" disabled>Update query text...</button>
               <div id="query-string-wrapper">
                 <fieldset>
-                  <span>SQL Query | View as: </span> <button data-encoding="false" class="btn active">Plain-text</button> <button data-encoding="true" class="btn">URL-Encoded</button>
+                  <span>SQL Query | View as:* </span> <button data-encoding="false" class="btn active">Plain-text</button> <button data-encoding="true" class="btn">URL-Encoded</button>
                   <div id="query-string">
                     <textarea id="sql">Select from the dropdown menu above...</textarea>
                   </div>
@@ -52,6 +52,9 @@
             <div class="btn-group">
               <a class="btn" id="download-csv" target="_blank" href="#">Download .csv</a>
               <a class="btn" id="download-json" target="_blank" href="#">View JSON</a>
+            </div>
+            <div id="query-asterisk-field">
+                <p>*All queries are URL-encoded when you select "Download as CSV" or "View JSON." Use these buttons as a shortcut when accessing the API programatically or for testing.</p>
             </div>
       </div>
       </div>
