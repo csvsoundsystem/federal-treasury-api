@@ -1,4 +1,6 @@
-from datetime import datetime
+#!/usr/bin/env python
+
+from datetime import datetime, date
 import pandas as pd
 import os
 from collections import defaultdict
@@ -208,7 +210,8 @@ def test_table(fp):
     return tests
 
 # test ALL the data
-filepaths = ["fms_parser_data/daily_csv/" + f for f in os.listdir("fms_parser_data/daily_csv/")]
+CSV_DIR = os.path.join('..', 'data', 'daily_csv')
+filepaths = [os.path.join(CSV_DIR, f) for f in os.listdir(CSV_DIR)]
 o = []
 for i, fp in enumerate(filepaths):
     print str(i), "of", str(len(filepaths))
@@ -221,15 +224,4 @@ cols = [
     'variable', 'n_pass', 'n_miss', 'n_fail', 'all_true'
 ]
 df = pd.DataFrame(o, columns=cols)
-df.to_csv("test_output/test-2013-05-14-pd.csv")
-
-
-
-
-
-
-
-
-
-
-
+df.to_csv(os.path.join('..', 'data', 'test_output', date.today().isoformat + '.csv'))
