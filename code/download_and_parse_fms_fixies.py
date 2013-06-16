@@ -6,6 +6,7 @@ import os
 import pandas as pd
 import pandas.io.sql
 import parse_fms_fixies_2
+import re
 import sqlite3
 import sys
 
@@ -58,13 +59,21 @@ for f in new_files:
 	dfs = parse_fms_fixies_2.parse_file(fname, verbose=False)
 
 	# each table for each date stored in separate csv files
-	for i, df in dfs.items():
-		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_t'+str(i)+'.csv')
+	for df in dfs.values():
+		try:
+			t_name = df.ix[0,'table']
+			t_name_match = re.search(r'TABLE [\w-]+', t_name)
+			t_name_short = re.sub(r'-| ', '_', t_name_match.group().lower())
+		except Exception as e:
+			#print df.head(5)
+			print '***ERROR: tables failed to parsed!'
+			continue
+		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_'+t_name_short+'.csv')
 		df.to_csv(daily_csv,
 			index=False, header=True, encoding='utf-8', na_rep='')
 
 # iterate over all fms tables
-for i in range(1,9):
+for i in ['i', 'ii', 'iii_a', 'iii_b', 'iii_c', 'iv', 'v', 'vi']:
 
 	# create the lifetime csv files it they don't exist
 	lifetime_csv = os.path.join(LIFETIME_CSV_DIR, 'table_'+str(i)+'.csv')
@@ -73,7 +82,7 @@ for i in range(1,9):
 	if not os.path.isfile(lifetime_csv):
 		lifetime = open(lifetime_csv, 'ab')
 		# add the header
-		lifetime.write(open(os.path.join(DAILY_CSV_DIR, list(parsed_files())[0]+'_t'+str(i)+'.csv')).readline())
+		lifetime.write(open(os.path.join(DAILY_CSV_DIR, list(parsed_files())[0]+'_table_'+str(i)+'.csv')).readline())
 		lifetime.close()
 
 	# append new csvs to lifetime csvs
@@ -82,7 +91,8 @@ for i in range(1,9):
 		# we have no idea why it's giving us a blank file
 		if len(f) == 0: continue
 
-		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_t'+str(i)+'.csv')
+		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_table_'+str(i)+'.csv')
+		if not os.path.isfile(daily_csv): continue
 
 		lifetime = open(lifetime_csv, 'ab')
 		daily = open(daily_csv, 'rb')
@@ -95,58 +105,48 @@ for i in range(1,9):
 
 ## SQL-IZE! ###################################################################
 TABLES = [
-    {
-        'raw-table': 1,
-        'new-table': 't1',
-    },
-    {
-        'raw-table': 2,
-        'new-table': 't2a',
-    },
-    {
-        'raw-table': 3,
-        'new-table': 't2b',
-    },
-    {
-        'raw-table': 4,
-        'new-table': 't3a',
-    },
-    {
-        'raw-table': 5,
-        'new-table': 't3b',
-    },
-    {
-        'raw-table': 6,
-        'new-table': 't3c',
-    },
-    {
-        'raw-table': 7,
-        'new-table': 't4_t5',
-    },
-    {
-        'raw-table': 8,
-        'new-table': 't6',
-    },
+	{
+		'raw-table': 'i',
+		'new-table': 't1',
+	},
+	{
+		'raw-table': 'ii',
+		'new-table': 't2',
+	},
+	{
+		'raw-table': 'iii_a',
+		'new-table': 't3a',
+	},
+	{
+		'raw-table': 'iii_b',
+		'new-table': 't3b',
+	},
+	{
+		'raw-table': 'iii_c',
+		'new-table': 't3c',
+	},
+	{
+		'raw-table': 'iv',
+		'new-table': 't4',
+	},
+	{
+		'raw-table': 'v',
+		'new-table': 't5',
+	},
+	{
+		'raw-table': 'vi',
+		'new-table': 't6',
+	},
 ]
 
 connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
 connection.text_factory = str # bad, but pandas doesn't work otherwise
 
 for table in TABLES:
-    df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%d.csv' % table['raw-table']))
-    pandas.io.sql.write_frame(df, '_t%d' % table['raw-table'], connection)
-    connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
-    connection.execute('ALTER TABLE "_t%d" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
-
-# Table 4 and table 5 views
-connection.execute('''
-CREATE VIEW IF NOT EXISTS t4 AS
-SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE IV%";
-''')
-connection.execute('''
-CREATE VIEW IF NOT EXISTS t5 AS
-SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE V%";
-''')
+	df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%s.csv' % table['raw-table']))
+	pandas.io.sql.write_frame(df, '_table_%s' % table['raw-table'], connection)
+	connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
+	connection.execute('ALTER TABLE "_table_%s" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
 
 # Commit
 connection.commit()
@@ -154,19 +154,19 @@ connection.commit()
 
 ## CELEBRATE! #################################################################
 csv_txt = r"""
-      ,----..    .--.--.
-     /   /   \  /  /    '.       ,---.
-    |   :     :|  :  /`. /      /__./|
-    .   |  ;. /;  |  |--`  ,---.;  ; |
-    .   ; /--` |  :  ;_   /___/ \  | |
-    ;   | ;     \  \    `.\   ;  \ ' |
-    |   : |      `----.   \\   \  \: |
-    .   | '___   __ \  \  | ;   \  ' .
-    '   ; : .'| /  /`--'  /  \   \   '
-    '   | '/  :'--'.     /    \   `  ;
-    |   :    /   `--'---'      :   \ |
-     \   \ .'                   '---"
-      `---`
+	  ,----..    .--.--.
+	 /   /   \  /  /    '.       ,---.
+	|   :     :|  :  /`. /      /__./|
+	.   |  ;. /;  |  |--`  ,---.;  ; |
+	.   ; /--` |  :  ;_   /___/ \  | |
+	;   | ;     \  \    `.\   ;  \ ' |
+	|   : |      `----.   \\   \  \: |
+	.   | '___   __ \  \  | ;   \  ' .
+	'   ; : .'| /  /`--'  /  \   \   '
+	'   | '/  :'--'.     /    \   `  ;
+	|   :    /   `--'---'      :   \ |
+	 \   \ .'                   '---"
+	  `---`
 """
 soundsystem_txt = r"""
 .-. .-. . . . . .-. .-. . . .-. .-. .-. .  .

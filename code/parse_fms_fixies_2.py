@@ -1,9 +1,8 @@
 
-import collections
 import datetime
 import pandas as pd
 import re
-import StringIO
+
 
 ################################################################################
 def get_date_and_day(f_name):
@@ -12,14 +11,16 @@ def get_date_and_day(f_name):
 	day = datetime.datetime.strftime(date, '%A')
 	return date, day
 
+
 ################################################################################
 def get_table_name(line):
 	try:
-		table_line = re.search(r'\s+TABLE.*', line).group()
+		table_line = re.search(r'\s+TABLE\s+[\w-]+.*', line).group()
 		table_name = table_line.strip()
 	except AttributeError:
 		table_name = None
 	return table_name
+
 
 ################################################################################
 def normalize_page_text(page):
@@ -43,6 +44,7 @@ def normalize_page_text(page):
 	lines = [line for line in lines if line!='' and line!=' ']
 	return lines
 
+
 ################################################################################
 def get_footnote(line):
 	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
@@ -50,15 +52,21 @@ def get_footnote(line):
 		return [footnote.group(1), footnote.group(2)]
 	return None
 
+
 ################################################################################
 def parse_file(f_name, verbose=False):
 
 	f = open(f_name, 'rb').read()
-	raw_pages = re.split(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d\s{2}', f)
-	pages = []
-	for raw_page in raw_pages:
-		page = normalize_page_text(raw_page)
-		pages.append(page)
+
+	raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
+	tables = []
+	for raw_table in raw_tables[1:]:
+		if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
+			table_name = raw_table
+			continue
+		raw_table = table_name + raw_table
+		table = normalize_page_text(raw_table)
+		tables.append(table)
 
 	# file metadata
 	date = get_date_and_day(f_name)[0]
@@ -66,16 +74,17 @@ def parse_file(f_name, verbose=False):
 	print 'INFO: parsing', f_name, '(', date, ')'
 
 	dfs = {}
-	for page in pages[1:]:
-		page_index = pages.index(page)
-		dfs[page_index] = parse_page(page, page_index, date, day, verbose=verbose)
+	for table in tables:
+		table_index = tables.index(table)
+		dfs[table_index] = parse_table(table, date, day, verbose=verbose)
 
 	return dfs
 
-################################################################################
-def parse_page(page, page_index, date, day, verbose=False):
 
-	# page defaults
+################################################################################
+def parse_table(table, date, day, verbose=False):
+
+	# table defaults
 	indent = 0
 	footnotes = {}
 	surtype_index = -1; type_index = -1; subtype_index = -1; used_index = -1
@@ -91,8 +100,8 @@ def parse_page(page, page_index, date, day, verbose=False):
 	else:
 		two_line_delta = -1
 
-	table = []
-	for line in page:
+	parsed_table = []
+	for line in table:
 		#print line
 		row = {}
 
@@ -100,12 +109,19 @@ def parse_page(page, page_index, date, day, verbose=False):
 		row['date'] = date
 		row['year'] = date.year
 		row['month'] = date.month
-		row['year-month'] = datetime.date.strftime(date, '%Y-%m')
+		row['year_month'] = datetime.date.strftime(date, '%Y-%m')
 		row['day'] = day
 
-		index = page.index(line)
+		index = table.index(line)
 		if index <= used_index : continue
 		indent = len(re.search(r'^\s*', line).group())
+
+		# skip page number rows
+		if re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d', line):
+			continue
+		# skip final footer of file
+		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
+			break
 
 		# skip table header rows
 		if re.match(r'\s{7,}', line): continue
@@ -122,7 +138,7 @@ def parse_page(page, page_index, date, day, verbose=False):
 			while not re.search(r'[.!?]$', footnote[1]):
 				# get next line, if it exists
 				try:
-					next_line = page[index + i]
+					next_line = table[index + i]
 				except IndexError:
 					break
 				# and next line is not itself a new footnote...
@@ -130,14 +146,14 @@ def parse_page(page, page_index, date, day, verbose=False):
 					# add next line text to current footnote
 					footnote[1] = ''.join([footnote[1], next_line])
 					used_index = index + i
-					print used_index
+					#print used_index
 					i += 1
 			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]
 			# if next line after footnote is not another footnote
 			# it is most assuredly extra comments we don't need
 			try:
-				last_line = page[index + i]
+				last_line = table[index + i]
 			except IndexError:
 				break
 			if not get_footnote(last_line):
@@ -153,7 +169,6 @@ def parse_page(page, page_index, date, day, verbose=False):
 		# bug fix, to remove the govt's arbitrary usage of 'r/' instead of '$'
 		# in front of particular dollar amounts
 		text = ' '.join(word for word in words if word != 'r')
-		#text = ' '.join(words)
 
 		# get type row
 		if len(digits) == 0 and text.endswith(':') and indent == 1:
@@ -179,9 +194,9 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 		# get and merge two-line rows
 		if len(digits) == 0 and not text.endswith(':'):
-			if two_line_delta == 1 or page_index != 1:
+			if two_line_delta == 1 or not re.search(r'TABLE I\s', row.get('table', '')):
 				try:
-					next_line = page[index + 1]
+					next_line = table[index + 1]
 					# check for footnotes, then note and erase them if present!
 					if re.search(r'\d+\/', next_line):
 						row['footnote'] = re.search(r'(\d+)\/', next_line).group(1)
@@ -193,15 +208,15 @@ def parse_page(page, page_index, date, day, verbose=False):
 						digits = next_digits
 						used_index = index + 1
 				except IndexError: pass
-			elif two_line_delta == -1 and page_index == 1:
+			elif two_line_delta == -1 and re.search(r'TABLE I\s', row.get('table', '')):
 				try:
-					prev_line = page[index - 1]
+					prev_line = table[index - 1]
 					prev_digits = re.findall(r'(\d+)', prev_line)
 					prev_words = re.findall(r'[^\W\d]+:?', prev_line)
 					if len(prev_digits) != 0:
 						text = ' '.join(prev_words) + ' ' + text
 						digits = prev_digits
-						get_rid_of_prev_line = table.pop()
+						get_rid_of_prev_line = parsed_table.pop()
 				except IndexError: pass
 
 		# skip table annotations that aren't footnotes
@@ -210,21 +225,24 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 		row['is_total'] = int('total' in text.lower())
 
-		if page_index in [1, 6]:
+		if re.search(r'TABLE I\s|TABLE III-C', row.get('table', '')):
 			try:
-				if page_index == 1:
+				if re.search(r'TABLE I\s', row.get('table', '')):
 					row['account'] = text
-				elif page_index == 6:
-					try: row['item'] = text
-					except: print line
+				elif re.search(r'TABLE III-C', row.get('table', '')):
+					try:
+						row['item'] = text
+					except:
+						if verbose is True:
+							print 'WARNING:', line
 				row['close_today'] = digits[-4]
 				row['open_today'] = digits[-3]
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
 			except:
 				if verbose is True:
-					print "WARNING:", line
-		elif page_index in [2, 3]:
+					print 'WARNING:', line
+		elif re.search(r'TABLE II\s', row.get('table', '')):
 			try:
 				row['item'] = text
 				row['today'] = digits[-3]
@@ -232,14 +250,16 @@ def parse_page(page, page_index, date, day, verbose=False):
 				row['fytd'] = digits[-1]
 				# tweak column names
 				row['account'] = row['type']
-				if page_index == 2:
-					row['type'] = 'deposit'
-				elif page_index == 3:
-					row['type'] = 'withdrawal'
+				# BUG FIX BJD
+				row['type'] = 'deposit'
+				#if page_index == 2:
+				#	row['type'] = 'deposit'
+				#elif page_index == 3:
+				#	row['type'] = 'withdrawal'
 			except:
 				if verbose is True:
-					print "WARNING:", line
-		elif page_index in [4, 5]:
+					print 'WARNING:', line
+		elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
 			try:
 				row['item'] = text
 				row['today'] = digits[-3]
@@ -247,8 +267,8 @@ def parse_page(page, page_index, date, day, verbose=False):
 				row['fytd'] = digits[-1]
 			except:
 				if verbose is True:
-					print "WARNING:", line
-		elif page_index in [7,8]:
+					print 'WARNING:', line
+		elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
 			try:
 				row['classification'] = text
 				row['today'] = digits[-3]
@@ -256,41 +276,54 @@ def parse_page(page, page_index, date, day, verbose=False):
 				row['fytd'] = digits[-1]
 			except:
 				if verbose is True:
-					print "WARNING:", line
+					print 'WARNING:', line
+		elif re.search(r'TABLE V\s', row.get('table', '')):
+			try:
+				row['balance_transactions'] = text
+				row['depositary_type_A'] = digits[-4]
+				row['depositary_type_B'] = digits[-3]
+				row['depositary_type_C'] = digits[-2]
+				row['total'] = digits[-1]
+			except:
+				if verbose is True:
+					print 'WARNING:', line
 
-		table.append(row)
+		parsed_table.append(row)
 
 	# assign footnotes to rows
 	# and split table III-a by surtype
-	for row in table:
+	for row in parsed_table:
 		if row.get('footnote'):
 			row['footnote'] = footnotes.get(row['footnote'])
 		if row.get('item'):
 			if row['item'].lower().strip() == 'total issues':
-				surtype_index = table.index(row)
+				surtype_index = parsed_table.index(row)
 				row['surtype'] = 'issue'
 
 	# after-the-fact surtype assignment
 	if surtype_index != -1:
-		for row in table[:surtype_index]:
+		for row in parsed_table[:surtype_index]:
 			row['surtype'] = 'issue'
-		for row in table[surtype_index + 1:]:
+		for row in parsed_table[surtype_index + 1:]:
 			row['surtype'] = 'redemption'
 
 	# create data frame from table list of row dicts
-	df = pd.DataFrame(table)
+	df = pd.DataFrame(parsed_table)
 
 	# and pretty them up
-	if page_index == 1:
-		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
-	if page_index in [2,3]:
-		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
-	elif page_index in [4,5]:
-		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
-	elif page_index == 6:
-		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
-	elif page_index in [7,8]:
-		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+	if re.search(r'TABLE I\s', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+	if re.search(r'TABLE II\s', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+	elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+	elif re.search(r'TABLE III-C', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+	elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+	elif re.search(r'TABLE V\s', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'balance_transactions', 'is_total', 'depositary_type_A', 'depositary_type_B', 'depositary_type_C', 'total', 'footnote'])
+
 
 	# table: string
 	# date: string, in standard YYYY-MM-DD format
