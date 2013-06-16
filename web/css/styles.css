@@ -238,7 +238,7 @@ form {
 #query-string-wrapper .btn, #query-string-wrapper .btn.active:active{
   top:-3px;
   left:auto;
-  font-size:7px;
+  font-size:9px;
   margin:0 2px 0 5px;
   border: 1px solid;
   padding: 0.25em 0.5em;
@@ -256,7 +256,7 @@ form {
   -webkit-box-shadow: 0px 0px 0px 0px;
   box-shadow: 0px 0px 0px 0px;
   top: 0px;
-  left: 1px;
+  left: 2px;
 }
 #query-asterisk-field{
   margin-top:25px;
