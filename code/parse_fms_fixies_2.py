@@ -23,10 +23,10 @@ def get_table_name(line):
 
 ################################################################################
 def normalize_page_text(page):
-	# remove unicode errors
-
+	# ignore unicode errors
+	# i.e. remove superscript 3 symbols ('\xc2\xb3') by way of ignoring their errors
+	# hopefully this doesn't have any undesirable side-effects
 	page = unicode(page, errors='ignore')
-
 	# split on line breaks
 	lines = re.split(r'\r\n', page)
 	# get rid of pipe delimiters and divider lines
@@ -63,7 +63,7 @@ def parse_file(f_name, verbose=False):
 	# file metadata
 	date = get_date_and_day(f_name)[0]
 	day = get_date_and_day(f_name)[1]
-	print f_name, '=>', date
+	print 'INFO: parsing', f_name, '(', date, ')'
 
 	dfs = {}
 	for page in pages[1:]:
@@ -96,11 +96,15 @@ def parse_page(page, page_index, date, day, verbose=False):
 		#print line
 		row = {}
 
+		# a variety of date formats -- for your convenience
 		row['date'] = date
+		row['year'] = date.year
+		row['month'] = date.month
+		row['year-month'] = datetime.date.strftime(date, '%Y-%m')
 		row['day'] = day
 
 		index = page.index(line)
-		if index == used_index : continue
+		if index <= used_index : continue
 		indent = len(re.search(r'^\s*', line).group())
 
 		# skip table header rows
@@ -111,18 +115,44 @@ def parse_page(page, page_index, date, day, verbose=False):
 		row['table'] = table_name
 
 		# save footnotes for later assignment to their rows
-		if get_footnote(line):
-			footnote = get_footnote(line)
+		footnote = get_footnote(line)
+		if footnote is not None:
+			# while footnote does not end in valid sentence-ending punctuation...
+			i = 1
+			while not re.search(r'[.!?]$', footnote[1]):
+				# get next line, if it exists
+				try:
+					next_line = page[index + i]
+				except IndexError:
+					break
+				# and next line is not itself a new footnote...
+				if not get_footnote(next_line):
+					# add next line text to current footnote
+					footnote[1] = ''.join([footnote[1], next_line])
+					used_index = index + i
+					i += 1
+			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]
-			continue
+			# if next line after footnote is not another footnote
+			# it is most assuredly extra comments we don't need
+			try:
+				last_line = page[index + i]
+			except IndexError:
+				break
+			if not get_footnote(last_line):
+				break
+
 		# note rows with footnote markers for later assignment
 		if re.search(r'\d+\/', line):
 			row['footnote'] = re.search(r'(\d+)\/', line).group(1)
 
 		# separate digits and words
-		digits = re.findall(r'(\d+)', line)
+		digits = re.findall(r'(-{,1}\d+)', line)
 		words = re.findall(r'[^\W\d]+:?', line)
-		text = ' '.join(words)
+		# bug fix, to remove the govt's arbitrary usage of 'r/' instead of '$'
+		# in front of particular dollar amounts
+		text = ' '.join(word for word in words if word != 'r')
+		#text = ' '.join(words)
 
 		# get type row
 		if len(digits) == 0 and text.endswith(':') and indent == 1:
@@ -251,15 +281,15 @@ def parse_page(page, page_index, date, day, verbose=False):
 
 	# and pretty them up
 	if page_index == 1:
-		df = df.reindex(columns=['table', 'date', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	if page_index in [2,3]:
-		df = df.reindex(columns=['table', 'date', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif page_index in [4,5]:
-		df = df.reindex(columns=['table', 'date', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif page_index == 6:
-		df = df.reindex(columns=['table', 'date', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif page_index in [7,8]:
-		df = df.reindex(columns=['table', 'date', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year-month', 'year', 'month', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 
 	# table: string
 	# date: string, in standard YYYY-MM-DD format
