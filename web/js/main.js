@@ -34,15 +34,6 @@ $(function() {
            }
          }
 
-
-         // if (ENCODING == true && $(this).data('encoding') == true){
-
-         // }else if ((ENCODING == false && $(this).data('encoding') == true)){
-
-         // }
-         // console.log(ENCODING)
-         // if (ENCODING == true){
-         // }
       });
 
       $('#query').on('keydown', '.gwt-TextBox', function(){
