@@ -82,7 +82,6 @@ def parse_page(page, page_index, date, day, verbose=False):
 	type_indent = -1; subtype_indent = -1
 	type_ = None; subtype = None
 	table_name = None
-	table_name_2 = None
 
 	# total hack for when the treasury decided to switch
 	# which (upper or lower) line of two-line items gets the 0s
