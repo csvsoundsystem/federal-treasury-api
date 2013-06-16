@@ -232,13 +232,13 @@ fieldset legend {
 }
 
 
-.highlight {
+.highlight-link {
   background: white;
   font-weight: 700;
   color: black;
   padding: 0 2px;
 }
-.highlight:hover {
+.highlight-link:hover {
   background: black;
   color: white;
 }
@@ -269,6 +269,9 @@ textarea {
 
 textarea:focus{
   overflow: auto;
+}
+.code-container{
+  width:100%;
 }
 
 /*#rqb {

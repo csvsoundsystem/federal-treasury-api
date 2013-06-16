@@ -56,8 +56,8 @@ $(function() {
   });
 
   // Load the example scripts
-  $.get('examples/treasury.py', function(code) {$('#python-example').text(code)})
-  $.get('examples/treasury.r', function(code) {$('#r-example').text(code)})
+  // $.get('examples/treasury.py', function(code) {$('#python-example').text(code)})
+  // $.get('examples/treasury.r', function(code) {$('#r-example').text(code)})
 
   bindHandlers();
 
