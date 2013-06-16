@@ -96,7 +96,7 @@
         </div>
     </div>
     <footer>
-      <p>Made lovingly by <a href="http://csvsoundsystem.com" target="_blank" class="highlight">csv soundsystem</a> in fulfillment of a Code Sprint grant from <a href="http://www.mozillaopennews.org/" target="_blank"  class="highlight">knight-mozilla OpenNews</a>.</p><p><a href="http://dansinker.com/post/49856260511/opennews-code-sprints-do-some-spring-cleaning-on-data" target="_blank">I want to know more</a>.</p>
+      <p>Made lovingly by <a href="http://csvsoundsystem.com" target="_blank" class="highlight">csv soundsystem</a> in fulfillment of a Code Sprint grant from <a href="http://www.mozillaopennews.org/" target="_blank"  class="highlight">knight-mozilla OpenNews</a>.</p><p><a href="http://dansinker.com/post/49856260511/opennews-code-sprints-do-some-spring-cleaning-on-data" target="_blank">Huh?</a></p>
     </footer>
         <script>
           $(function() {
@@ -108,13 +108,12 @@
                         var out = sql + '\r\n';
                         for (var i = 0; i < args.length; i++) {
                           var arg = args[i];
-                          out += 'arg' + i;
-                          if (arg != null) {
-                            out += ' type=' + Object.prototype.toString.call(arg) + ' toString=' + arg;
-                          } else {
-                            out += ' null';
+                          if(isNaN(arg)){
+                            arg = "'" + arg + "'"
+                          }else{
+                            arg = Number(arg);
                           }
-                          out += '\r\n';
+                          out = out.replace('?', arg)
                         }
                         sanitize_out = function(out) { return out.replace(/\"x0\"\.?/g, '');
                     }
