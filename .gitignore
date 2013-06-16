@@ -1,4 +1,7 @@
 .DS_Store
+data/fixie/
+data/daily_csv/
+data/lifetime_csv/
 data/fms.db
 data/fms.db-journal
 *.pyc
