@@ -16,11 +16,16 @@ def check_parse(fixie_basename):
 
     expected_csv  = {i:open(os.path.join('fixtures', '%s_t%d.csv' % (fixie_basename, i + 1))).read() for i in observed_dict.keys()}
 
+  # for i in expected_csv.keys():
+  #     n.assert_list_equal(
+  #         observed_csv[i].split('\n'),
+  #         expected_csv[i].split('\n'),
+  #     )
+
     for i in expected_csv.keys():
-        n.assert_list_equal(
-            observed_csv[i].split('\n'),
-            expected_csv[i].split('\n'),
-        )
+        print 'Testing table %d' % (1 + i)
+        for o,e in zip(observed_csv[i].split('\n'), expected_csv[i].split('\n')):
+            n.assert_equal(len(o), len(e))
 
     return observed_csv, expected_csv
 
