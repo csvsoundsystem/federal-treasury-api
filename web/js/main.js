@@ -18,6 +18,12 @@ $(function() {
           $query_refresher.removeAttr('disabled');
       });
 
+      $('#query').on('change', '.gwt-ListBox', function(){
+        if ($('#rqb .gwt-ListBox option:first-child').attr('disabled') == undefined){
+          $('#rqb .gwt-ListBox option:first-child').attr('disabled','disabled');
+        }
+      })
+
   }
   function scrollThere(that, e){
     e.preventDefault();
@@ -29,9 +35,6 @@ $(function() {
       RedQueryBuilderFactory.create({
           meta : table_schema,
           onSqlChange : function(sql, args) {
-              if ($('#rqb .gwt-ListBox option:first-child').attr('disabled') == undefined){
-                $('#rqb .gwt-ListBox option:first-child').attr('disabled','disabled');
-              }
               $query_refresher[0].disabled = true;
               var out = sql + '\r\n';
               for (var i = 0; i < args.length; i++) {
