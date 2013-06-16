@@ -100,6 +100,37 @@
     </footer>
         <script>
           $(function() {
+
+            function initRedQuery(table_schema){
+                RedQueryBuilderFactory.create({
+                    meta : table_schema,
+                    onSqlChange : function(sql, args) {
+                        var out = sql + '\r\n';
+                        for (var i = 0; i < args.length; i++) {
+                          var arg = args[i];
+                          out += 'arg' + i;
+                          if (arg != null) {
+                            out += ' type=' + Object.prototype.toString.call(arg) + ' toString=' + arg;
+                          } else {
+                            out += ' null';
+                          }
+                          out += '\r\n';
+                        }
+                        sanitize_out = function(out) { return out.replace(/\"x0\"\.?/g, '');
+                    }
+
+                    query = function(base, out) { return base + encodeURI(sanitize_out(out)); }
+                    document.getElementById("sql").value = sanitize_out(out);
+                    document.getElementById("download-json").setAttribute('href', query('https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=', out));
+                    document.getElementById("download-csv").setAttribute('href', query('http://jsonadapter.herokuapp.com/?q=', out));
+                  },
+                });
+            };
+
+            $.get('/web/table_schema/tables.json', function(table_schema) {
+                initRedQuery(table_schema);
+            });
+
             // Load the example scripts
             $.get('examples/treasury.py', function(code) {$('#python-example').text(code)})
             $.get('examples/treasury.r', function(code) {$('#r-example').text(code)})
@@ -125,259 +156,7 @@
           });
         </script>
         <script>
-RedQueryBuilderFactory.create({
-    meta : {
-        tables : [ {
-            "name" : "Operating Cash Balance",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },
-        {
-            "name" : "Deposits",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },
-        {
-            "name" : "Withdrawals",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },
-        {
-            "name" : "Public Debt Transactions",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },
-        {
-            "name" : "Adjustment of Public Debt Transactions to Cash Balance",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },{
-            "name" : "Debt Subject to Limit",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },{
-            "name" : "Federal Tax Deposits",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },{
-            "name" : "Short-term Cash Investments",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        },{
-            "name" : "Income Tax Refunds Issued",
-            "columns" : [ {
-                "name" : "ACCOUNT",
-                "label" : "account",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "DATE",
-                "label" : "date",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "TOTAL",
-                "label" : "total",
-                "type" : "STRING",
-                "size" : 10
-            },{
-                "name" : "CLOSING TODAY",
-                "label" : "closing_today",
-                "type" : "STRING",
-                "size" : 10
-            }],
-            fks : []
-        } ],
-        types : [ {
-            "name" : "STRING",
-            "editor" : "TEXT",
-            "operators" : [ {
-                "name" : "=",
-                "label" : "is",
-                "cardinality" : "ONE"
-            }]
-        }]
-    },
-    onSqlChange : function(sql, args) {
-    var out = sql + '\r\n';
-    for (var i = 0; i < args.length; i++) {
-      var arg = args[i];
-      out += 'arg' + i;
-      if (arg != null) {
-        out += ' type=' + Object.prototype.toString.call(arg) + ' toString=' + arg;
-      } else {
-        out += ' null';
-      }
-      out += '\r\n';
-    }
-    something = function(out) { return out.replace(/\"x0\"\.?/g, ''); }
-    
-    query = function(base, out) { return base + encodeURI(something(out)); }
-    document.getElementById("sql").value = something(out);
-    document.getElementById("download-json").setAttribute('href', query('https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=', out));
-    document.getElementById("download-csv").setAttribute('href', query('http://jsonadapter.herokuapp.com/?q=', out));
-  },
-});
+
         </script>
 </body>
 </html>
