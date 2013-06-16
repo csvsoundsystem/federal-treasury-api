@@ -46,6 +46,17 @@ Run `crontab -e` to edit the schedule later.
 In the Task Scheduler, set `run.bat` to run every day at 5 pm.
 
 ### Testing
+To unit test parser functions, write tests in `code/parse_fms_fixies_2.py`,
+and then run them with nose.
+
+    cd code
+    nosetests
+
+You might want to write some tests to make sure that a specific table
+is perfectly parsed. In order to do that, copy the source fixie and the
+intended csv to the `fixtures` directory. (Name them as they would be
+named in the `data` folder.) A test will be generated for each of these.
+
 To make sure that the script is still running on ScraperWiki, run
 
     ./is_it_running.py
