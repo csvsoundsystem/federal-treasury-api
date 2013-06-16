@@ -211,7 +211,12 @@ def test_table(fp):
 
 # test ALL the data
 CSV_DIR = os.path.join('..', 'data', 'daily_csv')
-filepaths = [os.path.join(CSV_DIR, f) for f in os.listdir(CSV_DIR)]
+filenames = os.listdir(CSV_DIR)
+filenames.remove('.gitignore')
+if filenames == []:
+    raise ValueError('No daily csv files were found.')
+
+filepaths = [os.path.join(CSV_DIR, f) for f in filenames]
 o = []
 for i, fp in enumerate(filepaths):
     print str(i), "of", str(len(filepaths))
