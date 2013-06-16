@@ -219,7 +219,7 @@ if filenames == []:
 filepaths = [os.path.join(CSV_DIR, f) for f in filenames]
 o = []
 for i, fp in enumerate(filepaths):
-    print str(i), "of", str(len(filepaths))
+    print str(i + 1), "of", str(len(filepaths))
     try:
         o.extend(test_table(fp))
     except IndexError:
@@ -229,4 +229,9 @@ cols = [
     'variable', 'n_pass', 'n_miss', 'n_fail', 'all_true'
 ]
 df = pd.DataFrame(o, columns=cols)
-df.to_csv(os.path.join('..', 'data', 'test_output', date.today().isoformat + '.csv'))
+outdir = os.path.join('..', 'data', 'test_output')
+try:
+    os.makedirs(outdir)
+except OSError:
+    pass
+df.to_csv(os.path.join(outdir, date.today().isoformat() + '.csv'))
