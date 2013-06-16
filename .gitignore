@@ -3,6 +3,11 @@ data/fms.db
 data/fms.db-journal
 *.pyc
 fms_parser_data/*
+code/*.pyc
+
+# tweet bot
+twitter/api.yml
+twitter/*.pyc
 
 # ScraperWiki box
 .bash_history

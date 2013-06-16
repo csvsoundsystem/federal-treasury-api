@@ -1,37 +1,41 @@
-import json, datetime
+import os, datetime
 
+import nose.tools as n
+import numpy.testing as nt
+import numpy
 import pandas
 
-def unstring_stuff(d):
-    d = {int(k):v for k,v in d.items()}
-    return d
-
-def string_stuff(d):
-    d = {str(k):v for k,v in d.items()}
-    return d
-
-def parsed_file_to_json(parsed_file_dict, fp):
-    d = string_stuff(parsed_file_dict)
-    for col in d.keys():
-        d[col] = string_stuff(d[col].to_dict())
-        for i in d[col]['date'].keys():
-            d[col]['date'][i] = d[col]['date'][i].toordinal()
-    json.dump(d, fp)
-
-def parsed_file_from_json(parsed_file_json_fp):
-    d = unstring_stuff(json.load(parsed_file_json_fp))
-    for table in d.keys():
-        for i in d[table]['date'].keys():
-            d[table]['date'][i] = datetime.date.fromordinal(d[table]['date'][i])
-        for col in d[table]:
-            d[table][col] = (unstring_stuff(d[table][col]))
-        d[table] = pandas.DataFrame(d[table])
-    return d
-
-import os
 from parse_fms_fixies_2 import parse_file
+
+NA_FILL = {
+    numpy.dtype('O'): '',
+    numpy.dtype('float64'): 0,
+    numpy.dtype('int64'): 0,
+}
+def fillna(series):
+    return series.fillna(NA_FILL[series.dtype])
+
 def check_parse(fixie_basename):
     observed = parse_file(os.path.join('fixtures', fixie_basename + '.txt'), 'r')
-    expected = parsed_file_from_json(open(os.path.join('fixtures', fixie_basename + '.json'), 'r'))
+    expected = {i:pandas.read_csv(os.path.join('fixtures', '%s_t%d.csv' % (fixie_basename, i))) for i in range(1,9)}
     for table_number in expected.keys():
-        assert observed[table_number].to_dict() == expected[table_number].to_dict()
+        expected[table_number]['date'] = expected[table_number]['date'].apply(lambda d: datetime.date(*map(int, d.split('-'))))
+
+    for table_number in expected.keys():
+        for column_name in expected[table_number].columns:
+            print column_name
+            observed_series = observed[table_number][column_name]
+            expected_series = expected[table_number][column_name]
+            observed_list = list(observed_series)
+            expected_list = list(expected_series)
+
+            if observed_series.name in {'open_today','open_mo','open_fy','close_today','today','mtd','fytd'}:
+                observed_list = map(int, observed_list)
+
+            # Hack to deal with NAs, which are floats and annoying to compare.
+            observed_series = fillna(observed_series)
+            expected_series = fillna(expected_series)
+            observed_list = list(observed_series)
+            expected_list = list(expected_series)
+
+            n.assert_list_equal(observed_list, expected_list)
