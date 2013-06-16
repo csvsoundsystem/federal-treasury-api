@@ -31,14 +31,19 @@ def parsed_file_from_json(parsed_file_json_fp):
 import os
 from parse_fms_fixies_2 import parse_file
 import nose.tools as n
+import numpy.testing as nt
+import numpy
+NA = {
+    numpy.dtype('O'): '',
+    numpy.dtype('float64'): 0,
+    numpy.dtype('int64'): 0,
+}
 def check_parse(fixie_basename):
     observed = parse_file(os.path.join('fixtures', fixie_basename + '.txt'), 'r')
     expected = parsed_file_from_json(open(os.path.join('fixtures', fixie_basename + '.json'), 'r'))
     for table_number in expected.keys():
-        for column in expected[table_number].keys():
-            print observed[table_number]['footnote']
-            print expected[table_number]['footnote']
-            n.assert_dict_equal(
-                observed[table_number][column].to_dict(),
-                expected[table_number][column].to_dict()
-            )
+        for column_name in expected[table_number].columns:
+            # Quite a hack
+            observed_series = observed[table_number][column_name].fillna(NA[observed[table_number][column_name].dtype])
+            expected_series = expected[table_number][column_name].fillna(NA[observed[table_number][column_name].dtype])
+            n.assert_list_equal(*map(list, [observed_series, expected_series]))
