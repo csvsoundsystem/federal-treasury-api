@@ -65,12 +65,17 @@ for f in new_files:
 			t_name_match = re.search(r'TABLE [\w-]+', t_name)
 			t_name_short = re.sub(r'-| ', '_', t_name_match.group().lower())
 		except Exception as e:
-			#print df.head(5)
-			print '***ERROR: tables failed to parsed!'
+			print '***ERROR: tables failed to parsed!', e
+
+			# keep track of fixies which fail to parase
+			broken_fixie_log = open('../code/broken_fixies.txt', 'ab')
+			broken_fixie_log.write(fname + "\n")
+
+			# go on
 			continue
+
 		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_'+t_name_short+'.csv')
-		df.to_csv(daily_csv,
-			index=False, header=True, encoding='utf-8', na_rep='')
+		df.to_csv(daily_csv, index=False, header=True, encoding='utf-8', na_rep='')
 
 # iterate over all fms tables
 for i in ['i', 'ii', 'iii_a', 'iii_b', 'iii_c', 'iv', 'v', 'vi']:
