@@ -1,0 +1,20 @@
+{
+  "item": {
+    "Supplementary Financing Program Account": "Supplementary Financing Program",
+    "Supplementary Financing Prog": "Supplementary Financing Program",
+    "Supplementary Financing Programs": "Supplementary Financing Program",
+    "Financial Institution Accoun": "Financial Institution Account",
+    "Animal Plant Health Inspection Svcs": "Animal Plant Health Inspection svcs",
+    "Agency for Internat l Development": "Agency for International Development",
+    "Farm Services Agency": "FSA Tobacco Assessments",
+    "Prepayment of Treasury Securities": "Prepayment of Treasury Securities net",
+    "Interest recd from T L Depositaries":"Interest recd from cash investments",
+    "Veterans Affairs programs": "Veterans Affairs Programs",
+    "GSA programs": "GSA Programs",
+    "Federal Financing Bank":"Federal Financing Bank net",
+    "Deposit Insurance Fund": "Deposit Insurance Fund net"
+  },
+  "classification": {
+    "directly": "direct"
+  }
+}

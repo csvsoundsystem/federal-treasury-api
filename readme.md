@@ -1,3 +1,7 @@
+## Git branches
+
+We develop on `master`, and we deploy to `gh-pages`.
+
 ## Running
 Optionally set up a virtualenv. (You need this on ScraperWiki.)
 Run this from the root of the current repository.
@@ -69,3 +73,7 @@ There are eight tables.
     python -m SimpleHTTPServer
 
 then visit http://localhost:8000
+
+## Downloaders
+`examples` contains some example downloader functions.
+[csv/json](https://github.com/csv/json) is a website that serves the data as csv.
