@@ -192,6 +192,11 @@ a:hover{
 .btn.active {
   background-color: #FFFFC5;
   color: black;
+
+}
+.btn.active a:hover, #query-string-wrapper .btn.active:hover{
+  cursor:default;
+  text-decoration: none;
 }
 #logo {
   margin: 0;
@@ -224,11 +229,38 @@ form {
   padding-bottom: 50px;
 }
 #query-string {
+  margin-top:3px;
   display: block;
   font-family: Courier, monospace;
 }
 #query-string-wrapper {
   margin-bottom: 20px;
+}
+#query-string-wrapper .btn, #query-string-wrapper .btn.active:active{
+  top:-3px;
+  left:auto;
+  font-size:7px;
+  margin:0 2px 0 5px;
+  border: 1px solid;
+  padding: 0.25em 0.5em;
+  -moz-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+  -webkit-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px,;
+}
+#query-string-wrapper .btn:hover{
+  text-decoration: underline;
+  cursor:pointer;
+  cursor:hand;
+}
+#query-string-wrapper .btn:active{
+  -moz-box-shadow: 0px 0px 0px 0px;
+  -webkit-box-shadow: 0px 0px 0px 0px;
+  box-shadow: 0px 0px 0px 0px;
+  top: 0px;
+  left: 1px;
+}
+#query-string-wrapper .btn.active:active{
+
 }
 fieldset legend {
   display: none;
