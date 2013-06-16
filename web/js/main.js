@@ -17,6 +17,7 @@ $(function() {
       $('#query').on('keydown', '.gwt-TextBox', function(){
           $query_refresher.removeAttr('disabled');
       });
+
   }
   function scrollThere(that, e){
     e.preventDefault();
@@ -28,7 +29,9 @@ $(function() {
       RedQueryBuilderFactory.create({
           meta : table_schema,
           onSqlChange : function(sql, args) {
-
+              if ($('#rqb .gwt-ListBox option:first-child').attr('disabled') == undefined){
+                $('#rqb .gwt-ListBox option:first-child').attr('disabled','disabled');
+              }
               $query_refresher[0].disabled = true;
               var out = sql + '\r\n';
               for (var i = 0; i < args.length; i++) {
@@ -52,14 +55,10 @@ $(function() {
   };
 
   $.get('/web/table_schema/tables.json', function(table_schema) {
-      initRedQuery(table_schema);
+    initRedQuery(table_schema);
+    bindHandlers();
   });
 
-  // Load the example scripts
-  // $.get('examples/treasury.py', function(code) {$('#python-example').text(code)})
-  // $.get('examples/treasury.r', function(code) {$('#r-example').text(code)})
-
-  bindHandlers();
 
 
 });

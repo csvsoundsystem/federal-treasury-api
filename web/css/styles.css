@@ -206,10 +206,12 @@ a:hover{
 }
 
 code {
-  background-color: white;
-  /*border: 3px dashed black;*/
-  color: black;
-  /*padding: 5px 7px;*/
+  color:#333;
+  margin: 0 2px;
+  padding: 0px 5px;
+  border: 1px solid #C5E2F0;
+  background-color: #F8F8F8;
+  border-radius: 3px;
   font-family: Courier, monospace;
 }
 form {
@@ -223,6 +225,7 @@ form {
 }
 #query-string {
   display: block;
+  font-family: Courier, monospace;
 }
 #query-string-wrapper {
   margin-bottom: 20px;
