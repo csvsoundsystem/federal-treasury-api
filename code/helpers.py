@@ -27,3 +27,11 @@ def parsed_file_from_json(parsed_file_json_fp):
             d[table][col] = (unstring_stuff(d[table][col]))
         d[table] = pandas.DataFrame(d[table])
     return d
+
+import os
+from parse_fms_fixies_2 import parse_file
+def check_parse(fixie_basename):
+    observed = parse_file(os.path.join('fixtures', fixie_basename + '.txt'), 'r')
+    expected = parsed_file_from_json(open(os.path.join('fixtures', fixie_basename + '.json'), 'r'))
+    for table_number in expected.keys():
+        assert observed[table_number].to_dict() == expected[table_number].to_dict()
