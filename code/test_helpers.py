@@ -14,7 +14,7 @@ def check_parse(fixie_basename):
 			index=False, header=True, encoding='utf-8', na_rep='')
         observed_csv[i] = observed_csv[i].getvalue()
 
-    expected_csv  = {i:open(os.path.join('fixtures', '%s_t%d.csv' % (fixie_basename, i))).read() for i in range(1,9)}
+    expected_csv  = {i:open(os.path.join('fixtures', '%s_t%d.csv' % (fixie_basename, i + 1))).read() for i in observed_dict.keys()}
 
     for i in expected_csv.keys():
         n.assert_list_equal(

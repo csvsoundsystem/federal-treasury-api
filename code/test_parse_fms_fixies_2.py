@@ -1,5 +1,5 @@
 from parse_fms_fixies_2 import strip_table_name
-from helpers import check_parse
+from test_helpers import check_parse
 
 def test_strip_clean_table_name():
     observed = strip_table_name(u'TABLE I Operating Cash Balance')
