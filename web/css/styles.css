@@ -5,10 +5,10 @@
   color:white;
 }
 ::selection {
-  background: #ffd700; /* Safari */
+  background: #98ebb5; /* Safari */
 }
 ::-moz-selection {
-  background: #ffd700; /* Firefox */
+  background: #98ebb5; /* Firefox */
 }
 
 .container-fluid {
