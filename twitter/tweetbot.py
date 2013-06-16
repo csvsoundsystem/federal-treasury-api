@@ -24,7 +24,6 @@ def connect_to_twitter(config="api.yml"):
     api = tweepy.API(auth)
     return api
 
-
 if __name__ == '__main__':
     print('Operating cash balances for May 22, 2013')
     print(treasury('''SELECT * FROM "t1" WHERE "date" = '2013-05-22';'''))
