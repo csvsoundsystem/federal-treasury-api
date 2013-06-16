@@ -10,7 +10,8 @@ def check_parse(fixie_basename):
     observed_dict = parse_file(os.path.join('fixtures', fixie_basename + '.txt'), 'r')
     observed_csv  = {i:StringIO.StringIO() for i in observed_dict.keys()}
     for i in observed_csv.keys():
-        observed_dict[i].to_csv(observed_csv[i])
+        observed_dict[i].to_csv(observed_csv[i],
+			index=False, header=True, encoding='utf-8', na_rep='')
         observed_csv[i] = observed_csv[i].getvalue()
 
     expected_csv  = {i:open(os.path.join('fixtures', '%s_t%d.csv' % (fixie_basename, i))).read() for i in range(1,9)}
