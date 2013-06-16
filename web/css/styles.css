@@ -172,6 +172,10 @@ a:hover{
   cursor:hand;
   text-decoration: underline;
 }
+#query-refresher{
+  margin:10px 0;
+
+}
 .btn-group .btn {
   margin-left:20px;
 }

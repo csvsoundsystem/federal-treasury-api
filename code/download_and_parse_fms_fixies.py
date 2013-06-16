@@ -153,16 +153,6 @@ for table in TABLES:
 	connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
 	connection.execute('ALTER TABLE "_table_%s" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
 
-# Table 4 and table 5 views
-# connection.execute('''
-# CREATE VIEW IF NOT EXISTS t4 AS
-# SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE IV%";
-# ''')
-# connection.execute('''
-# CREATE VIEW IF NOT EXISTS t5 AS
-# SELECT * FROM t4_t5 WHERE "table" LIKE "TABLE V%";
-# ''')
-
 # Commit
 connection.commit()
 

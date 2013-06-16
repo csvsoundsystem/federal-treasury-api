@@ -73,8 +73,6 @@ def parse_file(f_name, verbose=False):
 	day = get_date_and_day(f_name)[1]
 	print 'INFO: parsing', f_name, '(', date, ')'
 
-	#return tables
-
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
