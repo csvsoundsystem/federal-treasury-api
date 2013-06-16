@@ -10,4 +10,5 @@ def test_strip_dirty_table_name():
     assert observed == u'TABLE I Operating Cash Balance'
 
 def test_table4_text_format():
-    check_parse('06073100')
+#   check_parse('06073100')
+    check_parse('13020500')
