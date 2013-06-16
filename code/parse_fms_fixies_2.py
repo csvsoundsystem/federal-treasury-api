@@ -73,8 +73,6 @@ def parse_file(f_name, verbose=False):
 	day = get_date_and_day(f_name)[1]
 	print 'INFO: parsing', f_name, '(', date, ')'
 
-	#return tables
-
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
@@ -148,7 +146,7 @@ def parse_table(table, date, day, verbose=False):
 					# add next line text to current footnote
 					footnote[1] = ''.join([footnote[1], next_line])
 					used_index = index + i
-					print used_index
+					#print used_index
 					i += 1
 			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]

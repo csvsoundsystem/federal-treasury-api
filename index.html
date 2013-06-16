@@ -40,6 +40,7 @@
             <h2><a href="query"><span class="bullet">$</span> <span class="internal-link">Query builder</span></a></h2>
             <div id="builder">
               <div id="rqb">&nbsp;</div>
+              <button id="query-refresher" disabled>Refresh query text...</button>
               <div id="query-string-wrapper">
                 <fieldset>
                   <span>SQL Query</span>
@@ -101,10 +102,36 @@
         <script>
           $(function() {
 
+            var $query_refresher = $('#query-refresher');
+            function bindHandlers(){
+                $('#navmenu').scrollSpy()
+
+                $('#navmenu ul li a').on('click', function(e) {
+                    var that = this;
+                    scrollThere(that, e);
+                });
+
+                $('h2 a').on('click', function(e) {
+                    var that = this;
+                    scrollThere(that, e);
+                });
+
+                $('#query').on('keydown', '.gwt-TextBox', function(){
+                    $query_refresher.removeAttr('disabled');
+                });
+            }
+            function scrollThere(that, e){
+              e.preventDefault();
+              target = that.hash;
+              console.log(that.hash);
+              $.scrollTo(target, 300, {offset:-10});
+            }
             function initRedQuery(table_schema){
                 RedQueryBuilderFactory.create({
                     meta : table_schema,
                     onSqlChange : function(sql, args) {
+
+                        $query_refresher[0].disabled = true;
                         var out = sql + '\r\n';
                         for (var i = 0; i < args.length; i++) {
                           var arg = args[i];
@@ -134,24 +161,9 @@
             $.get('examples/treasury.py', function(code) {$('#python-example').text(code)})
             $.get('examples/treasury.r', function(code) {$('#r-example').text(code)})
 
-            $('#navmenu').scrollSpy()
+            bindHandlers();
 
-            $('#navmenu ul li a').on('click', function(e) {
-                var that = this;
-                scrollThere(that, e);
-            });
 
-            $('h2 a').on('click', function(e) {
-                var that = this;
-                scrollThere(that, e);
-            });
-
-            function scrollThere(that, e){
-              e.preventDefault();
-              target = that.hash;
-              console.log(that.hash);
-              $.scrollTo(target, 300, {offset:-10});
-            }
           });
         </script>
         <script>
