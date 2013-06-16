@@ -172,7 +172,7 @@
             "fks": []
         },
         {
-            "name": "Withdrawals",
+            "label": "Withdrawals",
             "name": "t3",
             "columns": [
                 {
