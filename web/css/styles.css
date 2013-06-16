@@ -5,10 +5,10 @@
   color:white;
 }
 ::selection {
-  background: #ffd700; /* Safari */
+  background: #98ebb5; /* Safari */
 }
 ::-moz-selection {
-  background: #ffd700; /* Firefox */
+  background: #98ebb5; /* Firefox */
 }
 
 .container-fluid {
@@ -192,6 +192,11 @@ a:hover{
 .btn.active {
   background-color: #FFFFC5;
   color: black;
+
+}
+.btn.active a:hover, #query-string-wrapper .btn.active:hover{
+  cursor:default;
+  text-decoration: none;
 }
 #logo {
   margin: 0;
@@ -206,10 +211,12 @@ a:hover{
 }
 
 code {
-  background-color: white;
-  /*border: 3px dashed black;*/
-  color: black;
-  /*padding: 5px 7px;*/
+  color:#333;
+  margin: 0 2px;
+  padding: 0px 5px;
+  border: 1px solid #C5E2F0;
+  background-color: #F8F8F8;
+  border-radius: 3px;
   font-family: Courier, monospace;
 }
 form {
@@ -219,26 +226,57 @@ form {
 #builder {
   background: rgba(255,255,255,.5);
   padding: 20px;
-  padding-bottom: 50px;
 }
 #query-string {
+  margin-top:3px;
   display: block;
+  font-family: Courier, monospace;
 }
 #query-string-wrapper {
   margin-bottom: 20px;
+}
+#query-string-wrapper .btn, #query-string-wrapper .btn.active:active{
+  top:-3px;
+  left:auto;
+  font-size:9px;
+  margin:0 2px 0 5px;
+  border: 1px solid;
+  padding: 0.25em 0.5em;
+  -moz-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px, 3px 3px 0px 0px, 4px 4px 0px 0px, 5px 5px 0px 0px;
+  -webkit-box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px;
+  box-shadow: 1px 1px 0px 0px, 2px 2px 0px 0px,;
+}
+#query-string-wrapper .btn:hover{
+  text-decoration: underline;
+  cursor:pointer;
+  cursor:hand;
+}
+#query-string-wrapper .btn:active{
+  -moz-box-shadow: 0px 0px 0px 0px;
+  -webkit-box-shadow: 0px 0px 0px 0px;
+  box-shadow: 0px 0px 0px 0px;
+  top: 0px;
+  left: 2px;
+}
+#query-asterisk-field{
+  margin-top:25px;
+}
+#query-asterisk-field p{
+  font-size: 9px;
+  letter-spacing: 1px;
 }
 fieldset legend {
   display: none;
 }
 
 
-.highlight {
+.highlight-link {
   background: white;
   font-weight: 700;
   color: black;
   padding: 0 2px;
 }
-.highlight:hover {
+.highlight-link:hover {
   background: black;
   color: white;
 }
@@ -269,6 +307,9 @@ textarea {
 
 textarea:focus{
   overflow: auto;
+}
+.code-container{
+  width:100%;
 }
 
 /*#rqb {

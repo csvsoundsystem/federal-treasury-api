@@ -43,15 +43,18 @@
               <button id="query-refresher" disabled>Update query text...</button>
               <div id="query-string-wrapper">
                 <fieldset>
-                  <span>SQL Query</span>
-                  <code id="query-string">
+                  <span>SQL Query | View as:* </span> <button data-encoding="false" class="btn active">Plain-text</button> <button data-encoding="true" class="btn">URL-Encoded</button>
+                  <div id="query-string">
                     <textarea id="sql">Select from the dropdown menu above...</textarea>
-                  </code>
+                  </div>
                 </fieldset>
               </div>
             <div class="btn-group">
               <a class="btn" id="download-csv" target="_blank" href="#">Download .csv</a>
               <a class="btn" id="download-json" target="_blank" href="#">View JSON</a>
+            </div>
+            <div id="query-asterisk-field">
+                <p>*All queries are URL-encoded when you select "Download as CSV" or "View JSON." Use these buttons as a shortcut when accessing the API programatically or for testing.</p>
             </div>
       </div>
       </div>
@@ -75,9 +78,9 @@
           </div>
           <div class="section" id="usage">
               <h2><a href="#usage"><span class="bullet">$</span> <span class="internal-link">Usage</span></a></h2>
-              <p>The eight tables are stored in one SQLite database. Query it from a URL like this,</p>
-              <pre><code>https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=:sql</code></pre>
-              <p>where <code>:sql</code> is a URL-encoded SQL command. For example, you can see the database schema like so.</p>
+              <p>The eight tables are stored in one SQLite database. Query it from a URL like this:</p>
+              <pre><code>https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=YOUR_QUERY</code></pre>
+              <p>where <code>YOUR_QUERY</code> is a URL-encoded SQL command. For example, you can see the database schema like so.</p>
               <pre><a target="_blank" href='https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=SELECT%20"name","sql"%20FROM%20sqlite_master'><code>https://box.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q=SELECT%20"name","sql"%20FROM%20sqlite_master</code></a></pre>
           </div>
           <div class="section" id="examples">
@@ -86,18 +89,23 @@
               <ul>
                 <li>
                   <h3>Python</h3>
-                  <pre><code id="python-example"></code></pre>
+                  <div class="code-container">
+                    <script src="https://gist.github.com/mhkeller/5793432.js"></script>
+                  </div>
                 </li>
                 <li>
                   <h3>R</h3>
-                  <pre><code id="r-example"></code></pre>
+                  <div class="code-container">
+                    <script src="https://gist.github.com/mhkeller/5793439.js"></script>
+
+                  </div>
                 </li>
               </ul>
           </div>
         </div>
     </div>
     <footer>
-      <p>Made lovingly by <a href="http://csvsoundsystem.com" target="_blank" class="highlight">csv soundsystem</a> in fulfillment of a Code Sprint grant from <a href="http://www.mozillaopennews.org/" target="_blank"  class="highlight">knight-mozilla OpenNews</a>.</p><p><a href="http://dansinker.com/post/49856260511/opennews-code-sprints-do-some-spring-cleaning-on-data" target="_blank">Huh?</a></p>
+      <p>Made lovingly by <a href="http://csvsoundsystem.com" target="_blank" class="highlight-link">csv soundsystem</a> in fulfillment of a Code Sprint grant from <a href="http://www.mozillaopennews.org/" target="_blank"  class="highlight-link">knight-mozilla OpenNews</a>.</p><p><a href="http://dansinker.com/post/49856260511/opennews-code-sprints-do-some-spring-cleaning-on-data" target="_blank">Huh?</a></p>
     </footer>
     <script src="web/js/main.js"></script>
 </body>
