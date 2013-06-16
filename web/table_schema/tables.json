@@ -1,0 +1,287 @@
+{
+    "tables": [
+        {
+            "name": "Operating Cash Balance",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Deposits",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Withdrawals",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Public Debt Transactions",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Adjustment of Public Debt Transactions to Cash Balance",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Debt Subject to Limit",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Federal Tax Deposits",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Short-term Cash Investments",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        },
+        {
+            "name": "Income Tax Refunds Issued",
+            "columns": [
+                {
+                    "name": "ACCOUNT",
+                    "label": "account",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "DATE",
+                    "label": "date",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "TOTAL",
+                    "label": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "name": "CLOSING TODAY",
+                    "label": "closing_today",
+                    "type": "STRING",
+                    "size": 10
+                }
+            ],
+            "fks": []
+        }
+    ],
+    "types": [
+        {
+            "name": "STRING",
+            "editor": "TEXT",
+            "operators": [
+                {
+                    "name": "=",
+                    "label": "is",
+                    "cardinality": "ONE"
+                }
+            ]
+        }
+    ]
+}

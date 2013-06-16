@@ -1,3 +1,7 @@
+## Git branches
+
+We develop on `master`, and we deploy to `gh-pages`.
+
 ## Running
 Optionally set up a virtualenv. (You need this on ScraperWiki.)
 Run this from the root of the current repository.
@@ -46,6 +50,14 @@ To make sure that the script is still running on ScraperWiki, run
 
     ./is_it_running.py
 
+To make sure that results are reasonable, run the integrity tests.
+
+    cd code
+    ./integrity_tests.py
+
+Results will appear in `data/test_output/%Y-%m-%d.csv`, named after today's
+date.
+
 ## Results
 Resulting files go in the `data` directory, to which the `http` directory
 is linked (for ScraperWiki compatibility). `fixie` contains the original files,
@@ -69,3 +81,7 @@ There are eight tables.
     python -m SimpleHTTPServer
 
 then visit http://localhost:8000
+
+## Downloaders
+`examples` contains some example downloader functions.
+[csv/json](https://github.com/csv/json) is a website that serves the data as csv.

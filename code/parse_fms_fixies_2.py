@@ -93,7 +93,6 @@ def parse_table(table, date, day, verbose=False):
 	type_indent = -1; subtype_indent = -1
 	type_ = None; subtype = None
 	table_name = None
-	table_name_2 = None
 
 	# total hack for when the treasury decided to switch
 	# which (upper or lower) line of two-line items gets the 0s
@@ -149,6 +148,7 @@ def parse_table(table, date, day, verbose=False):
 					# add next line text to current footnote
 					footnote[1] = ''.join([footnote[1], next_line])
 					used_index = index + i
+					print used_index
 					i += 1
 			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]
@@ -350,3 +350,5 @@ def parse_table(table, date, day, verbose=False):
 
 	return df
 
+def strip_table_name(table_name):
+    return re.sub('[^a-zA-Z]*$', '', table_name)
