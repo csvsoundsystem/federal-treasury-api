@@ -1,3 +1,7 @@
+## Git branches
+
+We develop on `master`, and we deploy to `gh-pages`.
+
 ## Running
 Optionally set up a virtualenv. (You need this on ScraperWiki.)
 Run this from the root of the current repository.
