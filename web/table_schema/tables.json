@@ -128,7 +128,7 @@
                 {
                     "label": "Type",
                     "name": "type",
-                    "name": "STRING",
+                    "type": "STRING",
                     "size": 10
                 },
                 {
@@ -173,6 +173,7 @@
         },
         {
             "name": "Withdrawals",
+            "name": "t3",
             "columns": [
                 {
                     "label": "Account",
