@@ -1,6 +1,16 @@
-## Git branches
+## Development notes
+
+### Git
 
 We develop on `master`, and we deploy to `gh-pages`.
+
+### Deploying to ScraperWiki
+You can run this on any number of servers, but we happen to be using ScraperWiki.
+To use ScraperWiki, log in [here](https://beta.scraperwiki.com/login),
+make a project, click the "SSH in" link, add your SSH key and SSH in.
+Then follow the directions below.
+
+The directions below still apply for any other service, of course.
 
 ## Running
 Optionally set up a virtualenv. (You need this on ScraperWiki.)
