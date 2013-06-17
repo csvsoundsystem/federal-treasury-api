@@ -12,8 +12,6 @@ def normalize_fields(text, field):
 		value = lookup[text]
 	except KeyError:
 		value = text
-	else:
-		print "INFO: Normalized a field!"
 	return value
 
 ################################################################################

@@ -43,7 +43,7 @@
                 {
                     "label": "Account",
                     "name": "account",
-                    "type": "NUMERIC",
+                    "type": "STRING",
                     "size": 10
                 },
                 {
