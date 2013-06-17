@@ -1,8 +1,20 @@
-
+import json
 import datetime
 import pandas as pd
 import re
 
+################################################################################
+NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
+
+def normalize_fields(text, field):
+	lookup = NORMALIZE_FIELD_TABLE[field]
+	try:
+		value = lookup[text]
+	except KeyError:
+		value = text
+	else:
+		print "INFO: Normalized a field!"
+	return value
 
 ################################################################################
 def get_date_and_day(f_name):
@@ -227,10 +239,12 @@ def parse_table(table, date, day, verbose=False):
 		if re.search(r'TABLE I\s|TABLE III-C', row.get('table', '')):
 			try:
 				if re.search(r'TABLE I\s', row.get('table', '')):
-					row['account'] = text
+					row['account_raw'] = text
+					row['account'] = normalize_fields(text, 'account')
 				elif re.search(r'TABLE III-C', row.get('table', '')):
 					try:
-						row['item'] = text
+						row['item_raw'] = text
+						row['item'] = normalize_fields(text, 'item')
 					except:
 						if verbose is True:
 							print 'WARNING:', line
@@ -243,7 +257,8 @@ def parse_table(table, date, day, verbose=False):
 					print 'WARNING:', line
 		elif re.search(r'TABLE II\s', row.get('table', '')):
 			try:
-				row['item'] = text
+				row['item_raw'] = text
+				row['item'] = normalize_fields(text, 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -260,7 +275,8 @@ def parse_table(table, date, day, verbose=False):
 					print 'WARNING:', line
 		elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
 			try:
-				row['item'] = text
+				row['item_raw'] = text
+				row['item'] = normalize_fields(text, 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -269,7 +285,8 @@ def parse_table(table, date, day, verbose=False):
 					print 'WARNING:', line
 		elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
 			try:
-				row['classification'] = text
+				row['classification_raw'] = text
+				row['classification'] = normalize_fields(text, 'classification')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -311,15 +328,15 @@ def parse_table(table, date, day, verbose=False):
 
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	if re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'account_raw', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'item', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE V\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'balance_transactions', 'is_total', 'depositary_type_A', 'depositary_type_B', 'depositary_type_C', 'total', 'footnote'])
 
