@@ -211,11 +211,11 @@ a:hover{
 }
 
 code {
-  color:#333;
+  color: #076692;
   margin: 0 2px;
-  padding: 0px 5px;
-  border: 1px solid #C5E2F0;
-  background-color: #F8F8F8;
+  padding: 1px 4px;
+  border: 1px solid #DFECF0;
+  background-color: #0CF;
   border-radius: 3px;
   font-family: Courier, monospace;
 }
