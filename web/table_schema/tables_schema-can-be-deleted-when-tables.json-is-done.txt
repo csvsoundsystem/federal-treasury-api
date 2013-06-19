@@ -1,0 +1,191 @@
+LINES THAT BEGIN WITH // ARE ALREADY DONE
+
+// table_i.csv
+// ['table', 'date', 'year_month', 'year', 'month', 'day', 'account', // 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', // 'footnote']
+// table           object
+// date            object
+// year_month      object
+// year             int64
+// month            int64
+// day             object
+// account         object
+// is_total         int64
+// close_today      int64
+// open_today       int64
+// open_mo          int64
+// open_fy          int64
+// footnote       float64
+// dtype: object
+// 
+// 
+// table_ii.csv
+// ['table', 'date', 'year_month', 'year', 'month', 'day', 'account', // 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', // 'footnote']
+// table          object
+// date           object
+// year_month     object
+// year            int64
+// month           int64
+// day            object
+// account        object
+// type           object
+// subtype        object
+// item           object
+// is_total        int64
+// today         float64
+// mtd           float64
+// fytd          float64
+// footnote       object
+// dtype: object
+// 
+// 
+// table_iii_a.csv
+// ['table', 'date', 'year_month', 'year', 'month', 'day', 'surtype', // 'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', // 'footnote']
+// table          object
+// date           object
+// year_month     object
+// year            int64
+// month           int64
+// day            object
+// surtype        object
+// type           object
+// subtype        object
+// item           object
+// is_total        int64
+// today         float64
+// mtd           float64
+// fytd          float64
+// footnote      float64
+// dtype: object
+
+
+//table_iii_b.csv
+//['table', 'date', 'year_month', 'year', 'month', 'day', 'surtype', //'type', 'subtype', 'item', 'is_total', 'today', 'mtd', 'fytd', //'footnote']
+//table          object
+//date           object
+//year_month     object
+//year            int64
+//month           int64
+//day            object
+//surtype       float64
+//type           object
+//subtype        object
+//item           object
+//is_total        int64
+//today           int64
+//mtd             int64
+//fytd            int64
+//footnote       object
+//dtype: object
+
+
+//table_iii_c.csv
+//['table', 'date', 'year_month', 'year', 'month', 'day', 'type', //'item', 'is_total', 'close_today', 'open_today', 'open_mo', //'open_fy', 'footnote']
+//table           object
+//date            object
+//year_month      object
+//year             int64
+//month            int64
+//day             object
+//type           float64
+//item            object
+//is_total         int64
+//close_today    float64
+//open_today     float64
+//open_mo        float64
+//open_fy        float64
+//footnote        object
+//dtype: object
+
+
+//table_iv.csv
+//['table', 'date', 'year_month', 'year', 'month', 'day', 'type', //'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+//table              object
+//date               object
+//year_month         object
+//year                int64
+//month               int64
+//day                object
+//type               object
+//classification     object
+//is_total            int64
+//today             float64
+//mtd               float64
+//fytd              float64
+//footnote           object
+//dtype: object
+
+
+//table_v.csv
+//['table', 'date', 'year_month', 'year', 'month', 'day', 'type', //'balance_transactions', 'is_total', 'depositary_type_A', //'depositary_type_B', 'depositary_type_C', 'total', 'footnote']
+//table                   object
+//date                    object
+//year_month              object
+//year                     int64
+//month                    int64
+//day                     object
+//type                    object
+//balance_transactions    object
+//is_total                 int64
+//depositary_type_A        int64
+//depositary_type_B        int64
+//depositary_type_C        int64
+//total                    int64
+//footnote                object
+//dtype: object
+
+
+//table_vi.csv
+//['table', 'date', 'year_month', 'year', 'month', 'day', 'type', //'classification', 'is_total', 'today', 'mtd', 'fytd', 'footnote']
+//table              object
+//date               object
+//year_month         object
+//year                int64
+//month               int64
+//day                object
+//type              float64
+//classification     object
+//is_total            int64
+//today             float64
+//mtd               float64
+//fytd              float64
+//footnote           object
+//dtype: object
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
