@@ -10,6 +10,13 @@ To use ScraperWiki, log in [here](https://beta.scraperwiki.com/login),
 make a project, click the "SSH in" link, add your SSH key and SSH in.
 Then follow the directions below.
 
+Some notes about how ScraperWiki works:
+
+* We have a user account in a chroot jail.
+* We don't have root, so we install Python packages in a virtualenv.
+* Files in `/home/http` get served on the web.
+* The database `/home/scraperwiki.sqlite` gets served from the SQLite web API.
+
 The directions below still apply for any other service, of course.
 
 ## Running
