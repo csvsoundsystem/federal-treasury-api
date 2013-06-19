@@ -120,7 +120,8 @@ def parse_table(table, date, day, verbose=False):
 		row['year'] = date.year
 		row['month'] = date.month
 		row['year_month'] = datetime.date.strftime(date, '%Y-%m')
-		row['day'] = day
+		row['weekday'] = day
+		row['day'] = date.day
 
 		index = table.index(line)
 		if index <= used_index : continue
@@ -326,39 +327,17 @@ def parse_table(table, date, day, verbose=False):
 
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	if re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'account', 'account_raw', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'surtype', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE V\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
-
-
-	# table: string
-	# date: string, in standard YYYY-MM-DD format
-	# day: string, full name of day
-	# account: string, name of associated account
-	# surtype: string, e.g. 'issue' or 'redemption'
-	# type: string, e.g. 'deposit' or 'withdrawal'
-	# subtype: string, e.g. 'deposits by states' or 'other withdrawals'
-	# classification: string, class of taxes
-	# item: string, name of line item, e.g. 'Energy Department programs' or 'Postal service'
-	# account: string
-	# is_total: int, 0 if False (is not a total) and 1 if True (is a total)
-	# today: int
-	# mtd: int, month-to-date
-	# ytd: int, year-to-date
-	# fytd: int, fiscal-year-to-date
-	# close_today: int
-	# open_today: int
-	# open_mo: int
-	# open_fy: int
-	# footnote: string
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
 
 	return df
 
