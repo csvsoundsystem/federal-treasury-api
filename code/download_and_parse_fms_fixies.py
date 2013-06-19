@@ -23,6 +23,7 @@ FIXIE_DIR = os.path.join('..', 'data', 'fixie')
 DAILY_CSV_DIR = os.path.join('..', 'data', 'daily_csv')
 LIFETIME_CSV_DIR = os.path.join('..', 'data', 'lifetime_csv')
 BROKEN_FIXIE_FILE = os.path.join('..', 'code', 'broken_fixies.txt')
+broken_fixies = []
 os.system('mkdir -pv ' + FIXIE_DIR)
 os.system('mkdir -pv ' + DAILY_CSV_DIR)
 os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
@@ -69,8 +70,7 @@ for f in new_files:
 			print '***ERROR: tables failed to parsed!', e
 
 			# keep track of fixies which fail to parase
-			broken_fixie_log = open(BROKEN_FIXIE_FILE, 'ab')
-			broken_fixie_log.write(re.sub(r"\.\./data/fixie/", "", fname) + "\n")
+			broken_fixies.append(re.sub(r"\.\./data/fixie/", "", fname))
 
 			# go on
 			continue
@@ -79,7 +79,8 @@ for f in new_files:
 		df.to_csv(daily_csv, index=False, header=True, encoding='utf-8', na_rep='')
 
 # clean up broken fixie file
-os.system("cat " + BROKEN_FIXIE_FILE + " | uniq > " + BROKEN_FIXIE_FILE)
+broken_fixie_log = open(BROKEN_FIXIE_FILE, 'ab')
+[broken_fixie_log.write(f+"\n") for f in broken_fixies]
 
 # iterate over all fms tables
 for i in ['i', 'ii', 'iii_a', 'iii_b', 'iii_c', 'iv', 'v', 'vi']:
@@ -185,6 +186,3 @@ soundsystem_txt = r"""
 print csv_txt
 print soundsystem_txt
 print '*http://csvsoundsystem.com/'
-
-# Brian's tests go here. Look at is_it_running.py if you want to make the date stuff fancier.
-t1 = pandas.io.sql.read_frame('''SELECT * FROM "t1" WHERE date = '%s';''' % datetime.date.today().isoformat(), connection)
