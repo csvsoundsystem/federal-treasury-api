@@ -173,210 +173,509 @@
         },
         {
             "label": "Withdrawals",
-            "name": "t3",
+            "name": "t3a",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "Date",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "Total",
-                    "name": "total",
+                    "label": "Year-Month",
+                    "name": "year_month",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
+                    "label": "Month",
+                    "name": "month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Weekday",
+                    "name": "day",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Surtype",
+                    "name": "surtype",
                     "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Subtype",
+                    "name": "subtype",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Item",
+                    "name": "item",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is total",
+                    "name": "is_total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Today",
+                    "name": "today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Month-to-date",
+                    "name": "mtd",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Fiscal-year-to-date",
+                    "name": "fytd",
+                    "type": "NUMERIC",
                     "size": 10
                 }
             ],
             "fks": []
         },
         {
-            "name": "Public Debt Transactions",
+            "label": "Public Debt Transactions",
+            "name": "t3b",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "Date",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "Total",
-                    "name": "total",
+                    "label": "Year-Month",
+                    "name": "year_month",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
+                    "label": "Month",
+                    "name": "month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Weekday",
+                    "name": "day",
                     "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Surtype",
+                    "name": "surtype",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Subtype",
+                    "name": "subtype",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Item",
+                    "name": "item",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is total",
+                    "name": "is_total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Today",
+                    "name": "today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Month-to-date",
+                    "name": "mtd",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Fiscal-year-to-date",
+                    "name": "fytd",
+                    "type": "NUMERIC",
                     "size": 10
                 }
             ],
             "fks": []
         },
         {
-            "name": "Adjustment of Public Debt Transactions to Cash Balance",
+            "label": "Debt Subject to Limit",
+            "name": "t3c",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "Date",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "Total",
-                    "name": "total",
+                    "label": "Year-Month",
+                    "name": "year_month",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
+                    "label": "Month",
+                    "name": "month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Weekday",
+                    "name": "day",
                     "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Item",
+                    "name": "item",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is total",
+                    "name": "is_total",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Close today",
+                    "name": "close_today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Open today",
+                    "name": "open_today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Open month",
+                    "name": "open_mo",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Open fiscal-year",
+                    "name": "open_fy",
+                    "type": "NUMERIC",
                     "size": 10
                 }
             ],
             "fks": []
         },
         {
-            "name": "Debt Subject to Limit",
+            "label": "Federal Tax Deposits",
+            "name": "t4",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "DATE",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "Total",
+                    "label": "Year-Month",
                     "name": "total",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
+                    "label": "Month",
+                    "name": "month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Weekday",
+                    "name": "day",
                     "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Classification",
+                    "name": "classification",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is total",
+                    "name": "is_total",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Today",
+                    "name": "today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Month-to-date",
+                    "name": "mtd",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Fiscal-year-to-date",
+                    "name": "fytd",
+                    "type": "NUMERIC",
                     "size": 10
                 }
             ],
             "fks": []
         },
         {
-            "name": "Federal Tax Deposits",
+            "label": "Short-Term Cash Investments",
+            "name": "t5",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "Date",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year-Month",
+                    "name": "year_month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Month",
+                    "name": "month",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Day",
+                    "name": "day",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Balance transactions",
+                    "name": "balance_transactions",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is total",
+                    "name": "is_total",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Depositary Type A",
+                    "name": "depositary_type_a",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Depositary Type B",
+                    "name": "depositary_type_b",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Depositary Type C",
+                    "name": "depositary_type_c",
+                    "type": "NUMERIC",
                     "size": 10
                 },
                 {
                     "label": "Total",
                     "name": "total",
                     "type": "NUMERIC",
-                    "size": 10
-                },
-                {
-                    "label": "Closing today",
-                    "name": "closing_today",
-                    "type": "STRING",
                     "size": 10
                 }
             ],
             "fks": []
         },
         {
-            "name": "Short-term Cash Investments",
+            "labe": "Income Tax Refunds Issued",
+            "name": "t6",
             "columns": [
                 {
-                    "label": "Account",
-                    "name": "account",
+                    "label": "Table",
+                    "name": "table",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "date",
-                    "name": "Date",
+                    "label": "Date",
+                    "name": "date",
                     "type": "STRING",
                     "size": 10
                 },
                 {
-                    "label": "Total",
-                    "name": "total",
+                    "label": "Year-Month",
+                    "name": "year_month",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Year",
+                    "name": "year",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
-                    "type": "STRING",
-                    "size": 10
-                }
-            ],
-            "fks": []
-        },
-        {
-            "name": "Income Tax Refunds Issued",
-            "columns": [
-                {
-                    "label": "Account",
-                    "name": "account",
-                    "type": "STRING",
-                    "size": 10
-                },
-                {
-                    "label": "date",
-                    "name": "Date",
-                    "type": "STRING",
-                    "size": 10
-                },
-                {
-                    "label": "Total",
-                    "name": "total",
+                    "label": "Month",
+                    "name": "month",
                     "type": "NUMERIC",
                     "size": 10
                 },
                 {
-                    "label": "Closing today",
-                    "name": "closing_today",
+                    "label": "Day",
+                    "name": "day",
                     "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Type",
+                    "name": "type",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Classification",
+                    "name": "classification",
+                    "type": "STRING",
+                    "size": 10
+                },
+                {
+                    "label": "Is total",
+                    "name": "is_total",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Today",
+                    "name": "today",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Month-to-day",
+                    "name": "mtd",
+                    "type": "NUMERIC",
+                    "size": 10
+                },
+                {
+                    "label": "Fiscal-year-to-day",
+                    "name": "fytd",
+                    "type": "NUMERIC",
                     "size": 10
                 }
             ],
