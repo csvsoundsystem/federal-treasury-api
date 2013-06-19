@@ -105,11 +105,6 @@ There are eight tables.
 * V. Short-term Cash Investments (`t5`)
 * VI. Incom Tax Refunds Issued (`t6`)
 
-## Frontend
-    python -m SimpleHTTPServer
-
-then visit http://localhost:8000
-
 ## Downloaders
 `examples` contains some example downloader functions.
 [csv/json](https://github.com/csv/json) is a website that serves the data as csv.
