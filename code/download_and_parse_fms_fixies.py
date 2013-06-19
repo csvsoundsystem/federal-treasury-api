@@ -80,7 +80,7 @@ for f in new_files:
 
 # clean up broken fixie file
 broken_fixie_log = open(BROKEN_FIXIE_FILE, 'ab')
-[broken_fixie_log.write(f+"\n") for f in broken_fixies]
+[broken_fixie_log.write(f+"\n") for f in set(broken_fixies)]
 
 # iterate over all fms tables
 for i in ['i', 'ii', 'iii_a', 'iii_b', 'iii_c', 'iv', 'v', 'vi']:
