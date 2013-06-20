@@ -134,6 +134,9 @@ def parse_table(table, date, day, verbose=False):
 		# skip page number rows
 		if re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d', line):
 			continue
+		# skip comment on statutory debt limit at end of Table III-C, and beyond
+		if re.search(r'(As|Act) of [A-Z]\w+ \d+, \d+', line) and re.search(r'(statutory )*debt( limit)*', line):
+			break
 		# skip final footer of file
 		if re.search(r"\s+This statement summarizes\s+the United States Treasury's cash and debt", line):
 			break
