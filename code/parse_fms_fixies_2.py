@@ -132,7 +132,9 @@ def parse_table(table, date, day, verbose=False):
 
 		# HARD CODED TO SKIP SHIT
 		# skip page number rows
-		if re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d', line):
+		page_number_match = re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+(\d)', line)
+		if page_number_match:
+			page_number = page_number_match.group(1)
 			continue
 		# skip comment on statutory debt limit at end of Table III-C, and beyond
 		if re.search(r'(As|Act) of [A-Z]\w+ \d+, \d+', line) and re.search(r'(statutory )*debt( limit)*', line):
@@ -273,12 +275,11 @@ def parse_table(table, date, day, verbose=False):
 				row['fytd'] = digits[-1]
 				# tweak column names
 				row['account'] = row['type']
-				# BUG FIX BJD
-				row['type'] = 'deposit'
-				#if page_index == 2:
-				#	row['type'] = 'deposit'
-				#elif page_index == 3:
-				#	row['type'] = 'withdrawal'
+				# this is a hack, deal with it
+				if int(page_number) == 3:
+					row['type'] = 'withdrawal'
+				else:
+					row['type'] = 'deposit'
 			except:
 				if verbose is True:
 					print 'WARNING:', line
