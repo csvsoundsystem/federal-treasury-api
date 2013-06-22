@@ -1,11 +1,13 @@
+
 import json
 import datetime
 import pandas as pd
 import re
 
-################################################################################
 NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
 
+
+################################################################################
 def normalize_fields(text, field):
 	lookup = NORMALIZE_FIELD_TABLE[field]
 	try:
@@ -13,6 +15,7 @@ def normalize_fields(text, field):
 	except KeyError:
 		value = text
 	return value
+
 
 ################################################################################
 def get_date_and_day(f_name):
@@ -119,18 +122,27 @@ def parse_table(table, date, day, verbose=False):
 		row['date'] = date
 		row['year'] = date.year
 		row['month'] = date.month
+		row['day'] = date.day
 		row['year_month'] = datetime.date.strftime(date, '%Y-%m')
 		row['weekday'] = day
-		row['day'] = date.day
 
 		index = table.index(line)
 		if index <= used_index : continue
 		indent = len(re.search(r'^\s*', line).group())
 
+		# HARD CODED TO SKIP SHIT
 		# skip page number rows
-		if re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+\d', line):
+		page_number_match = re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+(\d)', line)
+		if page_number_match:
+			page_number = page_number_match.group(1)
 			continue
+		# skip comment on statutory debt limit at end of Table III-C, and beyond
+		if re.search(r'(As|Act) of [A-Z]\w+ \d+, \d+', line) and re.search(r'(statutory )*debt( limit)*', line):
+			break
 		# skip final footer of file
+		if re.search(r"\s+This statement summarizes\s+the United States Treasury's cash and debt", line):
+			break
+		# skip final footer of file -- above line should make this redundant!
 		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
 			break
 
@@ -175,7 +187,7 @@ def parse_table(table, date, day, verbose=False):
 
 		# separate digits and words
 		digits = re.findall(r'(-{,1}\d+)', line)
-		words = re.findall(r'[^\W\d]+:?', line)
+		words = re.findall(r'\(\-\)|[()]|[^\W\d]+:?', line)
 		# bug fix, to remove the govt's arbitrary usage of 'r/' instead of '$'
 		# in front of particular dollar amounts
 		text = ' '.join(word for word in words if word != 'r')
@@ -263,12 +275,11 @@ def parse_table(table, date, day, verbose=False):
 				row['fytd'] = digits[-1]
 				# tweak column names
 				row['account'] = row['type']
-				# BUG FIX BJD
-				row['type'] = 'deposit'
-				#if page_index == 2:
-				#	row['type'] = 'deposit'
-				#elif page_index == 3:
-				#	row['type'] = 'withdrawal'
+				# this is a hack, deal with it
+				if int(page_number) == 3:
+					row['type'] = 'withdrawal'
+				else:
+					row['type'] = 'deposit'
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -328,7 +339,7 @@ def parse_table(table, date, day, verbose=False):
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
-	if re.search(r'TABLE II\s', row.get('table', '')):
+	elif re.search(r'TABLE II\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
@@ -341,5 +352,6 @@ def parse_table(table, date, day, verbose=False):
 
 	return df
 
+# BJD: Does this function serve a purpose...?
 def strip_table_name(table_name):
     return re.sub('[^a-zA-Z]*$', '', table_name)
