@@ -9,14 +9,18 @@ from urllib import urlencode
 from pandas import DataFrame
 from optparse import OptionParser
 
-# Load options
-QUERIES = {
-    'debt_ceiling': 'select date, close_today from t3c where item like \'%subject to limit%\' order by date desc limit 2'
-}
+# Global vars, this way we wont need to rewrite things for every tweet.
+URL = "http://treasury.io"
 
+# Insert new queries here.
+# Each query is a key/value pair with the key being the name of the query, and the value being the query itself
+QUERIES = {
+    'total_debt': '''SELECT date, close_today FROM t3c WHERE item LIKE \'%subject to limit%\' ORDER BY date DESC LIMIT 30'''
+}
+# each query key can be accessed via the command line with the -t flag
 def load_options():
     parser = OptionParser()
-    parser.add_option("-t", "--tweet-type", dest="tweet_type", default="debt_ceiling",
+    parser.add_option("-t", "--tweet-type", dest="tweet_type", default="total_debt",
                   help="write report to FILE", metavar="FILE")
 
     (options, args) = parser.parse_args()
@@ -39,20 +43,28 @@ def query_treasury(sql):
     else:
         raise ValueError(handle.read())
 
+# Helpers to humanize numbers / dates
 def human_number(num):
     return humanize.intword(int(math.ceil(num))).lower()
 
 def human_date(date):
     return humanize.naturalday(date).title()
 
+
+# this is the heart of the tweet bot
+# give a tweet type, it will query the database
+# for each tweet type, we will then calculate something and
 def construct_tweet(options):
     t = options.tweet_type
-    if t == 'debt_ceiling':
+
+    # total debt
+    if t == 'total_debt':
         q = QUERIES[t]
         df = query_treasury(q)
         num = human_number(df['close_today'][0]*1e6)
         date = human_date(datetime.strptime(df['date'][0], "%Y-%m-%d"))
-        tweet = "As of %s, the US Government is $%s in debt. Learn more at http://treasury.io" % (date, num)
+        tweet = "As of %s, the US Government is $%s in debt. Learn more at %s" % (date, num, URL)
+
     return tweet
 
 if __name__ == '__main__':
