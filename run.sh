@@ -9,5 +9,5 @@ fi
 git checkout master
 git pull origin master
 cd code
-./download_and_parse_fms_fixies.py
+python download_and_parse_fms_fixies.py
 echo Downloaded and parsed fixies

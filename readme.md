@@ -108,3 +108,7 @@ There are eight tables.
 ## Downloaders
 `examples` contains some example downloader functions.
 [csv/json](https://github.com/csv/json) is a website that serves the data as csv.
+
+## Troubleshooting
+If you have a strange error, try deleting the parser output and updating the code
+to the latest `master`. You can do this by running `./reset_data.sh`.
