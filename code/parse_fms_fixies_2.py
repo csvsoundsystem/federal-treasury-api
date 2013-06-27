@@ -132,7 +132,7 @@ def parse_table(table, date, day, verbose=False):
 
 		# HARD CODED TO SKIP SHIT
 		# skip page number rows
-		page_number_match = re.search(r'\d.*DAILY TREASURY STATEMENT.*PAGE:\s+(\d)', line)
+		page_number_match = re.search(r'\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', line)
 		if page_number_match:
 			page_number = page_number_match.group(1)
 			continue
@@ -275,11 +275,10 @@ def parse_table(table, date, day, verbose=False):
 				row['fytd'] = digits[-1]
 				# tweak column names
 				row['account'] = row['type']
-				# this is a hack, deal with it
+				# this is a hack, deal with it :-/
+				row['type'] = 'deposit'
 				if int(page_number) == 3:
 					row['type'] = 'withdrawal'
-				else:
-					row['type'] = 'deposit'
 			except:
 				if verbose is True:
 					print 'WARNING:', line
