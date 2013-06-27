@@ -54,6 +54,7 @@ def parsed_files():
 ## PARSE! #####################################################################
 # fixies that have not yet been parsed into csvs
 new_files = sorted(list(downloaded_files.difference(parsed_files())))
+
 # parse all teh fixies!
 for f in new_files:
 	fname = os.path.join(FIXIE_DIR, f+'.txt')
