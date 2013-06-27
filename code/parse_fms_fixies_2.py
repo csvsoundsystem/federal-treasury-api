@@ -46,7 +46,7 @@ def normalize_page_text(page):
 	# ignore unicode errors
 	# i.e. remove superscript 3 symbols ('\xc2\xb3') by way of ignoring their errors
 	# hopefully this doesn't have any undesirable side-effects
-	page = re.sub("\xc2\xa0", "", page)
+	page = re.sub("\xc2\xa0|\xc2\xb3", "", page)
 	# split on line breaks
 	# sometimes fixies are split on regular line-breaks, not carriage returns!
 	lines = re.split(r'\r\n|\n', page)
