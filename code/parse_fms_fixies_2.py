@@ -8,13 +8,19 @@ NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
 
 
 ################################################################################
-def normalize_fields(text, field):
-	lookup = NORMALIZE_FIELD_TABLE[field]
+def normalize_fields(text, field, table):
+	table_lookup = NORMALIZE_FIELD_TABLE[table]
 	try:
-		value = lookup[text]
+		value_lookup = table_lookup[field]
 	except KeyError:
-		value = text
-	return value
+		return text
+	else:
+		try:
+			value = value_lookup[text]
+		except KeyError:
+			return text
+		else:
+			return value
 
 
 ################################################################################
@@ -251,11 +257,11 @@ def parse_table(table, date, day, verbose=False):
 			try:
 				if re.search(r'TABLE I\s', row.get('table', '')):
 					row['account_raw'] = text
-					row['account'] = normalize_fields(text, 'account')
+					row['account'] = normalize_fields(text, 'account', 't1')
 				elif re.search(r'TABLE III-C', row.get('table', '')):
 					try:
 						row['item_raw'] = text
-						row['item'] = normalize_fields(text, 'item')
+						row['item'] = normalize_fields(text, 'item', 't3c')
 					except:
 						if verbose is True:
 							print 'WARNING:', line
@@ -269,7 +275,7 @@ def parse_table(table, date, day, verbose=False):
 		elif re.search(r'TABLE II\s', row.get('table', '')):
 			try:
 				row['item_raw'] = text
-				row['item'] = normalize_fields(text, 'item')
+				row['item'] = normalize_fields(text, 'item', 't2')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -282,20 +288,40 @@ def parse_table(table, date, day, verbose=False):
 			except:
 				if verbose is True:
 					print 'WARNING:', line
-		elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
+		elif re.search(r'TABLE III-A', row.get('table', '')):
 			try:
 				row['item_raw'] = text
-				row['item'] = normalize_fields(text, 'item')
+				row['item'] = normalize_fields(text, 'item', "t3a")
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 			except:
 				if verbose is True:
 					print 'WARNING:', line
-		elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
+		elif re.search(r'TABLE III-B', row.get('table', '')):
+			try:
+				row['item_raw'] = text
+				row['item'] = normalize_fields(text, 'item', "t3b")
+				row['today'] = digits[-3]
+				row['mtd'] = digits[-2]
+				row['fytd'] = digits[-1]
+			except:
+				if verbose is True:
+					print 'WARNING:', line
+		elif re.search(r'TABLE IV', row.get('table', '')):
 			try:
 				row['classification_raw'] = text
-				row['classification'] = normalize_fields(text, 'classification')
+				row['classification'] = normalize_fields(text, 'classification', 't4')
+				row['today'] = digits[-3]
+				row['mtd'] = digits[-2]
+				row['fytd'] = digits[-1]
+			except:
+				if verbose is True:
+					print 'WARNING:', line
+		elif re.search(r'TABLE VI', row.get('table', '')):
+			try:
+				row['classification_raw'] = text
+				row['classification'] = normalize_fields(text, 'classification', 't6')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]

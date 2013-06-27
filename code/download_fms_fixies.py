@@ -61,7 +61,7 @@ def request_fixie(fname):
 			return response.text
 		else:
 			return None
-		
+
 ################################################################################
 def request_all_fixies(fnames):
 	for fname in reversed(fnames):
