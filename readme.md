@@ -6,7 +6,7 @@ We develop on `master`, and we deploy to `gh-pages`.
 
 ### Deploying to ScraperWiki
 You can run this on any number of servers, but we happen to be using ScraperWiki.
-To use ScraperWiki, log in [here](https://beta.scraperwiki.com/login),
+To use ScraperWiki, log in [here](https://premium.scraperwiki.com/login),
 make a project, click the "SSH in" link, add your SSH key and SSH in.
 Then follow the directions below.
 
