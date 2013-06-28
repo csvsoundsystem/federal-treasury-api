@@ -1,47 +1,9 @@
-import tweepy
+#!/usr/bin/env python
+import treasuryio
 import humanize
 import math
-import re, sys, yaml
-from datetime import datetime
-from json import load
-from urllib import urlopen
-from urllib import urlencode
-from pandas import DataFrame
-from optparse import OptionParser
 
-# Global vars, this way we wont need to rewrite things for every tweet.
-URL = "http://treasury.io"
-
-# Insert new queries here.
-# Each query is a key/value pair with the key being the name of the query, and the value being the query itself
-QUERIES = {
-    'total_debt': '''SELECT date, close_today FROM t3c WHERE item LIKE \'%subject to limit%\' ORDER BY date DESC LIMIT 30'''
-}
-# each query key can be accessed via the command line with the -t flag
-def load_options():
-    parser = OptionParser()
-    parser.add_option("-t", "--tweet-type", dest="tweet_type", default="total_debt",
-                  help="write report to FILE", metavar="FILE")
-
-    (options, args) = parser.parse_args()
-    return options
-
-def connect_to_twitter(config="api.yml"):
-    conf = yaml.safe_load(open(config))
-    auth = tweepy.OAuthHandler(conf['consumer_key'], conf['consumer_secret'])
-    auth.set_access_token(conf['access_token'], conf['access_token_secret'])
-    api = tweepy.API(auth)
-    return api
-
-def query_treasury(sql):
-    url = 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/'
-    query_string = urlencode({'q':sql})
-    handle = urlopen(url + '?' + query_string)
-    if handle.code == 200:
-        d = load(handle)
-        return DataFrame(d)
-    else:
-        raise ValueError(handle.read())
+MIL = 1e6
 
 # Helpers to humanize numbers / dates
 def human_number(num):
@@ -50,27 +12,36 @@ def human_number(num):
 def human_date(date):
     return humanize.naturalday(date).title()
 
+@treasuryio.tweet
+def total_debt_tweet():
+    df = treasuryio.query('SELECT date, close_today FROM t3c WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1) ORDER BY date DESC')
 
-# this is the heart of the tweet bot
-# give a tweet type, it will query the database
-# for each tweet type, we will then calculate something and
-def construct_tweet(options):
-    t = options.tweet_type
+    # determine length of DataFrame
+    end = len(df)-1
 
-    # total debt
-    if t == 'total_debt':
-        q = QUERIES[t]
-        df = query_treasury(q)
-        num = human_number(df['close_today'][0]*1e6)
-        date = human_date(datetime.strptime(df['date'][0], "%Y-%m-%d"))
-        tweet = "As of %s, the US Government is $%s in debt. Learn more at %s" % (date, num, URL)
+    # extract current amount and amount at the beginning of the year
+    current_amt = df['close_today'][0]*MIL
+    previous_amt = df['close_today'][end]*MIL
 
-    return tweet
+    # calculate change
+    delta = abs(current_amt - previous_amt)
+
+    # generate word to represnet the direction of change
+    if current_amt > previous_amt:
+        change = "increased"
+    elif current_amt < previous_amt:
+        change = "decreased"
+
+    # humanize values
+    # Notice the included ``human_date`` and ``human_number`` functions which simplify these values for you
+    current_date = human_date(df['date'][0])
+    amt = human_number(current_amt)
+    delta = human_number(delta)
+    previous_date = human_date(df['date'][end])
+
+    # generate tweet
+    vals = (current_date, amt, change, previous_date, 'http://treasury.io')
+    return "As of %s, the US Gov is $%s in debt. This amount has %s since %s - %s" % vals
 
 if __name__ == '__main__':
-    options = load_options()
-    api = connect_to_twitter()
-    tweet = construct_tweet(options)
-    print "TWEET:", tweet
-    api.update_status(tweet)
-
+    total_debt_tweet()

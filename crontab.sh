@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo "0 17 * * * cd '$PWD' && git pull && ./run.sh"
+echo "0 17 * * * cd '$PWD' && git pull && ./run.sh && ./twitter/tweetbot.py"
