@@ -57,16 +57,21 @@ def human_date(date):
 
 ######################################
 def total_debt_tweet(df):
+    # determine length of DataFrame
     end = len(df)-1
+
+    # extract current amount and amount at the beginning of the year
     current_amt = df['close_today'][0]*MIL
     previous_amt = df['close_today'][end]*MIL
+
+    # calculate change
     delta = abs(current_amt - previous_amt)
+
+    # generate word to represnet the direction of change
     if current_amt > previous_amt:
         change = "increased"
     elif current_amt < previous_amt:
         change = "decreased"
-    else:
-        change = "not changed"
 
     # humanize values
     current_date = human_date(df['date'][0])
@@ -75,14 +80,8 @@ def total_debt_tweet(df):
     previous_date = human_date(df['date'][end])
 
     # generate tweet
-    if change!="not changed":
-        vals = (current_date, amt, change, delta, previous_date, URL)
-        tweet = "As of %s, the US Gov is $%s in debt. This amount has %s by $%s since %s - %s" % vals
-    else:
-        vals = (current_date, amt, change, previous_date, URL)
-        tweet = "As of %s, the US Gov is $%s in debt. This amount has %s since %s - %s" % vals
-
-    return tweet
+    vals = (current_date, amt, change, previous_date, URL)
+    return "As of %s, the US Gov is $%s in debt. This amount has %s since %s - %s" % vals
 
 def change_in_balance_tweet(df):
 
