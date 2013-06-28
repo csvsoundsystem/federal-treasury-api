@@ -46,9 +46,11 @@ def normalize_page_text(page):
 	# ignore unicode errors
 	# i.e. remove superscript 3 symbols ('\xc2\xb3') by way of ignoring their errors
 	# hopefully this doesn't have any undesirable side-effects
-	page = unicode(page, errors='ignore')
+	page = re.sub("\xc2\xa0|\xc2\xb3", "", page)
 	# split on line breaks
-	lines = re.split(r'\r\n', page)
+	# sometimes fixies are split on regular line-breaks, not carriage returns!
+	lines = re.split(r'\r\n|\n', page)
+
 	# get rid of pipe delimiters and divider lines
 	lines = [re.sub(r'^ \|', '       ', line) for line in lines]
 	lines = [re.sub(r'\|', '', line) for line in lines]
@@ -63,14 +65,12 @@ def normalize_page_text(page):
 	lines = [line for line in lines if line!='' and line!=' ']
 	return lines
 
-
 ################################################################################
 def get_footnote(line):
 	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
-
 
 ################################################################################
 def parse_file(f_name, verbose=False):
@@ -98,7 +98,6 @@ def parse_file(f_name, verbose=False):
 		dfs[table_index] = parse_table(table, date, day, verbose=verbose)
 
 	return dfs
-
 
 ################################################################################
 def parse_table(table, date, day, verbose=False):
