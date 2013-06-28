@@ -8,9 +8,11 @@ fi
 
 git checkout master
 git pull origin master
-cd code
-python download_and_parse_fms_fixies.py
+(
+  cd code
+  python download_and_parse_fms_fixies.py
+)
 echo Downloaded and parsed fixies
 
 echo Tweeting
-python twitter/tweetbot.py
+python ~/twitter/tweetbot.py
