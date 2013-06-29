@@ -78,7 +78,7 @@ def request_all_fixies(fnames):
 		if fixie is None:
 			print 'WARNING:', fname, '(',
 			print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
-			print ')', 'not available!'
+			print ')', 'not available! (Most likely a federal holiday)'
 
 ################################################################################
 def download_fixies(start_date, end_date=None):
