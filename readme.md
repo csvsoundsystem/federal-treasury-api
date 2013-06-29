@@ -79,7 +79,7 @@ Run `crontab -e` to edit the schedule later.
 In the Task Scheduler, set `run.bat` to run every day at 5 pm.
 
 ### Testing
-To unit test parser functions, write tests in `code/parse_fms_fixies_2.py`,
+To unit test parser functions, write tests in `code/parse_fms_fixies.py`,
 and then run them with nose.
 
     cd code
