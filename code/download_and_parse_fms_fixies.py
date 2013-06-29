@@ -183,6 +183,15 @@ soundsystem_txt = r"""
 `-. | | | | |\| |  )`-.  |  `-.  |  |-  |\/|
 `-' `-' `-' ' ` `-' `-'  `  `-'  '  `-' '  `
 """
+welcome_msg = r"""
+Everything you just downloaded is in the data directory.
+The raw files are in data/fixie.
+They were parsed and converted to csvs in the data/daily_csv directory.
+These are combined by table in the data/lifetime_csv directory.
+Those tables were made into a SQLite database at data/fms.db, which you can load using your favorite SQLite viewer.
+If you have any questions, check out treasury.io for usage and a link to the support Google Group.
+"""
 print csv_txt
 print soundsystem_txt
 print '*http://csvsoundsystem.com/'
+print welcome_msg
