@@ -9,12 +9,12 @@ fi
 git checkout master
 git pull origin master
 
-if [ -f data/daily_csv/ ]; then
+if [ -d  data/daily_csv ]; then
     echo "Removing data/daily_csv/"
     rm -r data/daily_csv/
 fi
 
-if [ -f data/lifetime_csv/ ]; then
+if [ -d data/lifetime_csv ]; then
     echo "Removing data/lifetime_csv/"
     rm -r data/lifetime_csv/
 fi
