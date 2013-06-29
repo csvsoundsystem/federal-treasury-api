@@ -4,7 +4,6 @@
 import os
 import json
 import sqlite3
-
 import dumptruck
 from bottle import route, run, response, static_file
 
