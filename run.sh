@@ -15,5 +15,8 @@ git pull origin master
 )
 echo Downloaded and parsed fixies
 
-echo Tweeting
-python ~/twitter/tweetbot.py
+# Tweet if running on ScraperWiki
+if uname -n|grep scraperwiki; then
+  echo Tweeting
+  python ~/twitter/tweetbot.py
+fi
