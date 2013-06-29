@@ -34,7 +34,7 @@ if len(test_fixies) == 0:
 	start_date = datetime.date(2005, 6, 9)
 # else start from last available fixie date
 else:
-	start_date = parse_fms_fixies_2.get_date_and_day(test_fixies[-1])[0]
+	start_date = parse_fms_fixies.get_date_and_day(test_fixies[-1])[0]
 # always end with today
 end_date = datetime.date.today()
 
@@ -56,7 +56,7 @@ new_files = sorted(list(downloaded_files.difference(parsed_files())))
 for f in new_files:
 	fname = os.path.join(FIXIE_DIR, f+'.txt')
 	#print '\n', fname
-	dfs = parse_fms_fixies_2.parse_file(fname, verbose=False)
+	dfs = parse_fms_fixies.parse_file(fname, verbose=False)
 
 	# each table for each date stored in separate csv files
 	for df in dfs.values():
