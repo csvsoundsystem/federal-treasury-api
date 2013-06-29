@@ -6,10 +6,25 @@ We develop on `master`, and we deploy to `gh-pages`.
 
 ### Deploying to ScraperWiki
 You can run this on any number of servers, but we happen to be using ScraperWiki.
+
+#### SSH
 To use ScraperWiki, log in [here](https://beta.scraperwiki.com/login),
 make a project, click the "SSH in" link, add your SSH key and SSH in.
-Then follow the directions below.
+Then you can SSH to the box like so.
 
+    ssh cc7znvq@premium.scraperwiki.com
+
+Or add this to your `~/.ssh/config`
+
+    Host fms
+    HostName premium.scraperwiki.com
+    User cc7znvq
+
+and just run
+
+    ssh fms
+
+#### What this ScraperWiki account is
 Some notes about how ScraperWiki works:
 
 * We have a user account in a chroot jail.
