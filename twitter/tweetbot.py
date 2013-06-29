@@ -90,14 +90,14 @@ def change_in_balance_tweet(df):
     if raw_amt < 0:
         change = "dropped"
     elif raw_amt > 0:
-        change = "increased"
+        change = "rose"
     # humanize number
     amt = human_number(abs(raw_amt)*MIL)
 
     #Extract Weekday
     weekday = df['weekday'][0]
 
-    return "The US Gov's total operating balance %s by $%s on %s - %s" % (change, amt, weekday, URL)
+    return "The US Gov's total operating balance %s $%s on %s - %s" % (change, amt, weekday, URL)
 
 ######################################
 
