@@ -164,18 +164,18 @@ HOLIDAY_FNAMES = [datetime.datetime.strptime(d, '%Y%m%d').strftime('%y%m%d00') f
     '20130121',
 ]]
 def request_all_fixies(fnames):
-	for fname in reversed(fnames):
-		alt_fnames = [fname]
-		alt_fnames.extend([fname[:-5] + i +'.txt' for i in ['1', '2', '3']])
-		for alt_fname in alt_fnames:
-			fixie = request_fixie(alt_fname)
-			if fixie:
-				f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'wb', 'utf-8')
-				f.write(fixie)
-				f.close()
-				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
-				break
-		if fixie is None:
+    for fname in reversed(fnames):
+        alt_fnames = [fname]
+        alt_fnames.extend([fname[:-5] + i +'.txt' for i in ['1', '2', '3']])
+        for alt_fname in alt_fnames:
+            fixie = request_fixie(alt_fname)
+            if fixie:
+                f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'wb', 'utf-8')
+                f.write(fixie)
+                f.close()
+                print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
+                break
+        if fixie is None:
             if fname in HOLIDAY_FNAMES:
                 print 'INFO:', fname, '(',
                 print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
