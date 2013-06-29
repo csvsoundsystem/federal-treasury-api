@@ -4,17 +4,25 @@
             "Supplementary Financing Program Account": "Supplementary Financing Program",
             "Supplementary Financing Prog": "Supplementary Financing Program",
             "Supplementary Financing Programs": "Supplementary Financing Program",
-            "Financial Institution Accoun": "Financial Institution Account"
+            "Financial Institution Accoun": "Financial Institution Account",
+            "Tax and Loan Note Accounts Table V": "Tax and Loan Note Accounts ( Table V )",
+            "Veterans Affairs programs": "Veterans Affairs Programs"
+
         }
     },
     "t2": {
         "item": {
             "Agency for Internat l Development": "Agency for International Development",
             "Animal Plant Health Inspection Svcs": "Animal Plant Health Inspection svcs",
-            "Deposit Insurance Fund": "Deposit Insurance Fund net",
+            "Deposit Insurance Fund": "Deposit Insurance Fund ( net )",
             "Farm Services Agency": "FSA Tobacco Assessments",
-            "Interest recd from T L Depositaries":"Interest recd from cash investments",
-            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities net"
+            "Interest recd from T L Depositaries": "Interest recd from cash investments",
+            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities ( net )",
+            "GSA programs": "GSA Programs",
+            "GSA": "GSA Programs",
+            "Transfer by HHS from Federal Tax Refund Offset Program to various State age": "Transfer by HHS from Federal Tax Refund Offset Program to various State agencies",
+            "Temporary Assistance for Needy Families HHS": "Temporary Assistance for Needy Families ( HHS )",
+            "Interior: Bureau of Land Mgmt": "Interior: Bureau of Land Management"
           }
     },
     "t3a": {

@@ -6,10 +6,11 @@ import pandas as pd
 import re
 
 NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
+REMOVE_ERRANT_FOOTNOTES_TABLE = json.load(open("../code/remove_errant_foontnotes_table.json"))
 
 
 ################################################################################
-def normalize_fields(text, field, table):
+def normalize_fields(text, table, field):
 	table_lookup = NORMALIZE_FIELD_TABLE[table]
 	try:
 		value_lookup = table_lookup[field]
@@ -23,6 +24,7 @@ def normalize_fields(text, field, table):
 		else:
 			return value
 
+def remove_errant_footnotes(text):
 
 ################################################################################
 def get_date_and_day(f_name):
@@ -151,7 +153,9 @@ def parse_table(table, date, day, verbose=False):
 		# skip final footer of file -- above line should make this redundant!
 		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
 			break
-
+		# ignore errant footnotes:
+		if any([re.search(".*%s.*" % f, line) for f in REMOVE_ERRANT_FOOTNOTES_TABLE]):
+			break
 		# skip table header rows
 		if re.match(r'\s{7,}', line): continue
 		if get_table_name(line):
@@ -257,11 +261,11 @@ def parse_table(table, date, day, verbose=False):
 			try:
 				if re.search(r'TABLE I\s', row.get('table', '')):
 					row['account_raw'] = text
-					row['account'] = normalize_fields(text, 'account', 't1')
+					row['account'] = normalize_fields(text, 't1', 'account')
 				elif re.search(r'TABLE III-C', row.get('table', '')):
 					try:
 						row['item_raw'] = text
-						row['item'] = normalize_fields(text, 'item', 't3c')
+						row['item'] = normalize_fields(text, 't3c', 'item')
 					except:
 						if verbose is True:
 							print 'WARNING:', line
@@ -275,7 +279,7 @@ def parse_table(table, date, day, verbose=False):
 		elif re.search(r'TABLE II\s', row.get('table', '')):
 			try:
 				row['item_raw'] = text
-				row['item'] = normalize_fields(text, 'item', 't2')
+				row['item'] = normalize_fields(text, 't2', 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -291,7 +295,7 @@ def parse_table(table, date, day, verbose=False):
 		elif re.search(r'TABLE III-A', row.get('table', '')):
 			try:
 				row['item_raw'] = text
-				row['item'] = normalize_fields(text, 'item', "t3a")
+				row['item'] = normalize_fields(text, "t3a", 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -301,7 +305,7 @@ def parse_table(table, date, day, verbose=False):
 		elif re.search(r'TABLE III-B', row.get('table', '')):
 			try:
 				row['item_raw'] = text
-				row['item'] = normalize_fields(text, 'item', "t3b")
+				row['item'] = normalize_fields(text, "t3b", 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -311,7 +315,7 @@ def parse_table(table, date, day, verbose=False):
 		elif re.search(r'TABLE IV', row.get('table', '')):
 			try:
 				row['classification_raw'] = text
-				row['classification'] = normalize_fields(text, 'classification', 't4')
+				row['classification'] = normalize_fields(text, 't4', 'classification')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
@@ -321,7 +325,7 @@ def parse_table(table, date, day, verbose=False):
 		elif re.search(r'TABLE VI', row.get('table', '')):
 			try:
 				row['classification_raw'] = text
-				row['classification'] = normalize_fields(text, 'classification', 't6')
+				row['classification'] = normalize_fields(text, 't6', 'classification')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]

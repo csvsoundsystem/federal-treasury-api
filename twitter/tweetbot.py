@@ -24,7 +24,6 @@ def human_date(date):
 def new_data_tweet():
     return ""
 
-
 @treasuryio.tweet
 def total_debt_tweet():
     df = treasuryio.query('SELECT date, close_today FROM t3c WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1) ORDER BY date DESC')
