@@ -63,7 +63,7 @@ def request_fixie(fname):
 			return None
 
 ################################################################################
-HOLIDAY_FNAMES = [datetime.datetime.strptime(d, '%Y%m%d').strftime('%y%m%d00') for d in [
+HOLIDAY_FNAMES = [datetime.datetime.strptime(d, '%Y%m%d').strftime('%y%m%d00.txt') for d in [
     # Federal holidays 2005
     '20050117',
     '20050221',
