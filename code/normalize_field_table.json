@@ -29,20 +29,20 @@
     "t3a": {
         "item": {
             "Agency for Internat l Development": "Agency for International Development",
-            "Deposit Insurance Fund": "Deposit Insurance Fund net",
-            "Federal Financing Bank":"Federal Financing Bank net",
+            "Deposit Insurance Fund": "Deposit Insurance Fund ( net )",
+            "Federal Financing Bank":"Federal Financing Bank ( net )",
             "GSA programs": "GSA Programs",
-            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities net",
+            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities ( net )",
             "Veterans Affairs programs": "Veterans Affairs Programs"
           }
     },
     "t3b": {
         "item": {
             "Agency for Internat l Development": "Agency for International Development",
-            "Deposit Insurance Fund": "Deposit Insurance Fund net",
-            "Federal Financing Bank":"Federal Financing Bank net",
+            "Deposit Insurance Fund": "Deposit Insurance Fund ( net )",
+            "Federal Financing Bank":"Federal Financing Bank ( net )",
             "GSA programs": "GSA Programs",
-            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities net",
+            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities ( net )",
             "Veterans Affairs programs": "Veterans Affairs Programs"
           }
     },
