@@ -2,13 +2,16 @@
 .DS_Store
 *.swp
 *.pyc
+.Rapp.history
+.gitconfig
+.selected_editor
 
 # Data
 data/fixie/
 data/daily_csv/
 data/lifetime_csv/
-data/fms.db
-data/fms.db-journal
+data/treasury_data.db
+data/treasury_data.db-journal
 fms_parser_data/*
 code/broken_fixies.txt
 

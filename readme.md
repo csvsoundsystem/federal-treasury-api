@@ -56,7 +56,8 @@ Then serve the web api like so.
 ### Windows
 Run everything
 
-    run.bat
+    cd code
+    python download_and_parser_fms_fixies.py
 
 Serve the API locally.
 

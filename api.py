@@ -120,7 +120,7 @@ def index():
 @route('/sql/')
 @route('/sql/<sql>')
 def sql(sql='SELECT * FROM sqlite_master;'):
-    dbname=os.path.join('data', 'fms.db')
+    dbname=os.path.join('data', 'treasury_data.db')
     try:
         code,body = execute_query(sql, dbname)
     except QueryError as e:

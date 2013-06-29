@@ -15,8 +15,8 @@ fi
 if [ -f data/lifetime_csv/]; then
   rm -r data/lifetime_csv/
 fi
-if [ -f data/fms.db]; then
-  rm -r data/fms.db
+if [ -f data/treasury_data.db]; then
+  rm -r data/treasury_data.db
 fi
 
 cd code

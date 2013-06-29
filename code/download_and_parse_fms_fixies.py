@@ -5,7 +5,7 @@ import download_fms_fixies
 import os
 import pandas as pd
 import pandas.io.sql
-import parse_fms_fixies_2
+import parse_fms_fixies
 import re
 import sqlite3
 import sys
@@ -22,8 +22,6 @@ if not os.path.split(os.getcwd())[-1] == 'code':
 FIXIE_DIR = os.path.join('..', 'data', 'fixie')
 DAILY_CSV_DIR = os.path.join('..', 'data', 'daily_csv')
 LIFETIME_CSV_DIR = os.path.join('..', 'data', 'lifetime_csv')
-BROKEN_FIXIE_FILE = os.path.join('..', 'code', 'broken_fixies.txt')
-broken_fixies = []
 os.system('mkdir -pv ' + FIXIE_DIR)
 os.system('mkdir -pv ' + DAILY_CSV_DIR)
 os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
@@ -68,19 +66,11 @@ for f in new_files:
 			t_name_short = re.sub(r'-| ', '_', t_name_match.group().lower())
 		except Exception as e:
 			print '***ERROR: tables failed to parsed!', e
-
-			# keep track of fixies which fail to parase
-			broken_fixies.append(re.sub(r"\.\./data/fixie/", "", fname))
-
 			# go on
 			continue
 
 		daily_csv = os.path.join(DAILY_CSV_DIR, f.split('.')[0]+'_'+t_name_short+'.csv')
 		df.to_csv(daily_csv, index=False, header=True, encoding='utf-8', na_rep='')
-
-# clean up broken fixie file
-broken_fixie_log = open(BROKEN_FIXIE_FILE, 'ab')
-[broken_fixie_log.write(f+"\n") for f in set(broken_fixies)]
 
 # iterate over all fms tables
 for i in ['i', 'ii', 'iii_a', 'iii_b', 'iii_c', 'iv', 'v', 'vi']:
@@ -149,7 +139,7 @@ TABLES = [
 	},
 ]
 
-connection = sqlite3.connect(os.path.join('..', 'data', 'fms.db'))
+connection = sqlite3.connect(os.path.join('..', 'data', 'treasury_data.db'))
 connection.text_factory = str # bad, but pandas doesn't work otherwise
 
 for table in TABLES:
@@ -188,7 +178,7 @@ Everything you just downloaded is in the data directory.
 The raw files are in data/fixie.
 They were parsed and converted to csvs in the data/daily_csv directory.
 These are combined by table in the data/lifetime_csv directory.
-Those tables were made into a SQLite database at data/fms.db, which you can load using your favorite SQLite viewer.
+Those tables were made into a SQLite database at data/treasury_data.db, which you can load using your favorite SQLite viewer.
 If you have any questions, check out treasury.io for usage and a link to the support Google Group.
 """
 print csv_txt
