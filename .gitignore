@@ -12,8 +12,6 @@ data/daily_csv/
 data/lifetime_csv/
 data/treasury_data.db
 data/treasury_data.db-journal
-fms_parser_data/*
-code/broken_fixies.txt
 
 # tweet bot
 twitter/api.yml
