@@ -1,12 +1,15 @@
+# General annoying files
 .DS_Store
+*.swp
+*.pyc
+
+# Data
 data/fixie/
 data/daily_csv/
 data/lifetime_csv/
 data/fms.db
 data/fms.db-journal
-*.pyc
 fms_parser_data/*
-code/*.pyc
 code/broken_fixies.txt
 
 # tweet bot
@@ -21,3 +24,4 @@ twitter/*.pyc
 .viminfo
 env/
 .sqlite_history
+.twitter.yml
