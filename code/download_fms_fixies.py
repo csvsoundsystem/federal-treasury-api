@@ -63,6 +63,106 @@ def request_fixie(fname):
 			return None
 
 ################################################################################
+HOLIDAY_FNAMES = [datetime.datetime.strptime(d, '%Y%m%d').strftime('%y%m%d00') for d in [
+    # Federal holidays 2005
+    '20050117',
+    '20050221',
+    '20050530',
+    '20050704',
+    '20050905',
+    '20051010',
+    '20051111',
+    '20051124',
+    '20051226',
+
+    # Federal holidays '2006',
+    '20060102',
+    '20060116',
+    '20060220',
+    '20060529',
+    '20060704',
+    '20060904',
+    '20061009',
+    '20061110',
+    '20061123',
+    '20061225',
+
+    # Federal holidays '2007',
+    '20070101',
+    '20070115',
+    '20070219',
+    '20070528',
+    '20070704',
+    '20070903',
+    '20071008',
+    '20071112',
+    '20071122',
+    '20071225',
+
+    # Federal holidays '2008',
+    '20080101',
+    '20080121',
+    '20080218',
+    '20080526',
+    '20080704',
+    '20080901',
+    '20081013',
+    '20081111',
+    '20081127',
+    '20081225',
+
+    # Federal holidays '2009',
+    '20090101',
+    '20090119',
+    '20090216',
+    '20090525',
+    '20090703',
+    '20090907',
+    '20091012',
+    '20091111',
+    '20091126',
+    '20091225',
+
+    # Federal holidays '2010',
+    '20100101',
+    '20100118',
+    '20100215',
+    '20100531',
+    '20100705',
+    '20100906',
+    '20101011',
+    '20101111',
+    '20101125',
+    '20101224',
+
+    # Federal holidays '2011',
+    '20101231',
+    '20110117',
+    '20110221',
+    '20110530',
+    '20110704',
+    '20110905',
+    '20111010',
+    '20111111',
+    '20111124',
+    '20111226',
+
+    # Federal holidays '2012',
+    '20120102',
+    '20120116',
+    '20120220',
+    '20120528',
+    '20120704',
+    '20120903',
+    '20121008',
+    '20121112',
+    '20121122',
+    '20121225',
+
+    # Federal holidays '2013',
+    '20130101',
+    '20130121',
+]]
 def request_all_fixies(fnames):
 	for fname in reversed(fnames):
 		alt_fnames = [fname]
@@ -76,9 +176,14 @@ def request_all_fixies(fnames):
 				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
 				break
 		if fixie is None:
-			print 'WARNING:', fname, '(',
-			print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
-			print ')', 'not available! (Most likely a federal holiday)'
+            if fname in HOLIDAY_FNAMES:
+                print 'INFO:', fname, '(',
+                print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
+                print ')', 'is a federal holiday, so it has no data)'
+            else:
+                print 'WARNING:', fname, '(',
+                print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
+                print ')', 'not available)'
 
 ################################################################################
 def download_fixies(start_date, end_date=None):
