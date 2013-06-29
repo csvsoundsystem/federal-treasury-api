@@ -179,11 +179,11 @@ def request_all_fixies(fnames):
             if fname in HOLIDAY_FNAMES:
                 print 'INFO:', fname, '(',
                 print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
-                print ')', 'is a federal holiday, so it has no data)'
+                print ')', 'is a federal holiday, so it has no data'
             else:
                 print 'WARNING:', fname, '(',
                 print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
-                print ')', 'not available)'
+                print ')', 'not available'
 
 ################################################################################
 def download_fixies(start_date, end_date=None):
