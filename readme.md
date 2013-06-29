@@ -113,7 +113,7 @@ stacked (unioned) on top of each other.
 There are eight tables.
 
 * I. Operating Cash Balance (`t1`)
-* II. Deposits (`t2a`) and Withdrawals (`t2b`)
+* II. Deposits and Withdrawals (`t2`)
 * IIIa. Public Debt Transactions (`t3a`)
 * IIIb. Adjustment of Public Dept Transactions to Cash Basis (`t3b`)
 * IIIc. Debt Subject to Limit (`t3c`)
