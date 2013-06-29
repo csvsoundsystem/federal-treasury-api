@@ -1,13 +1,11 @@
 #!/usr/bin/env python
-
 import json
 import datetime
 import pandas as pd
 import re
 
 NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
-REMOVE_ERRANT_FOOTNOTES_TABLE = json.load(open("../code/remove_errant_foontnotes_table.json"))
-
+REMOVE_ERRANT_FOOTNOTES_TABLE = json.load(open("../code/remove_errant_footnotes_table.json"))
 
 ################################################################################
 def normalize_fields(text, table, field):
