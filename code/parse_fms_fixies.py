@@ -24,8 +24,6 @@ def normalize_fields(text, table, field):
 		else:
 			return value
 
-def remove_errant_footnotes(text):
-
 ################################################################################
 def get_date_and_day(f_name):
 	raw_date = re.search(r'(\d+).txt', f_name).group(1)
@@ -153,9 +151,10 @@ def parse_table(table, date, day, verbose=False):
 		# skip final footer of file -- above line should make this redundant!
 		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
 			break
-		# ignore errant footnotes:
-		if any([re.search(".*%s.*" % f, line) for f in REMOVE_ERRANT_FOOTNOTES_TABLE]):
-			break
+		# NOT IMPLEMENTED YET, WE SHOULD TRY TO FIX THE PARSER FIRST
+		# # ignore errant footnotes:
+		# if any([re.search(".*%s.*" % f, line) for f in REMOVE_ERRANT_FOOTNOTES_TABLE]):
+		# 	break
 		# skip table header rows
 		if re.match(r'\s{7,}', line): continue
 		if get_table_name(line):
