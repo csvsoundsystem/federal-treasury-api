@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import os, datetime
 import re
 import StringIO
