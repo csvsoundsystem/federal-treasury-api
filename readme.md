@@ -1,8 +1,4 @@
-## Development notes
-
-### Git
-
-We develop on `master`, and we deploy to `gh-pages`.
+# Federal Treasury API
 
 ### Deploying to ScraperWiki
 You can run this on any number of servers, but we happen to be using ScraperWiki.
@@ -75,9 +71,6 @@ Run this to schedule the above script to run daily.
 
 Run `crontab -e` to edit the schedule later.
 
-### Windows
-In the Task Scheduler, set `run.bat` to run every day at 5 pm.
-
 ### Testing
 To unit test parser functions, write tests in `code/parse_fms_fixies.py`,
 and then run them with nose.
@@ -124,6 +117,9 @@ There are eight tables.
 ## Downloaders
 `examples` contains some example downloader functions.
 [csv/json](https://github.com/csv/json) is a website that serves the data as csv.
+
+## Reseting the database.
+If (and only if) you change the parsing engine, you can reset the data by running `reset_data.sh`.  This function will attempt to delete `data/daily_csv`, `data/lifetime_csv`, `data/treasury_data.db`, and then run `code/download_and_parse_fms_fixies.py`
 
 ## Troubleshooting
 If you have a strange error, try deleting the parser output and updating the code
