@@ -162,6 +162,13 @@ HOLIDAY_FNAMES = [datetime.datetime.strptime(d, '%Y%m%d').strftime('%y%m%d00.txt
     # Federal holidays '2013',
     '20130101',
     '20130121',
+    '20130218',
+    '20130527',
+    '20130704',
+    '20131014',
+    '20131111',
+    '20131128',
+    '20131225',
 ]]
 def request_all_fixies(fnames):
     for fname in reversed(fnames):
