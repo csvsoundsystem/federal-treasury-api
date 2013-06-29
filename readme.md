@@ -119,7 +119,7 @@ There are eight tables.
 [csv/json](https://github.com/csv/json) is a website that serves the data as csv.
 
 ## Reseting the database.
-If (and only if) you change the parsing engine, you can reset the data by running `reset_data.sh`.  This function will attempt to delete `data/daily_csv`, `data/lifetime_csv`, `data/treasury_data.db`, and then run `code/download_and_parse_fms_fixies.py`
+If (and only if) you change the parsing engine, you can reset the data by running `reset_data.sh`.  This function will attempt to delete `data/daily_csv`, `data/lifetime_csv`, `data/fms.db`, and then run `code/download_and_parse_fms_fixies.py`
 
 ## Troubleshooting
 If you have a strange error, try deleting the parser output and updating the code

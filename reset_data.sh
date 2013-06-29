@@ -19,9 +19,9 @@ if [ -d data/lifetime_csv ]; then
     rm -r data/lifetime_csv/
 fi
 
-if [ -f data/treasury_data.db ]; then
-  echo "Removing data/treasury_data.db"
-    rm -r data/treasury_data.db
+if [ -f data/fms.db ]; then
+  echo "Removing data/fms.db"
+    rm -r data/fms.db
 fi
 
 cd code
