@@ -10,8 +10,8 @@
 data/fixie/
 data/daily_csv/
 data/lifetime_csv/
-data/treasury_data.db
-data/treasury_data.db-journal
+data/fms.db
+data/fms.db-journal
 
 # tweet bot
 twitter/api.yml
