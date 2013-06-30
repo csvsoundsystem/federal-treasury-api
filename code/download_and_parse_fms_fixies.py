@@ -144,6 +144,14 @@ connection.text_factory = str # bad, but pandas doesn't work otherwise
 
 for table in TABLES:
 	df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%s.csv' % table['raw-table']))
+
+	# FILTER OUT TABLE 5 AFTER  2012-04-02 - HACK BUT WORKS FOR NOW
+	if table['new-table']=="t5":
+		print "filtering out invalid dates for TABLE V"
+		table_v_end = datetime.date(2012, 4, 2)
+		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
+		df = df[df.date < table_v_end]
+
 	pandas.io.sql.write_frame(df, '_table_%s' % table['raw-table'], connection)
 	connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
 	connection.execute('ALTER TABLE "_table_%s" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
@@ -174,12 +182,12 @@ soundsystem_txt = r"""
 `-' `-' `-' ' ` `-' `-'  `  `-'  '  `-' '  `
 """
 welcome_msg = r"""
-Everything you just downloaded is in the data directory.
+Everything you just downloaded is in the data/ directory.
 The raw files are in data/fixie.
 They were parsed and converted to csvs in the data/daily_csv directory.
 These are combined by table in the data/lifetime_csv directory.
 Those tables were made into a SQLite database at data/fms.db, which you can load using your favorite SQLite viewer.
-If you have any questions, check out treasury.io for usage and a link to the support Google Group.
+If you have any questions, check out http://treasury.io for usage and a link to the support Google Group.
 """
 print csv_txt
 print soundsystem_txt
