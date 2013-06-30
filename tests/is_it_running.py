@@ -62,7 +62,7 @@ def gen_test_tweet():
     elif observed['date'] < expected['date']:
         return "Hey %s, somethings wrong unless %s is a holiday! - %s" % (peeps, expected['date'])
     else:
-        return None
+        return "Running smooth..."
 
 if __name__ == '__main__':
     options = load_options()
