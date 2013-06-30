@@ -149,7 +149,7 @@ for table in TABLES:
 	if table['new-table']=="t5":
 		print "filtering out invalid dates for TABLE V"
 		table_v_end = datetime.date(2012, 4, 2)
-		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d"))
+		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d").date())
 		df = df[df.date < table_v_end]
 
 	pandas.io.sql.write_frame(df, '_table_%s' % table['raw-table'], connection)
