@@ -145,9 +145,10 @@ connection.text_factory = str # bad, but pandas doesn't work otherwise
 for table in TABLES:
 	df = pandas.read_csv(os.path.join('..', 'data', 'lifetime_csv', 'table_%s.csv' % table['raw-table']))
 
-	# FILTER OUT TABLE 5 AFTER  2012-04-02 - HACK BUT WORKS FOR NOW
+	# WARNING SERIOUS HACKS FOLLOW #
+	# FILTER OUT TABLE 5 AFTER  2012-04-02 - HACK BUT WORKS FOR NOW #
 	if table['new-table']=="t5":
-		print "filtering out invalid dates for TABLE V"
+		print "HACK: filtering out invalid dates for TABLE V"
 		table_v_end = datetime.date(2012, 4, 2)
 		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d").date())
 		df = df[df.date < table_v_end]
