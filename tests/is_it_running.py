@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 # Tested by Tom on Python 2.7.5 and Python 3.3.1 running on Arch Linux
-'Run this script to see whether the script on ScraperWiki is running daily.'
 
 import json
 import datetime
 from requests import get
+
 
 def date_pair(date_date):
     return {
@@ -31,15 +31,15 @@ def expected():
     return date_pair(adate)
 
 # Error if it hasn't run in half a week.
-observed = observed()
-expected = expected()
+def produce_message():
+    PEEPS = "@brianabelson @mhkeller @jbialer @thomaslevine @bdewilde @Cezary"
+    observed = observed()
+    expected = expected()
+    if observed['days'] > 7:
+        return twt =  "%s - something is definitely wrong at %s" % (PEEPS, datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S"))
 
-print('The parser last ran on ScraperWiki %(days)d days ago, on %(date)s.' % observed)
-if observed['days'] > 7:
-    print("That was a week ago; something is probably wrong.")
-    exit(1)
-elif observed['date'] < expected['date']:
-    print("It should have run on %(date)s; if that's not a holiday, something is wrong." % expected)
-    exit(2)
-else:
-    print('All seems well.')
+    elif observed['date'] < expected['date']:
+        print("If %(date)s;  that's not a holiday, something is wrong." % expected)
+        exit(2)
+    else:
+        print('All seems well.')

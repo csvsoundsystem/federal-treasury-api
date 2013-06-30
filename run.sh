@@ -10,6 +10,6 @@ fi
 git checkout master
 git pull origin master
 (
-  cd ~/code
+  cd ./code
   python download_and_parse_fms_fixies.py
 )
