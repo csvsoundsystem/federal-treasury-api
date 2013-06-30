@@ -27,7 +27,10 @@ def new_data_tweet():
 
 @treasuryio.tweet
 def total_debt_tweet():
-    df = treasuryio.query('SELECT date, close_today FROM t3c WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1) ORDER BY date DESC')
+    df = treasuryio.query('''SELECT date, close_today
+                             FROM t3c
+                             WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1)
+                             ORDER BY date DESC''')
 
     # determine length of DataFrame
     end = len(df)-1
@@ -59,19 +62,24 @@ def total_debt_tweet():
 ######################################
 @treasuryio.tweet
 def change_in_balance_tweet():
-    df = treasuryio.query('''SELECT close_today - open_today AS change, date, weekday FROM t1 WHERE account = 'Total Operating Balance' ORDER BY date DESC LIMIT 1''')
+    df = treasuryio.query('''SELECT close_today - open_today AS change, date, weekday
+                             FROM t1
+                             WHERE account = 'Total Operating Balance'
+                             ORDER BY date DESC
+                             LIMIT 1''')
+
     # calculate change
     raw_amt = df['change'][0]
     if raw_amt < 0:
         change = "dropped"
     elif raw_amt > 0:
         change = "rose"
-    # humanize number
-    amt = human_number(abs(raw_amt)*1e6)
 
-    #Extract Weekday
+    # humanize number and date
+    amt = human_number(abs(raw_amt)*1e6)
     the_date = human_date(df['date'][0])
 
+    # generate tweet
     vals = (change, amt, the_date, 'http://treasury.io')
     return "The US Gov's total operating balance %s $%s on %s - %s" % vals
 

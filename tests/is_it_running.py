@@ -3,7 +3,7 @@
 import json
 import datetime
 import treasuryio
-import tweepy
+from tweepy.error import TweepError
 from requests import get
 from optparse import OptionParser
 
@@ -42,7 +42,7 @@ def gen_test_message():
     observed = observed_data()
     expected = expected_data()
 
-    if observed['days'] > 7:
+    if observed['days'] > 5:
         print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
     elif observed['date'] < expected['date']:
         print "Unless %s is a holiday, something is up!" % expected['date']
@@ -69,7 +69,7 @@ if __name__ == '__main__':
     if options.tweet:
         try:
             gen_test_tweet()
-        except tweepy.error.TweepError:
+        except TweepError:
             pass
     else:
         gen_test_message()
