@@ -2,6 +2,7 @@
 
 ### Deploying to ScraperWiki
 You can run this on any number of servers, but we happen to be using ScraperWiki.
+You can check out their documentation [here](https://beta.scraperwiki.com/help/developer/)
 
 #### SSH
 To use ScraperWiki, log in [here](https://beta.scraperwiki.com/login),
