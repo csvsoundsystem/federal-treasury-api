@@ -1,4 +1,3 @@
-#!/bin/bash
 set -e
 
 if [ -d env ]; then
@@ -26,3 +25,4 @@ fi
 
 cd code
 ./download_and_parse_fms_fixies.py
+
