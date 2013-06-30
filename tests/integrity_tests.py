@@ -229,7 +229,7 @@ cols = [
     'variable', 'n_pass', 'n_miss', 'n_fail', 'all_true'
 ]
 df = pd.DataFrame(o, columns=cols)
-outdir = os.path.join('..', 'data', 'test_output')
+outdir = os.path.join('..', 'tests', 'test_output')
 try:
     os.makedirs(outdir)
 except OSError:

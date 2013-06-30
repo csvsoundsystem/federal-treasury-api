@@ -60,17 +60,17 @@ Run everything
 Run this to schedule the above script to run daily.
 
     crontab -l > /tmp/crontab
-    ./crontab.sh >> /tmp/crontab
+    utils/crontab.sh >> /tmp/crontab
     cat /tmp/crontab | crontab
     rm /tmp/crontab
 
 Run `crontab -e` to edit the schedule later.
 
 ### Testing
-To unit test parser functions, write tests in `code/parse_fms_fixies.py`,
+To unit test parser functions, write tests in `tests/parse_fms_fixies.py`,
 and then run them with nose.
 
-    cd code
+    cd tests
     nosetests
 
 You might want to write some tests to make sure that a specific table
@@ -80,14 +80,14 @@ named in the `data` folder.) A test will be generated for each of these.
 
 To make sure that the script is still running on ScraperWiki, run
 
-    ./is_it_running.py
+    python tests/is_it_running.py
 
 To make sure that results are reasonable, run the integrity tests.
 
-    cd code
-    ./integrity_tests.py
+    cd tests
+    python integrity_tests.py
 
-Results will appear in `data/test_output/%Y-%m-%d.csv`, named after today's
+Results will appear in `tests/test_output/%Y-%m-%d.csv`, named after today's
 date.
 
 ## Results
