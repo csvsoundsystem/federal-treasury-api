@@ -48,19 +48,11 @@ This one command downloads the (new) fixies and converts them to an SQLite3 data
 
     ./run.sh
 
-Then serve the web api like so.
-
-    ./api.py
-
 ### Windows
 Run everything
 
     cd code
     python download_and_parser_fms_fixies.py
-
-Serve the API locally.
-
-    python api.py
 
 ## Scheduling
 
