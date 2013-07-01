@@ -3,7 +3,6 @@ set -e
 
 if [ -d env ]; then
   . ./env/bin/activate
-  echo Activated virtualenv
 fi
 
 tmp=$(mktemp)
