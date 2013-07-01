@@ -4,7 +4,6 @@ set -e
 if [ -d env ]; then
   . ./env/bin/activate
   echo Activated virtualenv
-  pip install --upgrade -r requirements.pip
 fi
 
 tmp=$(mktemp)
