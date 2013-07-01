@@ -13,3 +13,7 @@ git pull origin master
   cd ./code
   python download_and_parse_fms_fixies.py
 )
+(
+  cd ./tests
+  python integrity_tests.py
+)
