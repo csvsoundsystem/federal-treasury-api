@@ -26,3 +26,4 @@ twitter/*.pyc
 env/
 .sqlite_history
 .twitter.yml
+.smtpcli.conf

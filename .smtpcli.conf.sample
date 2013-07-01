@@ -1,0 +1,6 @@
+[smtpcli]
+smtp-server  = mail.gandi.net
+port         = 587 
+encoding     = UTF-8
+mailaddress  = alerts@treasury.io
+password     = nottherealpassword
