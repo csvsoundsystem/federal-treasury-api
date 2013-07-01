@@ -4,6 +4,6 @@ set -e
 tmp=$(mktemp)
 
 # Email on error
-"$@" &> $tmp || smtpcli -s smtpcli -t csv@treasury.io -f $tmp
+"$@" &> $tmp || smtpcli -s 'treasury.io error' -t csv@treasury.io -f $tmp --no-confirm
 
 rm $tmp

@@ -67,6 +67,8 @@ Run this to schedule the above script to run daily.
 Run `crontab -e` to edit the schedule later.
 
 ### Testing
+
+### Parser unit tests
 To unit test parser functions, write tests in `tests/parse_fms_fixies.py`,
 and then run them with nose.
 
@@ -82,6 +84,7 @@ To make sure that the script is still running on ScraperWiki, run
 
     python tests/is_it_running.py
 
+### Data integrity tests
 To make sure that results are reasonable, run the integrity tests.
 
     cd tests
@@ -90,12 +93,10 @@ To make sure that results are reasonable, run the integrity tests.
 Results will appear in `tests/test_output/%Y-%m-%d.csv`, named after today's
 date.
 
-## Results
-Resulting files go in the `data` directory, to which the `http` directory
-is linked (for ScraperWiki compatibility). `fixie` contains the original files,
-`daily_csv` contains corresponding csv files, one per table per day, and
-`lifetime` contains eight csv files, one per table, with all of the days
-stacked (unioned) on top of each other.
+### Monitoring
+If you prefix a command with `./monitor.sh` and the command fails, the output
+of the command will be sent wherever you specify. In order to use this, you
+need to create a `~/.smtpcli.conf`.
 
 ## Tables
 There are eight tables.
