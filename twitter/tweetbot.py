@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import humanize
 import math
-from datetime import datetime
+import datetime
 from optparse import OptionParser
 import os
 import yaml
@@ -29,7 +29,7 @@ def human_number(num):
     return humanize.intword(int(math.ceil(num))).lower()
 
 def human_date(date):
-    return humanize.naturalday(datetime.strptime(date, "%Y-%m-%d")).title()
+    return humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
 
 ######################################
 # DATA
@@ -90,8 +90,9 @@ def tweet(tweet_text_func):
         try:
             api.update_status(tweet)
         except tweepy.error.TweepError as e:
-             print e
-        return tweet
+             pass
+        else:
+            return tweet
 
     return tweet_func
 
@@ -171,10 +172,10 @@ def is_it_running_tweet():
 
     def observed_data():
         url = 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql'
-        sql = '''SELECT MAX(date) FROM t1;'''
+        sql = '''SELECT MAX(date) AS max_date FROM t1;'''
 
         r = get(url, params = {'q': sql})
-        date_string = json.loads(r.text)[0]['max(date)']
+        date_string = json.loads(r.text)[0]['max_date']
         date_date = datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
 
         return date_pair(date_date)
@@ -184,7 +185,7 @@ def is_it_running_tweet():
         adate = datetime.date.today()
         adate -= datetime.timedelta(days=1)
         while adate.weekday() >= 4: # Mon-Fri are 0-4
-            adate -= datetime.timedelta(days=1)
+            adate -=  datetime.timedelta(days=1)
         return date_pair(adate)
 
     def gen_test_message():
@@ -198,7 +199,6 @@ def is_it_running_tweet():
         else:
             print "All seems well!"
 
-    @tweet
     def gen_test_tweet():
         peeps = "@brianabelson @mhkeller @jbialer @thomaslevine @bdewilde @Cezary"
         current_date = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
@@ -211,7 +211,7 @@ def is_it_running_tweet():
         elif observed['date'] < expected['date']:
             return "Hey %s, somethings wrong unless %s is a holiday! - %s" % (peeps, expected['date'])
         else:
-            return "Running smooth..."
+            return None
 
     return gen_test_tweet()
 
