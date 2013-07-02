@@ -92,6 +92,7 @@ def parse_file(f_name, verbose=False):
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
+		#if table_index != 1: continue
 		dfs[table_index] = parse_table(table, date, verbose=verbose)
 
 	return dfs
@@ -102,7 +103,7 @@ def parse_table(table, date, verbose=False):
 	# table defaults
 	indent = 0
 	footnotes = {}
-	surtype_index = -1; type_index = -1; subtype_index = -1; used_index = -1
+	index = -1; surtype_index = -1; type_index = -1; subtype_index = -1; used_index = -1
 	type_indent = -1; subtype_indent = -1
 	type_ = None; subtype = None
 	table_name = None
@@ -117,7 +118,7 @@ def parse_table(table, date, verbose=False):
 
 	parsed_table = []
 	for line in table:
-		#print line
+		#print '|' + line + '|'
 		row = {}
 
 		# a variety of date formats -- for your convenience
@@ -128,8 +129,10 @@ def parse_table(table, date, verbose=False):
 		row['year_month'] = datetime.date.strftime(date, '%Y-%m')
 		row['weekday'] = datetime.datetime.strftime(date, '%A')
 
-		index = table.index(line)
-		if index <= used_index : continue
+		# what's our line number? shall we bail out?
+		index += 1
+		if index <= used_index: continue
+
 		indent = len(re.search(r'^\s*', line).group())
 
 		# HARD CODED TO SKIP SHIT
@@ -151,6 +154,7 @@ def parse_table(table, date, verbose=False):
 		# # ignore errant footnotes:
 		# if any([re.search(".*%s.*" % f, line) for f in REMOVE_ERRANT_FOOTNOTES_TABLE]):
 		# 	break
+
 		# skip table header rows
 		if re.match(r'\s{7,}', line): continue
 		if get_table_name(line):
@@ -203,7 +207,6 @@ def parse_table(table, date, verbose=False):
 			type_indent = indent
 			type_index = index
 			continue
-		if index == type_index + 1: pass
 		elif indent <= type_indent:
 			type_ = None
 		row['type'] = type_
