@@ -34,7 +34,7 @@ if len(test_fixies) == 0:
 	start_date = datetime.date(2005, 6, 9)
 # else start from last available fixie date
 else:
-	start_date = parse_fms_fixies.get_date_and_day(test_fixies[-1])[0]
+	start_date = parse_fms_fixies.get_date_from_fname(test_fixies[-1])
 # always end with today
 end_date = datetime.date.today()
 
