@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 import datetime
 import download_fms_fixies
 import os
@@ -25,6 +24,7 @@ LIFETIME_CSV_DIR = os.path.join('..', 'data', 'lifetime_csv')
 os.system('mkdir -pv ' + FIXIE_DIR)
 os.system('mkdir -pv ' + DAILY_CSV_DIR)
 os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
+
 
 ## DOWNLOAD! ##################################################################
 # test for existence of downloaded fixies
@@ -163,19 +163,19 @@ connection.commit()
 
 ## CELEBRATE! #################################################################
 csv_txt = r"""
-	  ,----..    .--.--.
-	 /   /   \  /  /    '.       ,---.
-	|   :     :|  :  /`. /      /__./|
-	.   |  ;. /;  |  |--`  ,---.;  ; |
-	.   ; /--` |  :  ;_   /___/ \  | |
-	;   | ;     \  \    `.\   ;  \ ' |
-	|   : |      `----.   \\   \  \: |
-	.   | '___   __ \  \  | ;   \  ' .
-	'   ; : .'| /  /`--'  /  \   \   '
-	'   | '/  :'--'.     /    \   `  ;
-	|   :    /   `--'---'      :   \ |
-	 \   \ .'                   '---"
-	  `---`
+  ,----..    .--.--.
+ /   /   \  /  /    '.       ,---.
+|   :     :|  :  /`. /      /__./|
+.   |  ;. /;  |  |--`  ,---.;  ; |
+.   ; /--` |  :  ;_   /___/ \  | |
+;   | ;     \  \    `.\   ;  \ ' |
+|   : |      `----.   \\   \  \: |
+.   | '___   __ \  \  | ;   \  ' .
+'   ; : .'| /  /`--'  /  \   \   '
+'   | '/  :'--'.     /    \   `  ;
+|   :    /   `--'---'      :   \ |
+ \   \ .'                   '---"
+  `---`
 """
 soundsystem_txt = r"""
 .-. .-. . . . . .-. .-. . . .-. .-. .-. .  .
@@ -185,7 +185,7 @@ soundsystem_txt = r"""
 welcome_msg = r"""
 Everything you just downloaded is in the data/ directory.
 The raw files are in data/fixie.
-They were parsed and converted to csvs in the data/daily_csv directory.
+They were parsed and converted to CSVs in the data/daily_csv directory.
 These are combined by table in the data/lifetime_csv directory.
 Those tables were made into a SQLite database at data/treasury_data.db, which you can load using your favorite SQLite viewer.
 If you have any questions, check out http://treasury.io for usage and a link to the support Google Group.
