@@ -106,7 +106,7 @@ def new_data_tweet():
 
 @tweet
 def total_debt_tweet():
-    df = query('''SELECT date, close_today
+    df = _query('''SELECT date, close_today
                   FROM t3c
                   WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1)
                   ORDER BY date DESC''')
@@ -140,7 +140,7 @@ def total_debt_tweet():
 
 @tweet
 def change_in_balance_tweet():
-    df = query('''SELECT close_today - open_today AS change, date, weekday
+    df = _query('''SELECT close_today - open_today AS change, date, weekday
                   FROM t1
                   WHERE account = 'Total Operating Balance'
                   ORDER BY date DESC
@@ -187,17 +187,6 @@ def is_it_running_tweet():
         while adate.weekday() >= 4: # Mon-Fri are 0-4
             adate -=  datetime.timedelta(days=1)
         return date_pair(adate)
-
-    def gen_test_message():
-        observed = observed_data()
-        expected = expected_data()
-
-        if observed['days'] > y:
-            print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
-        elif observed['date'] < expected['date']:
-            print "Unless %s is a holiday, something is up!" % expected['date']
-        else:
-            print "All seems well!"
 
     def gen_test_tweet():
         peeps = "@brianabelson @mhkeller @jbialer @thomaslevine @bdewilde @Cezary"
