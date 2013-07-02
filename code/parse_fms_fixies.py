@@ -103,9 +103,9 @@ def parse_table(table, date, verbose=False):
 	# table defaults
 	indent = 0
 	footnotes = {}
-	index = -1; surtype_index = -1; type_index = -1; subtype_index = -1; used_index = -1
-	type_indent = -1; subtype_indent = -1
-	type_ = None; subtype = None
+	index = surtype_index = type_index = subtype_index = used_index = -1
+	type_indent = subtype_indent = -1
+	type_ = subtype = None
 	table_name = None
 
 	# total hack for when the treasury decided to switch
@@ -135,19 +135,30 @@ def parse_table(table, date, verbose=False):
 
 		indent = len(re.search(r'^\s*', line).group())
 
-		# HARD CODED TO SKIP SHIT
-		# skip page number rows
+		# Rows that we definitely want to skip
+		# empty or centered header rows
+		if re.match(r'^\s{7,}', line): continue
+		# page number rows
 		page_number_match = re.search(r'\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', line)
 		if page_number_match:
 			page_number = page_number_match.group(1)
 			continue
-		# skip comment on statutory debt limit at end of Table III-C, and beyond
+		# catch rare exceptions to the above
+		if re.search(r'DAILY\s+TREASURY\s+STATEMENT.*PAGE', line):
+			continue
+		# comment on statutory debt limit at end of Table III-C, and beyond
 		if re.search(r'(As|Act) of [A-Z]\w+ \d+, \d+', line) and re.search(r'(statutory )*debt( limit)*', line):
 			break
-		# skip final footer of file
+		# comment on whatever this is; above line may make this redundant
+		if re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
+			break
+		# comment about food stamp program euphemism
+		if re.search(r'\s*The Food Stamp Program has been renamed', line, flags=re.IGNORECASE):
+			break
+		# final footer of file
 		if re.search(r"\s+This statement summarizes\s+the United States Treasury's cash and debt", line):
 			break
-		# skip final footer of file -- above line should make this redundant!
+		# final footer of file -- above line should make this redundant! but just in case
 		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
 			break
 		# NOT IMPLEMENTED YET, WE SHOULD TRY TO FIX THE PARSER FIRST
@@ -156,7 +167,6 @@ def parse_table(table, date, verbose=False):
 		# 	break
 
 		# skip table header rows
-		if re.match(r'\s{7,}', line): continue
 		if get_table_name(line):
 			table_name = get_table_name(line)
 			continue
@@ -197,8 +207,8 @@ def parse_table(table, date, verbose=False):
 		# separate digits and words
 		digits = re.findall(r'(-{,1}\d+)', line)
 		words = re.findall(r'\(\-\)|[()]|[^\W\d]+:?', line)
-		# bug fix, to remove the govt's arbitrary usage of 'r/' instead of '$'
-		# in front of particular dollar amounts
+		# bug fix, to remove the govt's usage of 'r/' in front of numbers
+		# to denote revised values
 		text = ' '.join(word for word in words if word != 'r')
 
 		# get type row
@@ -217,7 +227,7 @@ def parse_table(table, date, verbose=False):
 			subtype_indent = indent
 			subtype_index = index
 			continue
-		if index == subtype_index + 1: pass
+		if index == subtype_index + 1: pass # maybe unnecessary
 		elif indent <= subtype_indent:
 			subtype = None
 		row['subtype'] = subtype
@@ -368,8 +378,10 @@ def parse_table(table, date, verbose=False):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE II\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
-	elif re.search(r'TABLE III-A|TABLE III-B', row.get('table', '')):
+	elif re.search(r'TABLE III-A', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+	elif re.search(r'TABLE III-B', row.get('table', '')):
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
