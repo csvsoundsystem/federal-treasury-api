@@ -29,7 +29,10 @@ def human_number(num):
     return humanize.intword(int(math.ceil(num))).lower()
 
 def human_date(date):
-    return humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
+    h = humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
+    if h in ['Yesterday', 'Today']:
+        h = h.lower()
+    return h
 
 ######################################
 # DATA
