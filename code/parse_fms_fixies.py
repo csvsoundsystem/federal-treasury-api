@@ -2,8 +2,7 @@
 import json
 import datetime
 import pandas as pd
-import re, os, time
-import bitly_api
+import re
 
 NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
 REMOVE_ERRANT_FOOTNOTES_TABLE = json.load(open("../code/remove_errant_footnotes_table.json"))
@@ -44,16 +43,6 @@ def get_table_name(line):
 	except AttributeError:
 		table_name = None
 	return table_name
-
-def gen_bitly_link(long_url):
-	access_token = os.getenv('TREASURY_BITLY_ACCESS_TOKEN')
-	if access_token is None:
-		return None
-	else:
-		btly = bitly_api.Connection(access_token = access_token)
-		blob = btly.shorten(long_url)
-		time.sleep(3)
-		return re.sub("http://", "", str(blob['url']) )
 
 ################################################################################
 def normalize_page_text(page):
@@ -143,7 +132,7 @@ def parse_table(table, date, verbose=False):
 		f_dir = "w"
 
 	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s00.txt&dir=%s" % (datetime.date.strftime(date, '%y%m%d'), f_dir)
-	bitly = gen_bitly_link(url)
+
 	parsed_table = []
 	for line in table:
 		#print '|' + line + '|'
@@ -157,7 +146,6 @@ def parse_table(table, date, verbose=False):
 		row['year_month'] = datetime.date.strftime(date, '%Y-%m')
 		row['weekday'] = datetime.datetime.strftime(date, '%A')
 		row['url'] = url
-		row['bitly'] = bitly
 
 		# what's our line number? shall we bail out?
 		index += 1
@@ -474,21 +462,21 @@ def parse_table(table, date, verbose=False):
 
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-B', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE V\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
 	elif re.search(r'TABLE VI', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'bitly', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
 
 	return df
 
