@@ -206,7 +206,7 @@ def random_item_tweet():
     the_val = human_number(abs(val*1e6))
     the_item = T2_ITEM_DICT[str([i for i in the_df.item][0])]
 
-    return "%s%s, the US Gov %s %s %s %s - %s" % (intro, the_date, change, the_val, preposition, the_item, url)
+    return "%s%s, the US Gov %s %s $%s %s - %s" % (intro, the_date, change, the_val, preposition, the_item, url)
 
 @tweet
 def total_debt_tweet():
@@ -240,8 +240,8 @@ def total_debt_tweet():
     previous_date = human_date(df['date'][end])
 
     # generate tweet
-    vals = (current_date, amt, change, delta, previous_date, url)
-    return "As of %s, the US Gov is $%s in debt. This amount has %s by %s since %s - %s" % vals
+    vals = (current_date, amt, url)
+    return "Think you're in debt? As of %s, the US Gov is $%s in the hole! - %s" % vals
 
 def dist_to_debt_ceiling_tweet():
 
