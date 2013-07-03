@@ -16,6 +16,7 @@ data/treasury_data.db-journal
 # tweet bot
 twitter/api.yml
 twitter/*.pyc
+bitly.yml
 
 # ScraperWiki box
 .bash_history
