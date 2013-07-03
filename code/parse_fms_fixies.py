@@ -275,7 +275,10 @@ def parse_table(table, date, verbose=False):
 		#print len(digits), '||', digits
 		# skip table annotations that aren't footnotes
 		# this is a band-aid at best, sorry folks
-		if len(digits) == 0: continue
+		if len(digits) == 0:
+			continue
+		if len(text) > 80:
+			continue
 
 		row['is_total'] = int('total' in text.lower())
 
