@@ -141,6 +141,16 @@ def total_debt_tweet():
     vals = (current_date, amt, change, delta, previous_date, 'http://treasury.io')
     return "As of %s, the US Gov is $%s in debt. This amount has %s by %s since %s - %s" % vals
 
+def dist_to_debt_ceiling_tweet():
+
+    df = _query('''SELECT a.date, a.close_today as Debt_Ceiling,
+                          b.close_today as Debt_Subject_To_Ceiling,
+                          a.close_today - b.close_today as Distance_From_Debt_Ceiling
+                   FROM t3c a inner join t3c b on a.date = b.date
+                   WHERE a.item = "Statutory Debt Limit" AND b.item = "Subject to Limit"
+                ''')
+
+
 @tweet
 def change_in_balance_tweet():
     df = _query('''SELECT close_today - open_today AS change, date, weekday

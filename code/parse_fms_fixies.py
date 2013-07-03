@@ -405,7 +405,7 @@ def parse_table(table, date, verbose=False):
 	if re.search(r'TABLE I\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-B', row.get('table', '')):
