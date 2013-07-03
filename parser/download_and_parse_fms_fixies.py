@@ -11,7 +11,7 @@ import sys
 
 # script must be run from fms_parser/parser directory
 if not os.path.split(os.getcwd())[-1] == 'parser':
-	if os.path.split(os.getcwd())[-1] == 'federal-treasury-api' or os.path.split(os.getcwd())[-1] =='fms_parser':
+	if os.path.split(os.getcwd())[-1] as p == 'federal-treasury-api' or p =='fms_parser':
 		os.chdir('parser')
 		print '\n*INFO: current working directory set to', os.getcwd()
 	else:
