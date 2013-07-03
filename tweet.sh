@@ -7,4 +7,4 @@ if [ -d env ]; then
 fi
 
 cd ./twitter
-python tweetbot.py $1
+python tweetbot.py -t $1
