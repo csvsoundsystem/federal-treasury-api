@@ -1,5 +1,25 @@
 # Federal Treasury API
-
+```
+   ‹
+   €     |    |     €€€€≤±‹€€€€≤±‹
+   €    .| -- | -+
+   €   ' |    |  |  €€€€≤±±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   €    `|    |
+   €     |`.  |     €€€€≤±±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   €     |  `.|
+   €     |    |`.   €€€€≤±±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   € +   |    |   '
+   € | _ | __ | _'   €€€≤±±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   €     |    |
+   €€€€€€€€€€€€€€€€€€€€€€≤±±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   €
+   €€€€€€€€€€€€€€€€€€€€€€≤±±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   €
+   €                      ﬂ±≤€€€€€€€€€€€€≤±±≤€€€€€≤±
+   €                                      ﬂ±≤€€€€€≤±
+   €
+   €
+```
 
 federal-treasury-api` is the first-ever electronically-searchable database of the Federal government's daily cash spending and borrowing. It updates daily and the data can be exported in various formats and loaded into various systems.
 
