@@ -25,7 +25,6 @@ os.system('mkdir -pv ' + FIXIE_DIR)
 os.system('mkdir -pv ' + DAILY_CSV_DIR)
 os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
 
-
 ## DOWNLOAD! ##################################################################
 # test for existence of downloaded fixies
 test_fixies = sorted([f for f in os.listdir(FIXIE_DIR) if f.endswith('.txt')])

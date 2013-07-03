@@ -66,14 +66,12 @@ def normalize_page_text(page):
 	lines = [line for line in lines if line!='' and line!=' ']
 	return lines
 
-
 ################################################################################
 def get_footnote(line):
 	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
-
 
 ################################################################################
 def parse_file(f_name, verbose=False):
@@ -182,9 +180,9 @@ def parse_table(table, date, verbose=False):
 		# final footer of file -- above line should make this redundant! but just in case
 		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
 			break
-		if re.search(r'.*As of April Federal Tax Deposits were no longer reported as.*', line):
+		if re.search(r'.*were no longer reported as.*', line):
 			break
-		if re.search(r'.*As of Treasury discontinued leaving a portion of the funds.*', line):
+		if re.search(r'.*leaving a portion of the funds.*', line):
 			break
 		# NOT IMPLEMENTED YET, WE SHOULD TRY TO FIX THE PARSER FIRST
 		# # ignore errant footnotes:
