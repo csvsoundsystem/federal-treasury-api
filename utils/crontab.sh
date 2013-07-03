@@ -1,3 +1,7 @@
 #!/bin/sh
-echo "0 17 * * * cd '$PWD' && git pull && ./monitor.sh ./run.sh"
-echo "52 14 * * * cd '$PWD' && /usr/bin/python twitter/tweetbot.y -t is_it_running"
+MAILTO="csvsoundsystem@gmail.com"
+30 16 * * * cd '$PWD' && git pull && ./monitor.sh ./run.sh
+*  17 * * 1,4  /bin/bash /home/tweet.sh change_in_balance
+10 15 * * 2,5  /bin/bash /home/tweet.sh total_debt
+30 11 * * * /bin/bash /home/tweet.sh is_it_running
+45 9,11,1,3,8,10 * * * /bin/bash /home/tweet.sh random_item
