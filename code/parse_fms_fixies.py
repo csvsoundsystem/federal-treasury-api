@@ -6,7 +6,13 @@ import re
 
 NORMALIZE_FIELD_TABLE = json.load(open("../code/normalize_field_table.json"))
 REMOVE_ERRANT_FOOTNOTES_TABLE = json.load(open("../code/remove_errant_footnotes_table.json"))
-
+T4_USE_ITEMS = [
+	'Tax and Loan Accounts',
+	'Inter agency Transfers',
+	'Federal Reserve Account Direct',
+	'Federal Reserve Account Total',
+	'Federal Reserve Account Depositaries'
+]
 ################################################################################
 def normalize_fields(text, table, field):
 	table_lookup = NORMALIZE_FIELD_TABLE[table]
@@ -96,7 +102,6 @@ def parse_file(f_name, verbose=False):
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
-		#if table_index != 1: continue
 		dfs[table_index] = parse_table(table, date, verbose=verbose)
 
 	return dfs
@@ -105,6 +110,7 @@ def parse_file(f_name, verbose=False):
 def parse_table(table, date, verbose=False):
 
 	# table defaults
+	t4_total_count = 0
 	indent = 0
 	footnotes = {}
 	index = surtype_index = type_index = subtype_index = used_index = -1
@@ -167,6 +173,10 @@ def parse_table(table, date, verbose=False):
 			break
 		# final footer of file -- above line should make this redundant! but just in case
 		if re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
+			break
+		if re.search(r'.*As of April Federal Tax Deposits were no longer reported as.*', line):
+			break
+		if re.search(r'.*As of Treasury discontinued leaving a portion of the funds.*', line):
 			break
 		# NOT IMPLEMENTED YET, WE SHOULD TRY TO FIX THE PARSER FIRST
 		# # ignore errant footnotes:
@@ -360,16 +370,35 @@ def parse_table(table, date, verbose=False):
 					print 'WARNING:', line
 		elif re.search(r'TABLE IV', row.get('table', '')):
 			try:
+				row['type'] = ''
 				row['classification_raw'] = text
-				row['classification'] = normalize_fields(text, 't4', 'classification')
+				this_class = normalize_fields(text, 't4', 'classification')
+				row['classification'] = this_class
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
+
+				# increment Total counts
+				if this_class == "Total": t4_total_count += 1
+
+				if t4_total_count == 1 and this_class == "Total":
+					row['type'] = "source"
+
+				elif t4_total_count == 2 and this_class == "Total":
+					row['type'] = "use"
+
+				elif this_class not in T4_USE_ITEMS:
+					row['type'] = "source"
+
+				else:
+					row['type'] = "use"
+
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 		elif re.search(r'TABLE VI', row.get('table', '')):
 			try:
+				row['type'] = None
 				row['classification_raw'] = text
 				row['classification'] = normalize_fields(text, 't6', 'classification')
 				row['today'] = digits[-3]

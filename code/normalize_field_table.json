@@ -53,7 +53,11 @@
     },
     "t4": {
         "classification": {
-            "Directly": "Direct"
+            "Directly": "Federal Reserve Account Direct",
+            "Direct": "Federal Reserve Account Direct",
+            "Total Cash FTD s": "Federal Reserve Account Total",
+            "Through Depositaries": "Federal Reserve Account Depositaries",
+            "Collector Depositaries": "Federal Reserve Account Depositaries"
           }
     },
     "t5": {
