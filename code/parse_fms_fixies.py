@@ -75,11 +75,13 @@ def parse_file(f_name, verbose=False):
 
 	f = open(f_name, 'rb').read()
 
-	raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
+	raw_tables = re.split(r'(\s+TABLE(\s+|_+)[\w-]+.*)', f)
 	tables = []
 	for raw_table in raw_tables[1:]:
-		if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
+		if re.search(r'\s+TABLE(\s+|_+)[\w-]+.*', raw_table):
 			table_name = raw_table
+			# fix malformed fixie table names, BLERGH GOV'T!
+			table_name = re.sub(r'_+', ' ', table_name)
 			continue
 		raw_table = table_name + raw_table
 		table = normalize_page_text(raw_table)
@@ -144,7 +146,7 @@ def parse_table(table, date, verbose=False):
 			page_number = page_number_match.group(1)
 			continue
 		# catch rare exceptions to the above
-		if re.search(r'DAILY\s+TREASURY\s+STATEMENT\s+PAGE', line):
+		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
 			continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		if re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
