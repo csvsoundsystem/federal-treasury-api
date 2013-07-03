@@ -4,4 +4,4 @@ MAILTO="csvsoundsystem@gmail.com"
 *  17 * * 1,4  /bin/bash /home/tweet.sh change_in_balance
 10 15 * * 2,5  /bin/bash /home/tweet.sh total_debt
 30 11 * * * /bin/bash /home/tweet.sh is_it_running
-45 9,11,1,3,8,10 * * * /bin/bash /home/tweet.sh random_item
+45 9,11,13,15,20,22 * * * /bin/bash /home/tweet.sh random_item
