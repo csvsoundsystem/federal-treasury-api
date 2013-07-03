@@ -144,7 +144,7 @@ def parse_table(table, date, verbose=False):
 			page_number = page_number_match.group(1)
 			continue
 		# catch rare exceptions to the above
-		if re.search(r'DAILY\s+TREASURY\s+STATEMENT.*PAGE', line):
+		if re.search(r'DAILY\s+TREASURY\s+STATEMENT\s+PAGE', line):
 			continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		if re.search(r'(As|Act) of [A-Z]\w+ \d+, \d+', line) and re.search(r'(statutory )*debt( limit)*', line):
@@ -199,6 +199,8 @@ def parse_table(table, date, verbose=False):
 				break
 			if not get_footnote(last_line):
 				break
+			# JUST IN CASE?! BJD: figure out why this is needed...
+			continue
 
 		# note rows with footnote markers for later assignment
 		if re.search(r'\d+\/', line):
