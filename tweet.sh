@@ -6,5 +6,8 @@ if [ -d env ]; then
   echo Activated virtualenv
 fi
 
+git checkout master
+git pull origin master
+
 cd ./twitter
 python tweetbot.py -t $1

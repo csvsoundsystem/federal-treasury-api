@@ -1,5 +1,9 @@
 # Federal Treasury API
 
+
+federal-treasury-api` is the first-ever electronically-searchable database of the Federal government's daily cash spending and borrowing. It updates daily and the data can be exported in various formats and loaded into various systems.
+
+
 ### Deploying to ScraperWiki
 You can run this on any number of servers, but we happen to be using ScraperWiki.
 You can check out their documentation [here](https://beta.scraperwiki.com/help/developer/)

@@ -23,6 +23,6 @@ if [ -f ../data/treasury_data.db ]; then
     rm -r ../data/treasury_data.db
 fi
 
-cd ../code
+cd ../parser
 ./download_and_parse_fms_fixies.py
 
