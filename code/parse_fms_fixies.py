@@ -147,11 +147,14 @@ def parse_table(table, date, verbose=False):
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT\s+PAGE', line):
 			continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
-		if re.search(r'(As|Act) of [A-Z]\w+ \d+, \d+', line) and re.search(r'(statutory )*debt( limit)*', line):
+		if re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
 			break
 		# comment on whatever this is; above line may make this redundant
 		if re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
 			break
+		# more cruft of a similar sort
+		if re.search(r'billion after \d+\/\d+\/\d+', line):
+			continue
 		# comment about food stamp program euphemism
 		if re.search(r'\s*The Food Stamp Program has been renamed', line, flags=re.IGNORECASE):
 			break
