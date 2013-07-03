@@ -3,14 +3,13 @@ import humanize
 import math
 import datetime
 from optparse import OptionParser
-import os
-import yaml
+import os, re, yaml, json
 import tweepy
+from random import choice
 from json import load
 from urllib2 import urlopen
 from urllib import urlencode
 from pandas import DataFrame
-import json
 from requests import get
 
 ######################################
@@ -26,19 +25,48 @@ def load_options():
 
 # Helpers to humanize numbers / dates
 def human_number(num):
-    return humanize.intword(int(math.ceil(num))).lower()
+    n = humanize.intword(int(math.ceil(num))).lower()
+    if re.search(r"^(\d+)\.0 ([A-Za-z]+)$", n):
+        m = re.search(r"^(\d+)\.0 ([A-Za-z]+)$", n)
+        n = m.group(1) + " " + m.group(2)
+    return n
 
 def human_date(date):
     h = humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
+    if re.search("([A-Za-z]+) 0([0-9])", h):
+        m = re.search("([A-Za-z]+) 0([0-9])", h)
+        h = m.group(1) + " " + m.group(2)
     if h in ['Yesterday', 'Today']:
         h = h.lower()
     return h
+
+def gen_fixie_file_url(date):
+    # get the url
+    BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
+    fname = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%y%m%d") + "00.txt"
+
+    response = get(BASE_URL,
+                   params={'dir': 'a',
+                    'fname': fname}
+                    )
+    if response.status_code == 200:
+        url = response.url
+
+    # check in working directory instead
+    else:
+        response = get(BASE_URL,
+                       params={'dir': 'w',
+                       'fname': fname}
+                       )
+        url = response.url
+
+    return url
 
 ######################################
 # DATA
 ######################################
 
-def _query(sql):
+def query(sql):
     '''
     Submit an `sql` query (string) to treasury.io and return a pandas DataFrame.
 
@@ -56,12 +84,11 @@ def _query(sql):
     else:
         raise ValueError(handle.read())
 
-
 ######################################
 # TWITTER
 ######################################
 
-def _connect_to_twitter(config = os.path.expanduser("~/.twitter.yml")):
+def connect_to_twitter(config = os.path.expanduser("~/.twitter.yml")):
     conf = yaml.safe_load(open(config))
     auth = tweepy.OAuthHandler(conf['consumer_key'], conf['consumer_secret'])
     auth.set_access_token(conf['access_token'], conf['access_token_secret'])
@@ -87,7 +114,7 @@ def tweet(tweet_text_func):
             return 'This tweet is not data-driven.'
     '''
     def tweet_func():
-        api = _connect_to_twitter()
+        api = connect_to_twitter()
         tweet = tweet_text_func()
         print "Tweeting: %s" % tweet
         try:
@@ -102,14 +129,88 @@ def tweet(tweet_text_func):
 ######################################
 # TWEETS
 ######################################
+T2_ITEM_DICT = {
+    "Unemployment": "Unemployment",
+    "Education Department programs": "the Education Dept.",
+    "Energy Department programs": "the Energy Dept.",
+    "Medicaid": "Medicaid",
+    "Medicare": "Medicare",
+    "Social Security Benefits ( EFT )": "social security benefits",
+    "NASA programs": "NASA",
+    "Housing and Urban Development programs": "housing and urban development pgrms",
+    "Justice Department programs": "justice dept. programs",
+    "Postal Service": "the postal service",
+    "Defense Vendor Payments ( EFT )": "military contractors",
+    "Federal Employees Insurance Payments": "fed. employees ins. payments",
+    "Fed Highway Administration programs": "the federal hwy admin.",
+    "Federal Salaries ( EFT )": "federal salaries",
+    "Food Stamps": "food stamps",
+    "Postal Service Money Orders and Other": "postal service money orders",
+    "Interest on Treasury Securities": "interest on treasury securities",
+    "Temporary Assistance for Needy Families ( HHS )": "Welfare",
+    "Veterans Affairs Programs": "veterans affairs programs",
+    "Air Transport Security Fees": "air transport security fees",
+    "Railroad Unemployment Ins": "railroad unemployement insurance",
+    "FSA Tobacco Assessments": "Tobacco Taxes",
+    "Agency for International Development": "USAID",
+    "Securities and Exchange Commission": "the SEC",
+    "Natl Railroad Retirement Inv Trust": "the Nat'l Railroad Retirment Inv. Trust",
+    "Federal Communications Commission": "the FCC",
+    "SEC: Stock Exchange Fees": "stock exchange fees",
+    "Environmental Protection Agency": "the EPA",
+    "IRS Tax Refunds Business ( EFT )": "tax refunds for businesses",
+    "IRS Tax Refunds Individual ( EFT )": "tax refunds for individuals",
+    "Military Active Duty Pay ( EFT )": "military active duty pay",
+    "Veterans Benefits ( EFT )": "veteran benefits",
+    "State Department": "the State dept.",
+    "Library of Congress": "the Lib. of Congress",
+    "Federal Trade Commission": "the FTC",
+    "Transportation Security Admin ( DHS )": "the TSA",
+    "TARP": "TARP",
+    "Interior": "Interior",
+    "USDA: Forest Service": "the Forest Service"
+}
 
 @tweet
-def new_data_tweet():
-    return ""
+def random_item_tweet():
+
+    df = query('''SELECT date, item, today, type FROM t2 WHERE date = (SELECT max(date) FROM t2)''')
+
+    the_df = df[df.item==choice([i for i in df.item if i in set(T2_ITEM_DICT.keys())])]
+
+    # determine change
+    if len(the_df) == 1:
+        if the_df['type'] == "deposit":
+            change = "took in"
+            preposition = "from"
+        elif the_df['type'] == "withdrawal":
+            change = "spent"
+            preposition = "on"
+        val = int(the_df['today'])
+    else:
+        val = int(the_df[the_df.type == 'deposit']['today']) - int(the_df[the_df.type == 'withdrawal']['today'])
+        if val > 0:
+            change = "took in"
+            preposition = "from"
+        else:
+            change = "spent"
+            preposition = "on"
+
+    # gen values
+    url = gen_fixie_file_url(df['date'][0])
+    the_date = human_date(df['date'][0])
+    if the_date in ["Yesterday", "Today"]:
+        intro = ""
+    else:
+        intro = "On "
+    the_val = human_number(abs(val*1e6))
+    the_item = T2_ITEM_DICT[str([i for i in the_df.item][0])]
+
+    return "%s%s, the US Gov %s %s %s %s - %s" % (intro, the_date, change, the_val, preposition, the_item, url)
 
 @tweet
 def total_debt_tweet():
-    df = _query('''SELECT date, close_today
+    df = query('''SELECT date, close_today
                   FROM t3c
                   WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1)
                   ORDER BY date DESC''')
@@ -132,32 +233,35 @@ def total_debt_tweet():
 
     # humanize values
     # Notice the included ``human_date`` and ``human_number`` functions which simplify these values for you
+    url = gen_fixie_file_url(df['date'][0])
     current_date = human_date(df['date'][0])
     amt = human_number(current_amt)
     delta = human_number(delta)
     previous_date = human_date(df['date'][end])
 
     # generate tweet
-    vals = (current_date, amt, change, delta, previous_date, 'http://treasury.io')
+    vals = (current_date, amt, change, delta, previous_date, url)
     return "As of %s, the US Gov is $%s in debt. This amount has %s by %s since %s - %s" % vals
 
 def dist_to_debt_ceiling_tweet():
 
-    df = _query('''SELECT a.date, a.close_today as Debt_Ceiling,
-                          b.close_today as Debt_Subject_To_Ceiling,
-                          a.close_today - b.close_today as Distance_From_Debt_Ceiling
-                   FROM t3c a inner join t3c b on a.date = b.date
-                   WHERE a.item = "Statutory Debt Limit" AND b.item = "Subject to Limit"
+    df = query('''SELECT a.date, a.close_today AS debt_ceiling,
+                          b.close_today AS debt_subject_to_ceiling,
+                          a.close_today - b.close_today as distance_from_debt_ceiling
+                   FROM t3c a
+                   INNER JOIN t3c b ON a.date = b.date
+                   WHERE a.item = "Statutory Debt Limit" AND b.item = "Total Public Debt Subject to Limit"
+                   ORDER BY a.date DESC
+                   LIMIT 1
                 ''')
-
 
 @tweet
 def change_in_balance_tweet():
-    df = _query('''SELECT close_today - open_today AS change, date, weekday
-                  FROM t1
-                  WHERE account = 'Total Operating Balance'
-                  ORDER BY date DESC
-                  LIMIT 1''')
+    df = query('''SELECT close_today - open_today AS change, date, weekday
+                   FROM t1
+                   WHERE account = 'Total Operating Balance'
+                   ORDER BY date DESC
+                   LIMIT 1''')
 
     # calculate change
     raw_amt = df['change'][0]
@@ -168,10 +272,11 @@ def change_in_balance_tweet():
 
     # humanize number and date
     amt = human_number(abs(raw_amt)*1e6)
+    url = gen_fixie_file_url(df['date'][0])
     the_date = human_date(df['date'][0])
 
     # generate tweet
-    vals = (change, amt, the_date, 'http://treasury.io')
+    vals = (change, amt, the_date, url)
     return "The US Gov's total operating balance %s $%s on %s - %s" % vals
 
 @tweet
@@ -232,4 +337,6 @@ if __name__ == '__main__':
         change_in_balance_tweet()
     elif t == 'is_it_running':
         is_it_running_tweet()
+    elif t == 'random_item':
+        random_item_tweet()
 
