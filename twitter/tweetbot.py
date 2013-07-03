@@ -126,7 +126,8 @@ def tweet(tweet_text_func):
         try:
             api.update_status(tweet)
         except tweepy.error.TweepError as e:
-             pass
+            print e
+            pass
         else:
             return tweet
 
@@ -143,12 +144,12 @@ T2_ITEM_DICT = {
     "Medicare": "Medicare",
     "Social Security Benefits ( EFT )": "social security benefits",
     "NASA programs": "NASA",
-    "Housing and Urban Development programs": "housing and urban development pgrms",
+    "Housing and Urban Development programs": "housing and urban development programs",
     "Justice Department programs": "justice dept. programs",
     "Postal Service": "the postal service",
     "Defense Vendor Payments ( EFT )": "military contractors",
     "Federal Employees Insurance Payments": "fed. employees ins. payments",
-    "Fed Highway Administration programs": "the federal hwy admin.",
+    "Fed Highway Administration programs": "the federal hwy admin",
     "Federal Salaries ( EFT )": "federal salaries",
     "Food Stamps": "food stamps",
     "Postal Service Money Orders and Other": "postal service money orders",
@@ -160,7 +161,7 @@ T2_ITEM_DICT = {
     "FSA Tobacco Assessments": "Tobacco Taxes",
     "Agency for International Development": "USAID",
     "Securities and Exchange Commission": "the SEC",
-    "Natl Railroad Retirement Inv Trust": "the Nat'l Railroad Retirment Inv. Trust",
+    "Natl Railroad Retirement Inv Trust": "the Nat'l Railroad Retirement Inv. Trust",
     "Federal Communications Commission": "the FCC",
     "SEC: Stock Exchange Fees": "stock exchange fees",
     "Environmental Protection Agency": "the EPA",
@@ -247,7 +248,7 @@ def total_debt_tweet():
 
     # generate tweet
     vals = (current_date, amt, btly, T_IO)
-    return "Think you're in debt? As of %s, the US Gov is $%s in the hole! \r\n - %s" % vals
+    return "Think you're in debt? As of %s, the US Gov is $%s in the hole! %s \r\n - %s" % vals
 
 def dist_to_debt_ceiling_tweet():
 
