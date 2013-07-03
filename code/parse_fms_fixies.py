@@ -259,6 +259,8 @@ def parse_table(table, date, verbose=False):
 						get_rid_of_prev_line = parsed_table.pop()
 				except IndexError: pass
 
+
+		#print len(digits), '||', digits
 		# skip table annotations that aren't footnotes
 		# this is a band-aid at best, sorry folks
 		if len(digits) == 0: continue
@@ -297,6 +299,13 @@ def parse_table(table, date, verbose=False):
 				row['type'] = 'deposit'
 				if int(page_number) == 3:
 					row['type'] = 'withdrawal'
+				if row.get('subtype'):
+					subtype = row['subtype']
+					row['subitem'] = row['item']
+					row['subitem_raw'] = row['item_raw']
+					row['item'] = subtype
+					row.pop('subtype')
+					row.pop('item_raw')
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -307,6 +316,13 @@ def parse_table(table, date, verbose=False):
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
+				if row.get('subtype'):
+					subtype = row['subtype']
+					row['subitem'] = row['item']
+					row['subitem_raw'] = row['item_raw']
+					row['item'] = subtype
+					row.pop('subtype')
+					row.pop('item_raw')
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -317,6 +333,13 @@ def parse_table(table, date, verbose=False):
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
+				if row.get('subtype'):
+					subtype = row['subtype']
+					row['subitem'] = row['item']
+					row['subitem_raw'] = row['item_raw']
+					row['item'] = subtype
+					row.pop('subtype')
+					row.pop('item_raw')
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -377,11 +400,11 @@ def parse_table(table, date, verbose=False):
 	if re.search(r'TABLE I\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-B', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'subtype', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
