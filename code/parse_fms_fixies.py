@@ -406,7 +406,7 @@ def parse_table(table, date, verbose=False):
 	elif re.search(r'TABLE III-B', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV|TABLE VI', row.get('table', '')):
 		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE V\s', row.get('table', '')):
