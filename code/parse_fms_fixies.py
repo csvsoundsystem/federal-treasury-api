@@ -207,9 +207,12 @@ def parse_table(table, date, verbose=False):
 		# separate digits and words
 		digits = re.findall(r'(-{,1}\d+)', line)
 		words = re.findall(r'\(\-\)|[()]|[^\W\d]+:?', line)
+		# check for (-) in words => multiply all digits by -1
+		if '(-)' in words:
+			digits = [str((-1)*int(digit)) for digit in digits]
 		# bug fix, to remove the govt's usage of 'r/' in front of numbers
 		# to denote revised values
-		text = ' '.join(word for word in words if word != 'r')
+		text = ' '.join(word for word in words if word not in ['r', '(-)'])
 
 		# get type row
 		if len(digits) == 0 and text.endswith(':') and indent == 1:
