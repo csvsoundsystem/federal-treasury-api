@@ -2,6 +2,7 @@
 import humanize
 import math
 import datetime
+import bitly_api
 from optparse import OptionParser
 import os, re, yaml, json
 import tweepy
@@ -31,11 +32,12 @@ def human_number(num):
         n = m.group(1) + " " + m.group(2)
     return n
 
-def style_day(n):
-    n = int(n)
-    return str(n)+("th" if 4<=n%100<=20 else {1:"st",2:"nd",3:"rd"}.get(n%10, "th"))
-
 def human_date(date):
+
+    def style_day(n):
+        n = int(n)
+        return str(n)+("th" if 4<=n%100<=20 else {1:"st",2:"nd",3:"rd"}.get(n%10, "th"))
+
     h = humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
 
     # remove zeros
@@ -44,34 +46,22 @@ def human_date(date):
 
     # style day
     m_day = re.search(r"([A-Za-z]+) (\d+)", h)
-    if m_day: h = "%s %s" % ( m_day.group(1), style_day(m.group(2)) )
+    if m_day: h = "%s %s" % ( m_day.group(1), style_day(m_day.group(2)) )
 
     # lowercase yesterday
     if h in ['Yesterday', 'Today']:
         h = h.lower()
+
     return h
 
-def gen_fixie_file_url(date):
-    # get the url
-    BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
-    fname = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%y%m%d") + "00.txt"
-
-    response = get(BASE_URL,
-                   params={'dir': 'a',
-                    'fname': fname}
-                    )
-    if response.status_code == 200:
-        url = response.url
-
-    # check in working directory instead
+def gen_bitly_link(long_url):
+    access_token = os.getenv('TREASURY_BITLY_ACCESS_TOKEN')
+    if access_token is None:
+        return None
     else:
-        response = get(BASE_URL,
-                       params={'dir': 'w',
-                       'fname': fname}
-                       )
-        url = response.url
-
-    return url
+        btly = bitly_api.Connection(access_token = access_token)
+        blob = btly.shorten(long_url)
+        return re.sub("http://", "", str(blob['url']))
 
 ######################################
 # DATA
@@ -185,7 +175,7 @@ T2_ITEM_DICT = {
 @tweet
 def random_item_tweet():
 
-    df = query('''SELECT date, item, today, type FROM t2 WHERE date = (SELECT max(date) FROM t2)''')
+    df = query('''SELECT date, item, today, type, url FROM t2 WHERE date = (SELECT max(date) FROM t2)''')
 
     the_df = df[df.item==choice([i for i in df.item if i in set(T2_ITEM_DICT.keys())])]
 
@@ -208,7 +198,7 @@ def random_item_tweet():
             preposition = "on"
 
     # gen values
-    url = gen_fixie_file_url(df['date'][0])
+    btly = gen_bitly_link(df['url'][0])
     the_date = human_date(df['date'][0])
     if the_date in ["Yesterday", "Today"]:
         intro = ""
@@ -217,11 +207,11 @@ def random_item_tweet():
     the_val = human_number(abs(val*1e6))
     the_item = T2_ITEM_DICT[str([i for i in the_df.item][0])]
 
-    return "%s%s, the US Gov %s %s $%s %s - %s" % (intro, the_date, change, the_val, preposition, the_item, url)
+    return "%s%s, the US Gov %s $%s %s %s - %s" % (intro, the_date, change, the_val, preposition, the_item, btly)
 
 @tweet
 def total_debt_tweet():
-    df = query('''SELECT date, close_today
+    df = query('''SELECT date, close_today, url
                   FROM t3c
                   WHERE (item LIKE \'%subject to limit%\' AND year = 2013 AND month >=1)
                   ORDER BY date DESC''')
@@ -244,14 +234,14 @@ def total_debt_tweet():
 
     # humanize values
     # Notice the included ``human_date`` and ``human_number`` functions which simplify these values for you
-    url = gen_fixie_file_url(df['date'][0])
+    btly = gen_bitly_link(df['url'][0])
     current_date = human_date(df['date'][0])
     amt = human_number(current_amt)
     delta = human_number(delta)
     previous_date = human_date(df['date'][end])
 
     # generate tweet
-    vals = (current_date, amt, url)
+    vals = (current_date, amt, btly)
     return "Think you're in debt? As of %s, the US Gov is $%s in the hole! - %s" % vals
 
 def dist_to_debt_ceiling_tweet():
@@ -268,7 +258,7 @@ def dist_to_debt_ceiling_tweet():
 
 @tweet
 def change_in_balance_tweet():
-    df = query('''SELECT close_today - open_today AS change, date, weekday
+    df = query('''SELECT close_today - open_today AS change, date, weekday, url
                    FROM t1
                    WHERE account = 'Total Operating Balance'
                    ORDER BY date DESC
@@ -283,12 +273,12 @@ def change_in_balance_tweet():
 
     # humanize number and date
     amt = human_number(abs(raw_amt)*1e6)
-    url = gen_fixie_file_url(df['date'][0])
+    btly = gen_bitly_link(df['url'][0])
     the_date = human_date(df['date'][0])
 
     # generate tweet
     vals = (change, amt, the_date, url)
-    return "The US Gov's total operating balance %s $%s on %s - %s" % vals
+    return "The US Gov's total operating balance %s $%s on %s - %s" % btly
 
 @tweet
 def is_it_running_tweet():

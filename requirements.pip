@@ -7,4 +7,5 @@ pyyaml
 tweepy
 humanize
 treasuryio
+bitly_api
 git+https://github.com/tlevine/smtpcli.git
