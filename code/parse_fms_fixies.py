@@ -375,6 +375,10 @@ def parse_table(table, date, verbose=False):
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
+				if '( eft )' in row.get('classification_raw', '').lower():
+					row['type'] = 'EFT'
+				elif '( checks )' in row.get('classification_raw', '').lower():
+					row['type'] = 'CHECKS'
 			except:
 				if verbose is True:
 					print 'WARNING:', line
