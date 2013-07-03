@@ -126,6 +126,14 @@ def parse_table(table, date, verbose=False):
 	else:
 		two_line_delta = -1
 
+	# hack to figure out the url w/o having to make a request
+	if date < datetime.date(2013, 5, 16):
+		f_dir = "a"
+	else:
+		f_dir = "w"
+
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s00.txt&dir=%s" % (datetime.date.strftime(date, '%y%m%d'), f_dir)
+
 	parsed_table = []
 	for line in table:
 		#print '|' + line + '|'
@@ -138,6 +146,7 @@ def parse_table(table, date, verbose=False):
 		row['day'] = date.day
 		row['year_month'] = datetime.date.strftime(date, '%Y-%m')
 		row['weekday'] = datetime.datetime.strftime(date, '%A')
+		row['url'] = url
 
 		# what's our line number? shall we bail out?
 		index += 1
@@ -292,18 +301,12 @@ def parse_table(table, date, verbose=False):
 
 		row['is_total'] = int('total' in text.lower())
 
-		if re.search(r'TABLE I\s|TABLE III-C', row.get('table', '')):
+		# parse one table at a time
+
+		if re.search(r'TABLE I\s', row.get('table', '')):
 			try:
-				if re.search(r'TABLE I\s', row.get('table', '')):
-					row['account_raw'] = text
-					row['account'] = normalize_fields(text, 't1', 'account')
-				elif re.search(r'TABLE III-C', row.get('table', '')):
-					try:
-						row['item_raw'] = text
-						row['item'] = normalize_fields(text, 't3c', 'item')
-					except:
-						if verbose is True:
-							print 'WARNING:', line
+				row['account_raw'] = text
+				row['account'] = normalize_fields(text, 't1', 'account')
 				row['close_today'] = digits[-4]
 				row['open_today'] = digits[-3]
 				row['open_mo'] = digits[-2]
@@ -311,6 +314,7 @@ def parse_table(table, date, verbose=False):
 			except:
 				if verbose is True:
 					print 'WARNING:', line
+
 		elif re.search(r'TABLE II\s', row.get('table', '')):
 			try:
 				row['item_raw'] = text
@@ -334,6 +338,7 @@ def parse_table(table, date, verbose=False):
 			except:
 				if verbose is True:
 					print 'WARNING:', line
+
 		elif re.search(r'TABLE III-A', row.get('table', '')):
 			try:
 				row['item_raw'] = text
@@ -351,6 +356,7 @@ def parse_table(table, date, verbose=False):
 			except:
 				if verbose is True:
 					print 'WARNING:', line
+
 		elif re.search(r'TABLE III-B', row.get('table', '')):
 			try:
 				row['item_raw'] = text
@@ -368,6 +374,19 @@ def parse_table(table, date, verbose=False):
 			except:
 				if verbose is True:
 					print 'WARNING:', line
+
+		elif re.search(r'TABLE III-C', row.get('table', '')):
+			try:
+				row['item_raw'] = text
+				row['item'] = normalize_fields(text, 't3c', 'item')
+				row['close_today'] = digits[-4]
+				row['open_today'] = digits[-3]
+				row['open_mo'] = digits[-2]
+				row['open_fy'] = digits[-1]
+			except:
+				if verbose is True:
+					print 'WARNING:', line
+
 		elif re.search(r'TABLE IV', row.get('table', '')):
 			try:
 				row['type'] = ''
@@ -381,21 +400,30 @@ def parse_table(table, date, verbose=False):
 				# increment Total counts
 				if this_class == "Total": t4_total_count += 1
 
+				# assign source and use types
 				if t4_total_count == 1 and this_class == "Total":
 					row['type'] = "source"
-
 				elif t4_total_count == 2 and this_class == "Total":
 					row['type'] = "use"
-
 				elif this_class not in T4_USE_ITEMS:
 					row['type'] = "source"
-
 				else:
 					row['type'] = "use"
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
+
+		elif re.search(r'TABLE V\s', row.get('table', '')):
+			try:
+				row['balance_transactions'] = text
+				row['depositary_type_a'] = digits[-4]
+				row['depositary_type_b'] = digits[-3]
+				row['depositary_type_c'] = digits[-2]
+				row['total'] = digits[-1]
+			except:
+				if verbose is True:
+					print 'WARNING:', line
+
 		elif re.search(r'TABLE VI', row.get('table', '')):
 			try:
 				row['classification_raw'] = text
@@ -407,16 +435,6 @@ def parse_table(table, date, verbose=False):
 					row['type'] = 'EFT'
 				elif '( checks )' in row.get('classification_raw', '').lower():
 					row['type'] = 'CHECKS'
-			except:
-				if verbose is True:
-					print 'WARNING:', line
-		elif re.search(r'TABLE V\s', row.get('table', '')):
-			try:
-				row['balance_transactions'] = text
-				row['depositary_type_a'] = digits[-4]
-				row['depositary_type_b'] = digits[-3]
-				row['depositary_type_c'] = digits[-2]
-				row['total'] = digits[-1]
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -445,21 +463,21 @@ def parse_table(table, date, verbose=False):
 
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-B', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE V\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
 	elif re.search(r'TABLE VI', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
 
 	return df
 

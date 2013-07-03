@@ -31,11 +31,22 @@ def human_number(num):
         n = m.group(1) + " " + m.group(2)
     return n
 
+def style_day(n):
+    n = int(n)
+    return str(n)+("th" if 4<=n%100<=20 else {1:"st",2:"nd",3:"rd"}.get(n%10, "th"))
+
 def human_date(date):
     h = humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
-    if re.search("([A-Za-z]+) 0([0-9])", h):
-        m = re.search("([A-Za-z]+) 0([0-9])", h)
-        h = m.group(1) + " " + m.group(2)
+
+    # remove zeros
+    m0 = re.search(r"([A-Za-z]+) 0([0-9])", h)
+    if m0: h = "%s %s" % ( m0.group(1), m0.group(2) )
+
+    # style day
+    m_day = re.search(r"([A-Za-z]+) (\d+)", h)
+    if m_day: h = "%s %s" % ( m_day.group(1), style_day(m.group(2)) )
+
+    # lowercase yesterday
     if h in ['Yesterday', 'Today']:
         h = h.lower()
     return h
@@ -188,7 +199,7 @@ def random_item_tweet():
             preposition = "on"
         val = int(the_df['today'])
     else:
-        val = int(the_df[the_df.type == 'deposit']['today']) - int(the_df[the_df.type == 'withdrawal']['today'])
+        val = sum(the_df[the_df.type == 'deposit']['today']) - sum(the_df[the_df.type == 'withdrawal']['today'])
         if val > 0:
             change = "took in"
             preposition = "from"

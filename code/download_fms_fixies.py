@@ -5,6 +5,8 @@ import os
 import pandas as pd
 import requests
 import sys
+from Queue import Queue
+from threading import Thread
 
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
 SAVE_DIR = os.path.join('..', 'data', 'fixie')
@@ -76,21 +78,25 @@ def request_fixie(fname):
 
 ################################################################################
 def request_all_fixies(fnames):
+
 	for fname in reversed(fnames):
 		alt_fnames = [fname]
 		alt_fnames.extend([fname[:-5] + i +'.txt' for i in ['1', '2', '3']])
 		for alt_fname in alt_fnames:
 			fixie = request_fixie(alt_fname)
 			if fixie:
+				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
 				f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'wb', 'utf-8')
 				f.write(fixie)
 				f.close()
-				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
 				break
+
 		if fixie is None:
 			print 'WARNING:', fname, '(',
 			print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
 			print ')', 'not available'
+
+	return fnames
 
 
 ################################################################################
@@ -105,12 +111,9 @@ def download_fixies(start_date, end_date=None):
 	print '\nINFO: Downloading FMS fixies from', all_dates[0], 'to', all_dates[-1], "!\n"
 
 	good_dates = remove_weekends_and_holidays(all_dates)
-	fnames = [''.join([datetime.datetime.strftime(date, '%y%m%d'), '00.txt'])
-			for date in good_dates]
+	fnames = [''.join([datetime.datetime.strftime(date, '%y%m%d'), '00.txt']) for date in good_dates]
 	request_all_fixies(fnames)
-
 	return fnames
-
 
 ################################################################################
 if __name__ == '__main__':
