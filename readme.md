@@ -21,7 +21,7 @@
    €
 ```
 
-federal-treasury-api` is the first-ever electronically-searchable database of the Federal government's daily cash spending and borrowing. It updates daily and the data can be exported in various formats and loaded into various systems.
+`federal-treasury-api` is the first-ever electronically-searchable database of the Federal government's daily cash spending and borrowing. It updates daily and the data can be exported in various formats and loaded into various systems.
 
 
 ### Deploying to ScraperWiki
@@ -76,7 +76,7 @@ This one command downloads the (new) fixies and converts them to an SQLite3 data
 Run everything
 
     cd parser
-    python download_and_parser_fms_fixies.py
+    python download_and_parse_fms_fixies.py
 
 ## Scheduling
 
