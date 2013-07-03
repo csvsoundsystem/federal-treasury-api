@@ -398,7 +398,6 @@ def parse_table(table, date, verbose=False):
 					print 'WARNING:', line
 		elif re.search(r'TABLE VI', row.get('table', '')):
 			try:
-				row['type'] = None
 				row['classification_raw'] = text
 				row['classification'] = normalize_fields(text, 't6', 'classification')
 				row['today'] = digits[-3]
