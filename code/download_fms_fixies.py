@@ -1,12 +1,10 @@
-
+#!/usr/bin/env python
 import codecs
 import datetime
 import os
 import pandas as pd
 import requests
 import sys
-from Queue import Queue
-from threading import Thread
 
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
 SAVE_DIR = os.path.join('..', 'data', 'fixie')
