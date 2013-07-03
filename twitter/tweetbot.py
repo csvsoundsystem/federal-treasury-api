@@ -38,6 +38,7 @@ def human_date(date):
         n = int(n)
         return str(n)+("th" if 4<=n%100<=20 else {1:"st",2:"nd",3:"rd"}.get(n%10, "th"))
 
+    # apply humanization fx
     h = humanize.naturalday(datetime.datetime.strptime(date, "%Y-%m-%d")).title()
 
     # remove zeros
@@ -48,20 +49,23 @@ def human_date(date):
     m_day = re.search(r"([A-Za-z]+) (\d+)", h)
     if m_day: h = "%s %s" % ( m_day.group(1), style_day(m_day.group(2)) )
 
-    # lowercase yesterday
-    if h in ['Yesterday', 'Today']:
-        h = h.lower()
+    # lowercase yesterday and today
+    if h in ['Yesterday', 'Today']: h = h.lower()
 
     return h
 
 def gen_bitly_link(long_url):
-    access_token = os.getenv('TREASURY_BITLY_ACCESS_TOKEN')
-    if access_token is None:
-        return None
+    try:
+        access_token = yaml.safe_load(open("%s/%s" % (os.getenv("HOME"), 'bitly.yml')))['access_token']
+    except:
+        return long_url
     else:
-        btly = bitly_api.Connection(access_token = access_token)
-        blob = btly.shorten(long_url)
-        return re.sub("http://", "", str(blob['url']))
+        if access_token is None:
+            return long_url
+        else:
+            btly = bitly_api.Connection(access_token = access_token)
+            blob = btly.shorten(long_url)
+            return re.sub("http://", "", str(blob['url']))
 
 ######################################
 # DATA
