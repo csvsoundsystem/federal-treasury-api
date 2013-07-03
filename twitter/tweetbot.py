@@ -16,6 +16,7 @@ from requests import get
 ######################################
 # HELPERS
 ######################################
+T_IO = "http://treasury.io"
 
 def load_options():
     parser = OptionParser()
@@ -210,8 +211,8 @@ def random_item_tweet():
         intro = "On "
     the_val = human_number(abs(val*1e6))
     the_item = T2_ITEM_DICT[str([i for i in the_df.item][0])]
-
-    return "%s%s, the US Gov %s $%s %s %s - %s" % (intro, the_date, change, the_val, preposition, the_item, btly)
+    vals = (intro, the_date, change, the_val, preposition, the_item, btly, T_IO)
+    return "%s%s, the US Gov %s $%s %s %s %s \r\n - %s" % vals
 
 @tweet
 def total_debt_tweet():
@@ -245,8 +246,8 @@ def total_debt_tweet():
     previous_date = human_date(df['date'][end])
 
     # generate tweet
-    vals = (current_date, amt, btly)
-    return "Think you're in debt? As of %s, the US Gov is $%s in the hole! - %s" % vals
+    vals = (current_date, amt, btly, T_IO)
+    return "Think you're in debt? As of %s, the US Gov is $%s in the hole! \r\n - %s" % vals
 
 def dist_to_debt_ceiling_tweet():
 
@@ -281,8 +282,8 @@ def change_in_balance_tweet():
     the_date = human_date(df['date'][0])
 
     # generate tweet
-    vals = (change, amt, the_date, url)
-    return "The US Gov's total operating balance %s $%s on %s - %s" % btly
+    vals = (change, amt, the_date, btly, T_IO)
+    return "The US Gov's total operating balance %s $%s on %s \r\n - %s" % vals
 
 @tweet
 def is_it_running_tweet():
@@ -290,7 +291,7 @@ def is_it_running_tweet():
     def date_pair(date_date):
         return {
             'days': (datetime.date.today() - date_date).days,
-            'date': date_date.strftime('%A, %B %d, %Y'),
+            'date': date_date,
         }
 
     def observed_data():
@@ -313,15 +314,15 @@ def is_it_running_tweet():
 
     def gen_test_tweet():
         peeps = "@brianabelson @mhkeller @jbialer @thomaslevine @bdewilde @Cezary"
-        current_date = datetime.datetime.now().strftime("%Y-%m-%d %H-%M-%S")
+        current_date = datetime.datetime.now()
 
         observed = observed_data()
         expected = expected_data()
 
         if observed['days'] > 7:
-            return "Yo %s! Something is definitely wrong! - %s" % (peeps, current_date)
-        elif observed['date'] < expected['date']:
-            return "Hey %s, somethings wrong unless %s is a holiday! - %s" % (peeps, expected['date'])
+            return "Yo %s! Something is probably wrong - @%s" % (peeps, current_date.date().strftime("%S"))
+        elif observed['days']  - expected['days'] > 3:
+            return "Hey %s, something might be wrong unless %s is a holiday! " % (peeps, expected['date'])
         else:
             return None
 
