@@ -161,14 +161,14 @@ T2_ITEM_DICT = {
     "IRS Tax Refunds Business ( EFT )": "tax refunds for businesses",
     "IRS Tax Refunds Individual ( EFT )": "tax refunds for individuals",
     "Military Active Duty Pay ( EFT )": "military active duty pay",
-    "Veterans Benefits ( EFT )": "veteran benefits",
+    "Veterans Benefits ( EFT )": "veterans benefits",
     "State Department": "the State dept.",
     "Library of Congress": "the Lib. of Congress",
     "Federal Trade Commission": "the FTC",
     "Transportation Security Admin ( DHS )": "the TSA",
     "TARP": "TARP",
     "Interior": "Interior",
-    "USDA: Forest Service": "the Forest Service"
+    "USDA: Forest Service": "the forest service"
 }
 
 @tweet
