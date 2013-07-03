@@ -322,7 +322,7 @@ def is_it_running_tweet():
         if observed['days'] > 7:
             return "Yo %s! Something is probably wrong - @%s" % (peeps, current_date.date().strftime("%S"))
         elif observed['days']  - expected['days'] > 3:
-            return "Hey %s, something might be wrong unless %s is a holiday! " % (peeps, expected['date'])
+            return "Hey %s, something might be wrong unless %s is a holiday! " % (peeps, expected['date'].strftime("%B %d"))
         else:
             return None
 
