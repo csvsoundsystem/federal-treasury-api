@@ -75,10 +75,12 @@ def parse_file(f_name, verbose=False):
 
 	f = open(f_name, 'rb').read()
 
-	raw_tables = re.split(r'(\s+TABLE(\s+|_+)[\w-]+.*)', f)
+	#raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
+	raw_tables = re.split(r'(\s+TABLE[\s_]+[\w_-]+.*)', f)
 	tables = []
 	for raw_table in raw_tables[1:]:
-		if re.search(r'\s+TABLE(\s+|_+)[\w-]+.*', raw_table):
+		#if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
+		if re.search(r'\s+TABLE[\s_]+[\w_-]+.*', raw_table):
 			table_name = raw_table
 			# fix malformed fixie table names, BLERGH GOV'T!
 			table_name = re.sub(r'_+', ' ', table_name)

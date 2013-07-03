@@ -65,7 +65,7 @@ for f in new_files:
 			t_name_match = re.search(r'TABLE [\w-]+', t_name)
 			t_name_short = re.sub(r'-| ', '_', t_name_match.group().lower())
 		except Exception as e:
-			print '***ERROR: tables failed to parsed!', e
+			print '***ERROR: tables failed to parse!', e
 			# go on
 			continue
 
