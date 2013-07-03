@@ -5,7 +5,7 @@ import pandas as pd
 import re
 
 NORMALIZE_FIELD_TABLE = json.load(open("../parser/normalize_field_table.json"))
-REMOVE_ERRANT_FOOTNOTES_TABLE = json.load(open("../parser/remove_errant_footnotes_table.json"))
+
 T4_USE_ITEMS = [
 	'Tax and Loan Accounts',
 	'Inter agency Transfers',
@@ -159,6 +159,9 @@ def parse_table(table, date, verbose=False):
 		if page_number_match:
 			page_number = page_number_match.group(1)
 			continue
+
+		# HARD CODED HACKS
+
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
 			continue
@@ -184,10 +187,19 @@ def parse_table(table, date, verbose=False):
 			break
 		if re.search(r'.*leaving a portion of the funds.*', line):
 			break
-		# NOT IMPLEMENTED YET, WE SHOULD TRY TO FIX THE PARSER FIRST
-		# # ignore errant footnotes:
-		# if any([re.search(".*%s.*" % f, line) for f in REMOVE_ERRANT_FOOTNOTES_TABLE]):
-		# 	break
+		if re.search(r'.*not include million offset .*', line, re.IGNORECASE):
+			break
+		if re.search(r'.*began a pilot program for the repurchase.*', line, re.IGNORECASE):
+			break
+		if re.search(r'.*and million for the fiscal year to date for.*', line, re.IGNORECASE):
+			break
+		if re.search(r'.*dated December.*', line, re.IGNORECASE):
+			break
+		if re.search(r'.*Treasury reduced the amount of Debt Subject.*', line, re.IGNORECASE):
+			break
+		if re.search(r'.*very Act of Public Law ( ) These long term nonmarketable.*', line, re.IGNORECASE):
+			break
+
 
 		# skip table header rows
 		if get_table_name(line):
