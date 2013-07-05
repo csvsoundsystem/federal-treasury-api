@@ -179,9 +179,47 @@ T2_ITEM_DICT = {
 }
 
 @tweet
+def random_comparison_tweet():
+
+    df = query('''SELECT date, item, fytd, url
+                  FROM t2
+                  WHERE type = 'withdrawal' AND date = (SELECT max(date) FROM t2)''')
+
+    # get two random items to compare
+    item_1_df = df[df.item==choice([i for i in df.item if i in set(T2_ITEM_DICT.keys())])]
+    item_2_df = item_1_df
+    while item_2_df.item == item_1_df.item:
+        item_2_df = df[df.item==choice([i for i in df.item if i in set(T2_ITEM_DICT.keys())])]
+
+    item_1 = T2_ITEM_DICT[str([i for i in item_1_df.item][0])]
+    item_2 = T2_ITEM_DICT[str([i for i in item_2_df.item][0])]
+
+    # detmine diff and value
+    if int(item_1_df.fytd) > int(item_2_df.fytd):
+        per_diff = 100*(float(item_1_df.fytd) / float(item_2_df.fytd))
+
+    else:
+        per_diff = 100*(float(item_2_df.fytd) / float(item_1_df.fytd))
+
+        # switch item 1 and 2
+        item_3 = item_1
+        item_1 = item_2
+        item_2 = item_3
+
+
+
+    per = str(int(math.ceil(per_diff))) + "%"
+    btly = gen_bitly_link(str(df['url'][0]))
+    vals = (per, item_1, item_2, btly)
+
+    return "The US Gov has spent %s more on %s than on %s this year - %s" % vals
+
+@tweet
 def random_item_tweet():
 
-    df = query('''SELECT date, item, today, type, url FROM t2 WHERE date = (SELECT max(date) FROM t2)''')
+    df = query('''SELECT date, item, today, type, url
+                  FROM t2
+                  WHERE date = (SELECT max(date) FROM t2)''')
 
     the_df = df[df.item==choice([i for i in df.item if i in set(T2_ITEM_DICT.keys())])]
 
@@ -284,7 +322,7 @@ def change_in_balance_tweet():
 
     # generate tweet
     vals = (change, amt, the_date, btly, T_IO)
-    return "The US Gov's total operating balance %s $%s on %s \r\n - %s" % vals
+    return "The US Gov's total operating balance %s $%s on %s %s \r\n - %s" % vals
 
 @tweet
 def is_it_running_tweet():
@@ -346,4 +384,6 @@ if __name__ == '__main__':
         is_it_running_tweet()
     elif t == 'random_item':
         random_item_tweet()
+    elif t == 'random_comparison':
+        random_comparison_tweet()
 
