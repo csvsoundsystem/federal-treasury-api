@@ -206,8 +206,6 @@ def random_comparison_tweet():
         item_1 = item_2
         item_2 = item_3
 
-
-
     per = str(int(math.ceil(per_diff))) + "%"
     btly = gen_bitly_link(str(df['url'][0]))
     vals = (per, item_1, item_2, btly)
