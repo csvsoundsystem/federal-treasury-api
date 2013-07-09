@@ -199,7 +199,7 @@ def parse_table(table, date, verbose=False):
 			break
 		elif re.search(r'.*Treasury reduced the amount of Debt Subject.*', line, re.IGNORECASE):
 			break
-		elif re.search(r'.*very Act of Public Law ( ) These long term nonmarketable.*', line, re.IGNORECASE):
+		elif re.search(r'.*very Act of Public Law ( ) These long term nonmarketable.*', line, flags=re.IGNORECASE):
 			break
 
 		# skip table header rows
