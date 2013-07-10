@@ -23,7 +23,7 @@ def observed_data():
     sql = '''SELECT MAX(date) FROM t1;'''
 
     r = get(url, params = {'q': sql})
-    date_string = json.loads(r.text)[0]['max(date)']
+    date_string = json.loads(r.text)[0]['MAX(date)']
     date_date = datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
 
     return date_pair(date_date)
