@@ -1,8 +1,0 @@
-#!/bin/sh
-MAILTO="csvsoundsystem@gmail.com"
-30 16 * * * cd /home && git pull && ./run.sh
-*  17 * * 1,4  /bin/bash /home/tweet.sh change_in_balance
-10 15 * * 2,5  /bin/bash /home/tweet.sh total_debt
-30 11 * * * /bin/bash /home/tweet.sh is_it_running
-45 9,13,20,22 * * * /bin/bash /home/tweet.sh random_item
-30 11,15,22 * * * /bin/bash /home/tweet.sh random_comparison

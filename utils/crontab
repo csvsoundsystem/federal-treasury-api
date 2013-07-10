@@ -1,0 +1,6 @@
+30 16 * * * ./montior.sh ./run.sh
+*  17 * * 1,4  ./montior.sh ./tweet.sh change_in_balance
+10 15 * * 2,5  ./montior.sh ./tweet.sh total_debt
+30 11 * * * ./montior.sh ./tweet.sh is_it_running
+45 9,13,20,22 * * * ./montior.sh ./tweet.sh random_item
+30 11,15,22 * * * ./montior.sh ./tweet.sh random_comparison
