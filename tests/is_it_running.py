@@ -40,9 +40,10 @@ def gen_test_message():
     observed = observed_data()
     expected = expected_data()
 
-    if observed['days'] > y:
-        print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
-    elif observed['date'] < expected['date']:
+   #if observed['days'] > expected['days']:
+   #    print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
+   #el
+    if observed['date'] < expected['date']:
         print "Unless %s is a holiday, something is up!" % expected['date']
     else:
         print "All seems well!"
