@@ -1,7 +1,6 @@
 #!/bin/sh
-crontab -l > /tmp/crontab
-cat crontab.sh > /tmp/crontab
-cat /tmp/crontab | crontab
-rm /tmp/crontab
+crontab -l > /tmp/crontab.bak
+cat "$HOME/crontab" | crontab
 echo "NEW CRONTAB:"
 crontab -l
+echo "OLD CRONTAB: Backed up to /tmp/crontab.bak"
