@@ -25,7 +25,9 @@
             "Interior: Bureau of Land Mgmt": "Interior: Bureau of Land Management",
             "Veterans Affairs programs": "Veterans Affairs Programs",
             "Overseas Private Investment Co": "Overseas Private Investment Co ( net )",
-            "Supple Nutrition Assist Program ( SNAP )": "Food Stamps"
+            "Supple Nutrition Assist Program ( SNAP )": "Food Stamps",
+            "Cash FTD s Received ( Table IV )" : "FTDs Received",
+            "FTD s Received ( Table IV )" : "FTDs Received"
           }
     },
     "t3a": {
