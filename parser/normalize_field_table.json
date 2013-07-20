@@ -51,7 +51,9 @@
           }
     },
     "t3c": {
-
+        "item": {
+            "Total Public Debt Subject to Limit r": "Total Public Debt Subject to Limit"
+          }
     },
     "t4": {
         "classification": {
