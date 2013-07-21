@@ -110,9 +110,13 @@ Results will appear in `tests/test_output/%Y-%m-%d.csv`, named after today's
 date.
 
 ### Monitoring
-If you prefix a command with `./monitor.sh` and the command fails, the output
-of the command will be sent wherever you specify. In order to use this, you
-need to create a `~/.smtpcli.conf`.
+We use emails for monitoring.
+In order to use them or to run the email tests (`test_email.py`),
+you need to set the email credentials.
+
+    . credentials.sh
+
+This file is not in the repository, but you can see an example in `credentials.sh.example`.
 
 ## Tables
 There are eight tables.
