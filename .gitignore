@@ -27,4 +27,4 @@ bitly.yml
 env/
 .sqlite_history
 .twitter.yml
-.smtpcli.conf
+credentials.sh

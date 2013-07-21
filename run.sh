@@ -7,6 +7,7 @@ if [ -d env ]; then
   pip install --upgrade -r requirements.pip
 fi
 
+. ./credentials.sh
 git checkout master
 git pull origin master
 (
