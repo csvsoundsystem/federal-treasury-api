@@ -6,10 +6,13 @@ def login():
     return M
 
 def main():
+    M = login()
     M.select()
-    typ, data = M.search(None, 'ALL')
+    typ, data = M.search(None, '(UNSEEN FROM "fms.treas.gov")')
     for num in data[0].split():
         typ, data = M.fetch(num, '(RFC822)')
         print 'Message %s\n%s\n' % (num, data[0][1])
     M.close()
     M.logout()
+
+main()
