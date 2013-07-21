@@ -1,4 +1,9 @@
-import os, imaplib
+import os
+
+import imaplib
+
+import smtplib
+from email.mime.text import MIMEText
 
 def login():
     M = imaplib.IMAP4_SSL(os.environ['IMAP_SERVER'])
@@ -27,3 +32,17 @@ def new_mail(search_string = '(UNSEEN FROM "fms.treas.gov")'):
 
     # Return True or False
     return _new_mail
+
+def send(subject, body):
+    'Send an email'
+    # http://docs.python.org/2/library/email-examples.html
+
+    msg = MIMEText(body)
+
+    msg['Subject'] = 'The contents of %s' % textfile
+    msg['From'] = os.environ['IMAP_USER']
+    msg['To'] = 'csv@treasury.io'
+
+    s = smtplib.SMTP(os.envirov['IMAP_SERVER'])
+    s.sendmail(msg['From'], [msg['To']], msg.as_string())
+    s.quit()
