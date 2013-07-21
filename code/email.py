@@ -5,6 +5,9 @@ import imaplib
 import smtplib
 from email.mime.text import MIMEText
 
+import logging
+import logging.handlers
+
 def login():
     M = imaplib.IMAP4_SSL(os.environ['IMAP_SERVER'])
     M.login(os.environ['IMAP_USER'], os.environ['IMAP_PASSWORD'])
@@ -46,3 +49,27 @@ def send(subject, body):
     s = smtplib.SMTP(os.envirov['IMAP_SERVER'])
     s.sendmail(msg['From'], [msg['To']], msg.as_string())
     s.quit()
+
+def logger(subject):
+    '''
+    Return a logger that can send errors to email.
+    Use it like so.
+
+        l = email.logger('Twitter bot error')
+        try:
+            break
+        except Exception as e:
+            l.error(e)
+
+    From http://stackoverflow.com/questions/6182693/python-send-email-when-exception-is-raised
+    '''
+    smtp_handler = logging.handlers.SMTPHandler(
+        mailhost = (os.environ['IMAP_SERVER'], 25),
+        fromaddr = os.environ['IMAP_USER'],
+        toaddrs = 'csv@treasury.io',
+        subject = subject
+    )
+
+    logger = logging.getLogger()
+    logger.addHandler(smtp_handler)
+    return logger
