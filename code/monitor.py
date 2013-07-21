@@ -9,8 +9,8 @@ import logging
 import logging.handlers
 
 def login():
-    M = imaplib.IMAP4_SSL(os.environ['IMAP_SERVER'])
-    M.login(os.environ['IMAP_USER'], os.environ['IMAP_PASSWORD'])
+    M = imaplib.IMAP4_SSL(os.environ['EMAIL_SERVER'])
+    M.login(os.environ['EMAIL_USER'], os.environ['EMAIL_PASSWORD'])
     return M
 
 def new_mail(search_string = '(UNSEEN FROM "fms.treas.gov")'):
@@ -36,21 +36,21 @@ def new_mail(search_string = '(UNSEEN FROM "fms.treas.gov")'):
     # Return True or False
     return _new_mail
 
-def send(subject, body):
+def send(subject, body, to = 'csv@treasury.io'):
     'Send an email'
     # http://docs.python.org/2/library/email-examples.html
 
     msg = MIMEText(body)
 
     msg['Subject'] = 'The contents of %s' % textfile
-    msg['From'] = os.environ['IMAP_USER']
-    msg['To'] = 'csv@treasury.io'
+    msg['From'] = os.environ['EMAIL_USER']
+    msg['To'] = to
 
-    s = smtplib.SMTP(os.envirov['IMAP_SERVER'])
+    s = smtplib.SMTP(os.envirov['EMAIL_SERVER'])
     s.sendmail(msg['From'], [msg['To']], msg.as_string())
     s.quit()
 
-def logger(subject):
+def logger(subject, to = 'csv@treasury.io'):
     '''
     Return a logger that can send errors to email.
     Use it like so.
@@ -64,9 +64,9 @@ def logger(subject):
     From http://stackoverflow.com/questions/6182693/python-send-email-when-exception-is-raised
     '''
     smtp_handler = logging.handlers.SMTPHandler(
-        mailhost = (os.environ['IMAP_SERVER'], 25),
-        fromaddr = os.environ['IMAP_USER'],
-        toaddrs = 'csv@treasury.io',
+        mailhost = (os.environ['EMAIL_SERVER'], 25),
+        fromaddr = os.environ['EMAIL_USER'],
+        toaddrs = to,
         subject = subject
     )
 
