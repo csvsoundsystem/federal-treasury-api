@@ -42,11 +42,11 @@ def send(subject, body, to = 'csv@treasury.io'):
 
     msg = MIMEText(body)
 
-    msg['Subject'] = 'The contents of %s' % textfile
+    msg['Subject'] = subject
     msg['From'] = os.environ['EMAIL_USER']
     msg['To'] = to
 
-    s = smtplib.SMTP(os.envirov['EMAIL_SERVER'])
+    s = smtplib.SMTP(os.environ['EMAIL_SERVER'], port = 587)
     s.sendmail(msg['From'], [msg['To']], msg.as_string())
     s.quit()
 
@@ -64,7 +64,7 @@ def logger(subject, to = 'csv@treasury.io'):
     From http://stackoverflow.com/questions/6182693/python-send-email-when-exception-is-raised
     '''
     smtp_handler = logging.handlers.SMTPHandler(
-        mailhost = (os.environ['EMAIL_SERVER'], 25),
+        mailhost = (os.environ['EMAIL_SERVER'], 587),
         fromaddr = os.environ['EMAIL_USER'],
         toaddrs = to,
         subject = subject
