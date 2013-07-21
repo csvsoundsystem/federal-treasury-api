@@ -36,20 +36,6 @@ def new_mail(search_string = '(UNSEEN FROM "fms.treas.gov")'):
     # Return True or False
     return _new_mail
 
-def send(subject, body, to = 'csv@treasury.io'):
-    'Send an email'
-    # http://docs.python.org/2/library/email-examples.html
-
-    msg = MIMEText(body)
-
-    msg['Subject'] = subject
-    msg['From'] = os.environ['EMAIL_USER']
-    msg['To'] = to
-
-    s = smtplib.SMTP(os.environ['EMAIL_SERVER'], port = 587)
-    s.sendmail(msg['From'], [msg['To']], msg.as_string())
-    s.quit()
-
 def logger(subject, to = 'csv@treasury.io'):
     '''
     Return a logger that can send errors to email.
@@ -67,7 +53,10 @@ def logger(subject, to = 'csv@treasury.io'):
         mailhost = (os.environ['EMAIL_SERVER'], 587),
         fromaddr = os.environ['EMAIL_USER'],
         toaddrs = to,
-        subject = subject
+        subject = subject,
+        credentials = (os.environ['EMAIL_USER'], os.environ['EMAIL_PASSWORD']),
+        secure = tuple(),
+
     )
 
     logger = logging.getLogger()
