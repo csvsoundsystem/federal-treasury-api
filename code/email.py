@@ -6,6 +6,7 @@ def login():
     return M
 
 def new_mail(search_string = '(UNSEEN FROM "fms.treas.gov")'):
+    'Return True or False.'
     M = login()
     M.select()
 
