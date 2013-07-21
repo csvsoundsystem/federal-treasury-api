@@ -1,7 +1,7 @@
-import getpass, imaplib
+import os, imaplib
 
-M = imaplib.IMAP4(os.environ['IMAP_SERVER'])
-M.login(os.environ['IMAP_USER'], os.environ['IMAP_SERVER'])
+M = imaplib.IMAP4_SSL(os.environ['IMAP_SERVER'])
+M.login(os.environ['IMAP_USER'], os.environ['IMAP_PASSWORD'])
 M.select()
 typ, data = M.search(None, 'ALL')
 for num in data[0].split():
