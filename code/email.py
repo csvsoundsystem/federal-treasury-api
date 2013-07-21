@@ -13,9 +13,10 @@ def previous_email(search_string = '(FROM "fms.treas.gov")'):
     status, header = M.search(None, search_string)
     num = header[0].split()[-1]
 
-    # Read the most recent one.
+    # Source of the most recent one.
     status, eml = M.fetch(num, '(RFC822)')
-    print eml[0][1]
 
     M.close()
     M.logout()
+
+    return eml[0][1]
