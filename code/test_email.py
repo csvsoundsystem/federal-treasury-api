@@ -23,5 +23,12 @@ def test_new_mail():
     # The email should not be new; we just saw it.
     assert not email.new_mail(search_string = _unseen)
 
+    M.close()
+    M.logout()
+
     # Let's check that the email has been seen, just to be sure.
+    M = email.login()
+    M.select()
     assert M.search(None, _unseen)[1] == ['']
+    M.close()
+    M.logout()
