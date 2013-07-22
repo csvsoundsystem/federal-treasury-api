@@ -144,7 +144,7 @@ function addValuesToColumn(obj_to_push){
   var table_name = obj_to_push.name;
   table_schema.tables[table_name] = obj_to_push;
 
-  console.log('Appending ', obj_to_push.name);
+  console.log('Adding', obj_to_push.name);
   writeToFile_after(table_schema);
 };
 
@@ -161,7 +161,7 @@ for (var table_name in table_names){
 				      table_obj = {
 				      	"label": table_names[table_name],
 				      	"name" : table_name,
-                "columns": []
+                "columns": {}
 				      };
 
           var addValuesToColumn_after = _.after(_.size(name_types), addValuesToColumn); // Only invoked after all of the columns in a given table are processed
@@ -203,7 +203,7 @@ for (var table_name in table_names){
                   };
 
 					  			name_type['values'] = sorted_values_with_blank
-					  			table_obj.columns.push(name_type);
+					  			table_obj.columns[name_type.name] = name_type;
                   addValuesToColumn_after(table_obj);
 
                 });
