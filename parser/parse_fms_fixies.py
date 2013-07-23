@@ -3,6 +3,7 @@ import json
 import datetime
 import pandas as pd
 import re
+import requests
 
 # Global Vars
 NORMALIZE_FIELD_TABLE = json.load(open("../parser/normalize_field_table.json"))
@@ -81,6 +82,20 @@ def get_footnote(line):
 		return [footnote.group(1), footnote.group(2)]
 	return None
 
+def check_fixie_url(url):
+	print "INFO: checking %s to make sure it's valid" % url
+	r = requests.get(url)
+	if r.status_code==200:
+		return url
+	else:
+		# what directory are we in?
+		bad_dir = re.search('.*dir=([a-z])$', url).group(1)
+		if bad_dir == 'a':
+			good_dir = 'w'
+		elif bad_dir == 'w':
+			good_dir = 'a'
+		return re.sub("dir="+bad_dir, "dir="+good_dir, url)
+
 ################################################################################
 def parse_file(f_name, verbose=False):
 
@@ -103,16 +118,35 @@ def parse_file(f_name, verbose=False):
 	# file metadata
 	date = get_date_from_fname(f_name)
 	print 'INFO: parsing', f_name, '(', date, ')'
+
+	# simplify file name for url creation
 	f_name = re.sub(r'\.\./data/fixie/', '', f_name)
+
+	# arbitrary cutoff to determine archive and working directories
+	rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
+	if date < rolling_cutoff:
+  		f_dir = "a"
+	else:
+  		f_dir = "w"
+
+  	# format the url
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (f_name, f_dir)
+	
+	# now lets check urls that fall within 15 days before and after our rolling cutoff
+	check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
+	check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
+	if date > check_cutoff_start and date < check_cutoff_end:
+		url = check_fixie_url(url)
+
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
-		dfs[table_index] = parse_table(table, date, f_name, verbose=verbose)
+		dfs[table_index] = parse_table(table, date, url, verbose=verbose)
 
 	return dfs
 
 ################################################################################
-def parse_table(table, date, f_name, verbose=False):
+def parse_table(table, date, url, verbose=False):
 
 	# table defaults
 	t4_total_count = 0
@@ -130,15 +164,6 @@ def parse_table(table, date, f_name, verbose=False):
 		two_line_delta = 1
 	else:
 		two_line_delta = -1
-
-	# hack to estimate the cutoff between archive and working directory
-	# these are checked and updated daily by update_urls.py
-	if date < datetime.datetime.now().date() - datetime.timedelta(days=50):
-  		f_dir = "a"
-	else:
-  		f_dir = "w"
-
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (f_name, f_dir)
 
 	parsed_table = []
 	for line in table:
