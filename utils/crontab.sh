@@ -4,3 +4,4 @@
 45 00,02,13,17 * * * cd /home && sh tweet.sh random_item
 30 11,15,22 * * * cd /home && sh tweet.sh random_comparison
 01 8 * * * cd /home/utils/ && sh reset_data.sh
+
