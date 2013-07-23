@@ -21,6 +21,9 @@ twitter/api.yml
 twitter/*.pyc
 bitly.yml
 
+#gmail tets
+gmail.yml
+
 # ScraperWiki box
 .bash_history
 .lesshst
