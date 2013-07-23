@@ -15,6 +15,12 @@ T4_USE_ITEMS = [
 	'Federal Reserve Account Depositaries'
 ]
 
+ERRANT_FOOTNOTE_PATTERNS = [p for p in open("../parser/errant_footnote_patterns.txt").read().split('\n') if p is not '']
+
+################################################################################
+def is_errant_footnote(line):
+	return any([re.search(p, line, flags=re.IGNORECASE) for p in ERRANT_FOOTNOTE_PATTERNS])
+
 ################################################################################
 def normalize_fields(text, table, field):
 	table_lookup = NORMALIZE_FIELD_TABLE[table]
@@ -163,10 +169,9 @@ def parse_table(table, date, verbose=False):
 			continue
 
 		# HARD CODED HACKS
-
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
-			continue
+		    continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
 			break
@@ -176,30 +181,7 @@ def parse_table(table, date, verbose=False):
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
 			continue
-		# comment about food stamp program euphemism
-		elif re.search(r'\s*The Food Stamp Program has been renamed', line, flags=re.IGNORECASE):
-			break
-		# final footer of file
-		elif re.search(r"\s+This statement summarizes\s+the United States Treasury's cash and debt", line):
-			break
-		# final footer of file -- above line should make this redundant! but just in case
-		elif re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
-			break
-		elif re.search(r'.*were no longer reported as.*', line):
-			break
-		elif re.search(r'.*leaving a portion of the funds.*', line):
-			break
-		elif re.search(r'.*not include million offset .*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*began a pilot program for the repurchase.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*and million for the fiscal year to date for.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*dated December.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*Treasury reduced the amount of Debt Subject.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*ery Act of Public Law \( \) These long term nonmarketable.*', line, flags=re.IGNORECASE):
+		elif is_errant_footnote(line):
 			break
 
 		# skip table header rows
