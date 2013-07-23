@@ -117,7 +117,6 @@ def parse_file(f_name, verbose=False):
 
 	# file metadata
 	date = get_date_from_fname(f_name)
-	print 'INFO: parsing', f_name, '(', date, ')'
 
 	# simplify file name for url creation
 	f_name = re.sub(r'\.\./data/fixie/', '', f_name)
@@ -138,6 +137,7 @@ def parse_file(f_name, verbose=False):
 	if date > check_cutoff_start and date < check_cutoff_end:
 		url = check_fixie_url(url)
 
+	print 'INFO: parsing', f_name, '(', date, ')'
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
