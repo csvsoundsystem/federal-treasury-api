@@ -5,7 +5,9 @@
 .Rapp.history
 .gitconfig
 .selected_editor
-
+.node-gyp/
+.npm/
+.gnupg/
 # Data
 data/fixie/
 data/daily_csv/
@@ -28,3 +30,8 @@ env/
 .sqlite_history
 .twitter.yml
 .smtpcli.conf
+#schema builder
+schema-builder/node_modules
+
+# AWS
+.s3cfg
