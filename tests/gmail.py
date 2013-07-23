@@ -16,16 +16,13 @@ def gmail(test_func):
       session.starttls()
       session.login(c['account'], c['password'])
       
-      email_from = c['account'] + "@gmail.com"
-      email_to = c['account'] + "+treasuryiotests@gmail.com"
-
-      headers = "\r\n".join(["from: " + email_from,
+      headers = "\r\n".join(["from: " + c['account'],
                              "subject: " + c['subject'],
-                             "to: " + email_to,
+                             "to: " + c['account'],
                              "mime-version: 1.0",
                              "content-type: text/html"])
       content = headers + "\r\n\r\n" + test_func()
       # body_of_email can be plaintext or html!
-      session.sendmail(email_from, email_to, content)
+      session.sendmail(c['account'], c['account'], content)
       
     return send_gmail()
