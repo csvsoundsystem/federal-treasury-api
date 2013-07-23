@@ -103,7 +103,7 @@ def parse_file(f_name, verbose=False):
 	# file metadata
 	date = get_date_from_fname(f_name)
 	print 'INFO: parsing', f_name, '(', date, ')'
-
+	f_name = re.sub(r'\.\./data/fixie/', '', f_name)
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
@@ -138,7 +138,7 @@ def parse_table(table, date, f_name, verbose=False):
 	else:
   		f_dir = "w"
 
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?%s.txt&dir=%s" % (f_name, f_dir)
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s.txt&dir=%s" % (f_name, f_dir)
 
 	parsed_table = []
 	for line in table:
