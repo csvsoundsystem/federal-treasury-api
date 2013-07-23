@@ -67,6 +67,11 @@ Install dependencies.
 
     pip install -r requirements.pip
 
+Enable the git post-merge hook.
+
+    cd .git/hooks
+    ln -s ../../utils/post-merge .
+
 ### POSIX
 This one command downloads the (new) fixies and converts them to an SQLite3 database.
 
