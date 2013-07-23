@@ -14,9 +14,17 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
     't6': "t6: Income Tax Refunds Issued"
    },
    table_schema = {
-      "tables":[
-
-      ],
+      "tables":{ 
+        "t1": {},
+        "t2": {},
+        "t3": {},
+        "t3a": {},
+        "t3b": {},
+        "t3c": {},
+        "t4": {},
+        "t5": {},
+        "t6": {},
+      },
       "types":[
         {
           "name":"TEXT",
@@ -115,27 +123,29 @@ function cleanPragmaObj(json){
 	return clean_json;
 };
 
-function sortAndWriteToFile(tables_arr){
+function writeToFile(table_schema){
   console.log('Writing file...');
-  var sorted_tables_arr = _.sortBy(tables_arr, function(table) { return table.name}); // Sort the final json so the tables are in order
-  table_schema.tables = sorted_tables_arr;
+  // var sorted_tables_arr = _.sortBy(tables_arr, function(table) { return table.name}); // Sort the final json so the tables are in order
+  // table_schema.tables = sorted_tables_arr;
 
 	fs.writeFileSync('table_schema.json', JSON.stringify(table_schema) );
 };
-var sortAndWriteToFile_after = _.after(_.size(table_names), sortAndWriteToFile); // Only invoked after all the tables have been processed
+
+var writeToFile_after = _.after(_.size(table_names), writeToFile); // Only invoked after all the tables have been processed
 
 function treasuryIo(query){
   return $.ajax({
     url: 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q='+query
-
   });
 };
 
 
 function addValuesToColumn(obj_to_push){
-  tables.push(obj_to_push);
-  console.log('Appending ', obj_to_push.name)
-  sortAndWriteToFile_after(tables);
+  var table_name = obj_to_push.name;
+  table_schema.tables[table_name] = obj_to_push;
+
+  console.log('Adding', obj_to_push.name);
+  writeToFile_after(table_schema);
 };
 
 
@@ -151,7 +161,7 @@ for (var table_name in table_names){
 				      table_obj = {
 				      	"label": table_names[table_name],
 				      	"name" : table_name,
-                "columns": []
+                "columns": {}
 				      };
 
           var addValuesToColumn_after = _.after(_.size(name_types), addValuesToColumn); // Only invoked after all of the columns in a given table are processed
@@ -193,7 +203,7 @@ for (var table_name in table_names){
                   };
 
 					  			name_type['values'] = sorted_values_with_blank
-					  			table_obj.columns.push(name_type);
+					  			table_obj.columns[name_type.name] = name_type;
                   addValuesToColumn_after(table_obj);
 
                 });
