@@ -16,7 +16,7 @@ def query(sql):
     return r.json()
 
 def gen_queries(params):
-    sql_pattern = "SELECT \'%s\' FROM \'%s\' WHERE date = (SELECT MAX(date) FROM \'%s\') AND \'%s\' IS NULL"
+    sql_pattern = "SELECT \'%s\' FROM \'%s\' WHERE \'%s\' IS NULL"
 
     queries = defaultdict(list)
     for t, param in params.iteritems():
@@ -26,7 +26,7 @@ def gen_queries(params):
                     'table': t,
                     'field': f,
                     'value': v,
-                    'query': sql_pattern % (f, t, t, v)
+                    'query': sql_pattern % (f, t, v)
                 })
     return queries
 
@@ -68,19 +68,29 @@ def null_tests():
                      """ % today
 
         postscript = """
+                    <p> The parameters for these tests can be set in: \r\n 
+                    https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/null_test_params.json
+                    </p> 
                      <p> xoxo, </p>
                      <p> \t treasury.io/</p>
                      """ 
 
-        return salutation + "<br></br>".join(filtered_msgs) + postscript
+        msq =  salutation + "<br></br>".join(filtered_msgs) + postscript
+        print "EMAIL: %s" % msg
+        return msg
 
     else:
-        return   """
+        msg =  """
                 <p>Hello,</p> 
-                <p> There are no <u>relevant</u> null values in the treasury.io database at <em>%s</em></p> 
+                <p> There are no relevant null values in the treasury.io database at <em>%s</em></p>
+                <p> The parameters for these tests can be set in: \r\n 
+                https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/null_test_params.json
+                </p> 
                 <p> xoxo, </p>
                 <p> \t treasury.io/</p>
                 """ % today
+        print "EMAIL: %s" % msg
+        return msg
 
             
 

@@ -66,7 +66,7 @@ def is_it_running():
         return msg
 
 if __name__ == '__main__':
-    try:
-        is_it_running()
-    except TypeError:
-        pass
+  try:
+      is_it_running()
+  except TypeError:
+      pass

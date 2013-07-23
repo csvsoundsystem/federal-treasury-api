@@ -20,7 +20,7 @@ def gmail(test_func):
       email_to = c['account'] + "+treasuryiotests@gmail.com"
 
       headers = "\r\n".join(["from: " + email_from,
-                             "subject: " + 'hello from treasury.io (tests)',
+                             "subject: " + c['subject'],
                              "to: " + email_to,
                              "mime-version: 1.0",
                              "content-type: text/html"])

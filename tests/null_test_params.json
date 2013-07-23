@@ -64,7 +64,7 @@
     },
     "t5": {         
         "fields" : [
-            "balance_transactions   "
+            "balance_transactions"
             ],
         "values" : [
             "depositary_type_a ",
