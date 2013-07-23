@@ -150,6 +150,7 @@ function addValuesToColumn(obj_to_push){
 
 
 for (var table_name in table_names){
+  console.log('\nGenerating table schema and pushing to s3\n')
 	if (_.has(table_names, table_name)){
 
     // Get a table scheme for each table, use a closure becaue it's done asynchronously and you need to know what table this ajax call refers to

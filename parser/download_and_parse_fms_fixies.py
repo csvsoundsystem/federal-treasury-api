@@ -41,15 +41,14 @@ end_date = datetime.date.today()
 download_fms_fixies.download_fixies(start_date, end_date)
 
 # check all downloaded fixies against all parsed csvs
-downloaded_files = set([fixie.split('.')[0] for fixie in os.listdir(FIXIE_DIR)
-	if fixie.endswith('.txt')])
+downloaded_files = set([fixie.split('.')[0] for fixie in os.listdir(FIXIE_DIR) if fixie.endswith('.txt')])
 def parsed_files():
 	return set([csv.split('_')[0] for csv in os.listdir(DAILY_CSV_DIR) if csv.endswith('.csv')])
 
 
 ## PARSE! #####################################################################
 # fixies that have not yet been parsed into csvs
-new_files = sorted(list(downloaded_files.difference(parsed_files())))
+new_files = reversed(sorted(list(downloaded_files.difference(parsed_files()))))
 
 # parse all teh fixies!
 for f in new_files:

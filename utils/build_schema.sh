@@ -9,6 +9,8 @@ fi
 git checkout master
 git pull origin master
 
-# tweet
-cd ./twitter
-python tweetbot.py -t $1
+(
+  cd ../schema-builder
+  node schema-builder.js
+  s3cmd put table_schema.json s3://treasury.io/table_schema.json
+)
