@@ -8,6 +8,7 @@
 .node-gyp/
 .npm/
 .gnupg/
+
 # Data
 data/fixie/
 data/daily_csv/
@@ -30,8 +31,10 @@ env/
 .sqlite_history
 .twitter.yml
 .smtpcli.conf
+
 #schema builder
 schema-builder/node_modules
+schema-builder/table_schema.json
 
 # AWS
 .s3cfg
