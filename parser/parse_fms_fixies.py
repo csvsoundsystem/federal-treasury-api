@@ -138,7 +138,7 @@ def parse_table(table, date, f_name, verbose=False):
 	else:
   		f_dir = "w"
 
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s.txt&dir=%s" % (f_name, f_dir)
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (f_name, f_dir)
 
 	parsed_table = []
 	for line in table:
