@@ -89,7 +89,7 @@ def check_fixie_url(url):
 		return url
 	else:
 		# what directory are we in?
-		bad_dir = re.search('.*dir=([a-z])$', url).group(1)
+		bad_dir = re.search('.*dir=([aw])$', url).group(1)
 		if bad_dir == 'a':
 			good_dir = 'w'
 		elif bad_dir == 'w':
