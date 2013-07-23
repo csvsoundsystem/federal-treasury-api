@@ -13,4 +13,5 @@ git pull origin master
   cd ../schema-builder
   node schema-builder.js
   s3cmd put table_schema.json s3://treasury.io/table_schema.json
+  s3cmd setacl s3://treasury.io/ --acl-public --recursive
 )
