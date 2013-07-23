@@ -76,7 +76,6 @@ def request_fixie(fname):
 
 ################################################################################
 def request_all_fixies(fnames):
-
 	for fname in reversed(fnames):
 		alt_fnames = [fname]
 		alt_fnames.extend([fname[:-5] + i +'.txt' for i in ['1', '2', '3']])
@@ -96,7 +95,6 @@ def request_all_fixies(fnames):
 
 	return fnames
 
-
 ################################################################################
 def download_fixies(start_date, end_date=None):
 	start_date = datetime.datetime.strptime(str(start_date), '%Y-%m-%d').date()
@@ -111,7 +109,6 @@ def download_fixies(start_date, end_date=None):
 	good_dates = remove_weekends_and_holidays(all_dates)
 	fnames = [''.join([datetime.datetime.strftime(date, '%y%m%d'), '00.txt']) for date in good_dates]
 	request_all_fixies(fnames)
-	return fnames
 
 ################################################################################
 if __name__ == '__main__':

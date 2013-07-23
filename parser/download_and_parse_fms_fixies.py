@@ -38,7 +38,7 @@ else:
 end_date = datetime.date.today()
 
 # download all teh fixies!
-fnames = download_fms_fixies.download_fixies(start_date, end_date)
+download_fms_fixies.download_fixies(start_date, end_date)
 
 # check all downloaded fixies against all parsed csvs
 downloaded_files = set([fixie.split('.')[0] for fixie in os.listdir(FIXIE_DIR)

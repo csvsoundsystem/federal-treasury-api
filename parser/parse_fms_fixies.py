@@ -107,12 +107,12 @@ def parse_file(f_name, verbose=False):
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
-		dfs[table_index] = parse_table(table, date, verbose=verbose)
+		dfs[table_index] = parse_table(table, date, f_name, verbose=verbose)
 
 	return dfs
 
 ################################################################################
-def parse_table(table, date, verbose=False):
+def parse_table(table, date, f_name, verbose=False):
 
 	# table defaults
 	t4_total_count = 0
@@ -131,13 +131,14 @@ def parse_table(table, date, verbose=False):
 	else:
 		two_line_delta = -1
 
-	# hack to figure out the url w/o having to make a request
-	if date < datetime.date(2013, 5, 16):
-		f_dir = "a"
+	# hack to estimate the cutoff between archive and working directory
+	# these are checked and updated daily by update_urls.py
+	if date < datetime.datetime.now().date() - datetime.timedelta(days=50):
+  		f_dir = "a"
 	else:
-		f_dir = "w"
+  		f_dir = "w"
 
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s00.txt&dir=%s" % (datetime.date.strftime(date, '%y%m%d'), f_dir)
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?%s.txt&dir=%s" % (f_name, f_dir)
 
 	parsed_table = []
 	for line in table:
