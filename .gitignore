@@ -32,6 +32,7 @@ env/
 .smtpcli.conf
 #schema builder
 schema-builder/node_modules
+schema-builder/table_schema.json
 
 # AWS
 .s3cfg
