@@ -38,6 +38,7 @@ def expected_data():
 
 @email
 def is_it_running():
+    print "\nINFO: Testing whether the server is running as it should\n"
     observed = observed_data()
     expected = expected_data()
     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -66,7 +67,6 @@ def is_it_running():
         return subject, msg
 
 if __name__ == '__main__':
-    print "\nINFO: Testing whether the server is running as it should\n"
     try:
         is_it_running()
     except TypeError:

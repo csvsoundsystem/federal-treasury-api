@@ -40,6 +40,7 @@ def format_err_msg(q, results):
         return ""
 @email
 def null_tests():
+    print "\nINFO: Testing for null values in the dataset\n"
     # setup
     params = json.load(open('null_test_params.json'))
     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
@@ -94,7 +95,6 @@ def null_tests():
             
 
 if __name__ == '__main__':
-    print "\nINFO: Testing for null values in the dataset\n"
     try:
         null_tests()
     except TypeError:
