@@ -37,15 +37,15 @@ def parse_query_results(q, results):
         for i in q['ignore']:
             if q['field']==i.keys()[0]:
                 print "IGNORING: %s" % i.values()[0]
-                return [ r[q['field']] for r in results if r[q['field']]!=i.values()[0]]
+                return list(set([r[q['field']] for r in results if r[q['field']]!=i.values()[0]]))
     else:
-        return [r[q['field']] for r in results if r[q['field']] is not None]
+        return list(set([r[q['field']] for r in results if r[q['field']] is not None]))
 
 def format_err_msg(q, results):
-    null_strings = "\n".join(list(set(results)))
+    null_strings = "<br></br>\t".join(results)
     if null_strings is not None and len(results)>0:
         return """
-            <p> These are the current values of %s in <em>%s</em> where %s is NULL:</p>
+            <strong><p>These are the current values of <em>%s</em> in <em>%s</em> where <em>%s</em> is NULL:</p></strong>
             <p>%s</p> 
             """ % (q['field'], q['table'], q['value'], null_strings)
     else:
@@ -58,7 +58,7 @@ def gen_msgs(msgs):
     if len(msgs)>0:
         salutation = """ 
                      <p>Hello,</p> 
-                     <p>here are all the null values in the treasury.io database at 
+                     <p>Here are all the null values in the treasury.io database at 
                         <em>%s</em>:
                      </p>
                      """ % today
@@ -79,7 +79,7 @@ def gen_msgs(msgs):
         msg =  """
                 <p>Hello,</p> 
                 <p> There are no relevant null values in the treasury.io database at <em>%s</em></p>
-                <p> The parameters for these tests can be set in: \r\n 
+                <p> The parameters for these tests can be set in: <br></br>
                 https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/null_test_params.json
                 </p> 
                 <p> xoxo, </p>
