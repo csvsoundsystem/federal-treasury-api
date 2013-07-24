@@ -3,12 +3,10 @@
 import json
 import datetime
 from requests import get
-from gmail import gmail
+from postmark import email
 from collections import defaultdict
 # null tests
 # are there null values in any of the tables today?
-
-
 
 def query(sql):
     url = 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql'
@@ -40,13 +38,14 @@ def format_err_msg(q, results):
             """ % (q['field'], q['table'], q['value'], null_strings)
     else:
         return ""
-@gmail
+@email
 def null_tests():
     # setup
     params = json.load(open('null_test_params.json'))
     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    queries = gen_queries(params)
+    subject = "[treasury.io tests] null_tests.py | %s" % today
 
+    queries = gen_queries(params)
     # generate error messages
     msg_list = []
     for t, qs in queries.iteritems():
@@ -72,12 +71,12 @@ def null_tests():
                     https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/null_test_params.json
                     </p> 
                      <p> xoxo, </p>
-                     <p> \t treasury.io/</p>
+                     <p> \t treasury.io</p>
                      """ 
 
         msq =  salutation + "<br></br>".join(filtered_msgs) + postscript
         print "EMAIL: %s" % msg
-        return msg
+        return subject, msg
 
     else:
         msg =  """
@@ -87,10 +86,10 @@ def null_tests():
                 https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/null_test_params.json
                 </p> 
                 <p> xoxo, </p>
-                <p> \t treasury.io/</p>
+                <p> \t treasury.io</p>
                 """ % today
         print "EMAIL: %s" % msg
-        return msg
+        return subject, msg
 
             
 

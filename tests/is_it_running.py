@@ -4,7 +4,7 @@ import json
 import datetime
 from requests import get
 from optparse import OptionParser
-from gmail import gmail
+from postmark import email
 
 
 # gmail helper
@@ -36,11 +36,12 @@ def expected_data():
         adate -= datetime.timedelta(days=1)
     return date_pair(adate)
 
-@gmail
+@email
 def is_it_running():
     observed = observed_data()
     expected = expected_data()
     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    subject = "[treasury.io tests] is_it_running.py | %s" % today
 
    #if observed['days'] > expected['days']:
    #    print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
@@ -49,21 +50,21 @@ def is_it_running():
         msg =   """
                 <p> Unless <em>%s</em> is a holiday, something is up !</p> 
                 <p> xoxo, </p>
-                <p> \t treasury.io/ </p>
+                <p> \t treasury.io</p>
                 """ % expected['date']
 
         print "EMAIL: %s" % msg
-        return msg
+        return subject, msg
         
     else:
         msg =   """
                 <p> All seems well at <em>%s</em></p> 
                 <p> xoxo, </p>
-                <p> \t treasury.io/</p>
+                <p> \t treasury.io</p>
                 """ % today
 
         print "EMAIL: %s" % msg
-        return msg
+        return subject, msg
 
 if __name__ == '__main__':
   try:
