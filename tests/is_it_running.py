@@ -43,12 +43,10 @@ def is_it_running():
     today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     subject = "[treasury.io tests] is_it_running.py | %s" % today
 
-   #if observed['days'] > expected['days']:
-   #    print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
-   #el
-    if observed['date'] < expected['date']:
+    if (expected['days']  - observed['days']) > 3:
         msg =   """
-                <p> Unless <em>%s</em> is a holiday, something is up !</p> 
+                <p> Hello, </p>
+                <p> The parser last ran on <em>%s.</em> Something is up!</p> 
                 <p> xoxo, </p>
                 <p> \t treasury.io</p>
                 """ % expected['date']
@@ -58,6 +56,7 @@ def is_it_running():
         
     else:
         msg =   """
+                <p> Hello, </p>
                 <p> All seems well at <em>%s</em></p> 
                 <p> xoxo, </p>
                 <p> \t treasury.io</p>
@@ -67,7 +66,4 @@ def is_it_running():
         return subject, msg
 
 if __name__ == '__main__':
-  try:
-      is_it_running()
-  except TypeError:
-      pass
+    is_it_running()
