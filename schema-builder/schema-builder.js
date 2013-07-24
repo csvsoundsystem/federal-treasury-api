@@ -148,7 +148,6 @@ function addValuesToColumn(obj_to_push){
   writeToFile_after(table_schema);
 };
 
-console.log('\nGenerating table schema and pushing to s3\n')
 for (var table_name in table_names){
 	if (_.has(table_names, table_name)){
 
