@@ -81,6 +81,9 @@ def gen_msgs(msgs):
                 <p> There are no relevant null values in the treasury.io database at <em>%s</em></p>
                 <p> The parameters for these tests can be set in: <br></br>
                 https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/null_test_params.json
+                </p>
+                <p> Additional errant footnotes to remove may be placed here: <br></br>
+                https://github.com/csvsoundsystem/federal-treasury-api/blob/master/parser/errant_footnote_patterns.txt
                 </p> 
                 <p> xoxo, </p>
                 <p> \t treasury.io</p>
