@@ -42,7 +42,7 @@ def parse_query_results(q, results):
         return [r[q['field']] for r in results if r[q['field']] is not None]
 
 def format_err_msg(q, results):
-    null_strings = "\n".join(results)
+    null_strings = "\n".join(list(set(results)))
     if null_strings is not None and len(results)>0:
         return """
             <p> These are the current values of %s in <em>%s</em> where %s is NULL:</p>
