@@ -15,20 +15,21 @@ git pull origin master
   python download_and_parse_fms_fixies.py
   cd ..
 )
-echo "Waiting for Database to update before proceeding\r\n"
+echo "INFO: Waiting for Database to update before proceeding\r\n"
 sleep 20
-echo "Running tests\r\n"
+echo "INFO: Running tests\r\n"
 (
   cd ./tests
   python is_it_running.py
   python null_tests.py
 )
-echo "Building schema_table.json and uploading to S3\r\n"
+echo "INFO: Building schema_table.json \r\n"
 (
   cd ./schema-builder
   node schema-builder.js
+  echo "INFO: Uploading schema_table.json to s3\r\n"
   s3cmd put table_schema.json s3://treasury.io/table_schema.json
   s3cmd setacl s3://treasury.io/ --acl-public --recursive
   cd ..
 )
-echo "\r\nDone"
+echo "\r\nDone!\r\n"
