@@ -1,3 +1,3 @@
 #!/bin/sh
 
-curl http://treasury.io.s3.amazonaws.com/table_schema.json > http/table_schema.json
+curl http://treasury.io.s3.amazonaws.com/table_schema.json > schema-builder/table_schema.json
