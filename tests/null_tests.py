@@ -75,7 +75,7 @@ def null_tests():
                      """ 
 
         msq =  salutation + "<br></br>".join(filtered_msgs) + postscript
-        print "EMAIL: %s" % msg
+        print "\nEMAIL: %s" % msg
         return "ERROR: " + subject, msg
 
     else:
@@ -88,13 +88,13 @@ def null_tests():
                 <p> xoxo, </p>
                 <p> \t treasury.io</p>
                 """ % today
-        print "EMAIL: %s" % msg
+        print "\nEMAIL: %s" % msg
         return subject, msg
 
             
 
 if __name__ == '__main__':
-    print "Testing for null values in the dataset"
+    print "\nINFO: Testing for null values in the dataset\n"
     try:
         null_tests()
     except TypeError:

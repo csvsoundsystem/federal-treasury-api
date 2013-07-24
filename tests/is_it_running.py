@@ -51,8 +51,8 @@ def is_it_running():
                 <p> \t treasury.io</p>
                 """ % expected['date']
 
-        print "EMAIL: %s" % msg
-        return subject, msg
+        print "\nEMAIL: %s" % msg
+        return "ERROR: " + subject, msg
         
     else:
         msg =   """
@@ -62,10 +62,11 @@ def is_it_running():
                 <p> \t treasury.io</p>
                 """ % today
 
-        print "EMAIL: %s" % msg
+        print "\nEMAIL: %s" % msg
         return subject, msg
 
 if __name__ == '__main__':
+    print "\nINFO: Testing whether the server is running as it should\n"
     try:
         is_it_running()
     except TypeError:
