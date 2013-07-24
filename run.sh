@@ -13,13 +13,13 @@ git pull origin master
 (
   cd ./parser
   python download_and_parse_fms_fixies.py
-  cd ..
 )
 echo "Waiting for Database to update before rebuilding schema\r\n"
 sleep 20
 (
-  cd ./utils
-  sh build_schema.sh
-  cd ..
+  cd ../schema-builder
+  node schema-builder.js
+  s3cmd put table_schema.json s3://treasury.io/table_schema.json
+  s3cmd setacl s3://treasury.io/ --acl-public --recursive
 )
 echo "\r\nDone"
