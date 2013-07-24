@@ -21,8 +21,8 @@ twitter/api.yml
 twitter/*.pyc
 bitly.yml
 
-#gmail tets
-gmail.yml
+#postmark tests
+postmark.yml
 
 # ScraperWiki box
 .bash_history
