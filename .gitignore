@@ -15,6 +15,7 @@ data/daily_csv/
 data/lifetime_csv/
 data/treasury_data.db
 data/treasury_data.db-journal
+logs/
 
 # tweet bot
 twitter/api.yml
