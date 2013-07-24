@@ -94,4 +94,7 @@ def null_tests():
             
 
 if __name__ == '__main__':
-    null_tests()
+    try:
+        null_tests()
+    except TypeError:
+        pass
