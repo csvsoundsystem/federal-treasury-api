@@ -8,13 +8,16 @@ from collections import defaultdict
 # null tests
 # are there null values in any of the tables today?
 
+today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+subject = "[treasury.io tests] null_tests.py | %s" % today
+
 def query(sql):
     url = 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql'
     r = get(url, params = {'q': sql})
     return r.json()
 
 def gen_queries(params):
-    sql_pattern = "SELECT \'%s\' FROM \'%s\' WHERE \'%s\' IS NULL"
+    sql_pattern = "SELECT %s FROM %s WHERE %s IS NULL"
 
     queries = defaultdict(list)
     for t, param in params.iteritems():
@@ -23,13 +26,22 @@ def gen_queries(params):
                 queries[t].append({
                     'table': t,
                     'field': f,
+                    'ignore': param['ignore'] if param.has_key("ignore") else [],
                     'value': v,
                     'query': sql_pattern % (f, t, v)
                 })
     return queries
 
+def parse_query_results(q, results):
+    if len(q['ignore']) > 0:
+        for i in q['ignore']:
+            if q['field']==i.keys()[0]:
+                print "IGNORING: %s" % i.values()[0]
+                return [ r[q['field']] for r in results if r[q['field']]!=i.values()[0]]
+    else:
+        return [r[q['field']] for r in results if r[q['field']] is not None]
+
 def format_err_msg(q, results):
-    results = [r for r in results if r is not None]
     null_strings = "\n".join(results)
     if null_strings is not None and len(results)>0:
         return """
@@ -38,28 +50,12 @@ def format_err_msg(q, results):
             """ % (q['field'], q['table'], q['value'], null_strings)
     else:
         return ""
-@email
-def null_tests():
-    print "\nINFO: Testing for null values in the dataset\n"
-    # setup
-    params = json.load(open('null_test_params.json'))
-    today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    subject = "[treasury.io tests] null_tests.py | %s" % today
 
-    queries = gen_queries(params)
-    # generate error messages
-    msg_list = []
-    for t, qs in queries.iteritems():
-        for q in qs:
-            print "QUERY: %s" % q['query']
-            results = query(q['query'])
-            msg_list.append(format_err_msg(q, results))
+def gen_msgs(msgs):
+        # generate emails
+    
 
-    # filter generated messages
-    filtered_msgs = [m for m in msg_list if m is not None and m is not ""]
-
-    # generate emails
-    if len(filtered_msgs)>0:
+    if len(msgs)>0:
         salutation = """ 
                      <p>Hello,</p> 
                      <p>here are all the null values in the treasury.io database at 
@@ -75,7 +71,7 @@ def null_tests():
                      <p> \t treasury.io</p>
                      """ 
 
-        msq =  salutation + "<br></br>".join(filtered_msgs) + postscript
+        msg =  salutation + "<br></br>".join(msgs) + postscript
         print "\nEMAIL: %s" % msg
         return "ERROR: " + subject, msg
 
@@ -92,7 +88,25 @@ def null_tests():
         print "\nEMAIL: %s" % msg
         return subject, msg
 
-            
+@email
+def null_tests():
+    print "\nINFO: Testing for null values in the dataset\n"
+    # setup
+    params = json.load(open('null_test_params.json'))
+    queries = gen_queries(params)
+    # generate error messages
+    msg_list = []
+    for t, qs in queries.iteritems():
+        for q in qs:
+            print "QUERY: %s" % q['query']
+            results = query(q['query'])
+            parsed_results = parse_query_results(q, results)
+            msg_list.append(format_err_msg(q, parsed_results))
+
+    # filter generated messages
+    filtered_msgs = [m for m in msg_list if m is not None and m is not ""]
+
+    return gen_msgs(filtered_msgs)
 
 if __name__ == '__main__':
     try:

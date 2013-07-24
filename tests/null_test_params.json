@@ -45,6 +45,10 @@
         "fields" : [
             "item"
         ],
+        "ignore": [
+            {"item": "Statutory Debt Limit"}
+
+        ],
         "values" : [
             "close_today",
             "open_today",
