@@ -98,15 +98,15 @@ def check_fixie_url(url):
 
 ################################################################################
 def parse_file(f_name, verbose=False):
-
+	f_name = "../data/fixie/13053100.txt"
 	f = open(f_name, 'rb').read()
 
 	#raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
-	raw_tables = re.split(r'(\s+TABLE[\s_]+[\w_-]+.*)', f)
+	raw_tables = re.split(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', f)
 	tables = []
 	for raw_table in raw_tables[1:]:
 		#if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
-		if re.search(r'\s+TABLE[\s_]+[\w_-]+.*', raw_table):
+		if re.search(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', raw_table):
 			table_name = raw_table
 			# fix malformed fixie table names, BLERGH GOV'T!
 			table_name = re.sub(r'_+', ' ', table_name)
@@ -119,24 +119,24 @@ def parse_file(f_name, verbose=False):
 	date = get_date_from_fname(f_name)
 
 	# simplify file name for url creation
-	f_name = re.sub(r'\.\./data/fixie/', '', f_name)
+	new_f_name = re.sub(r'\.\./data/fixie/', '', f_name)
 
 	# arbitrary cutoff to determine archive and working directories
 	rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
 	if date < rolling_cutoff:
-  		f_dir = "a"
+		f_dir = "a"
 	else:
-  		f_dir = "w"
+		f_dir = "w"
 
-  	# format the url
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (f_name, f_dir)
+	# format the url
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_f_name, f_dir)
 	
 	# now lets check urls that fall within 15 days before and after our rolling cutoff
 	check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
 	check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
 	if date > check_cutoff_start and date < check_cutoff_end:
 		url = check_fixie_url(url)
-
+	verbose = False
 	print 'INFO: parsing', f_name, '(', date, ')'
 	dfs = {}
 	for table in tables:
