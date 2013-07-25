@@ -98,7 +98,6 @@ def check_fixie_url(url):
 
 ################################################################################
 def parse_file(f_name, verbose=False):
-	f_name = "../data/fixie/13053100.txt"
 	f = open(f_name, 'rb').read()
 
 	#raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
