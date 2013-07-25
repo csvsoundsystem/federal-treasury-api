@@ -10,4 +10,3 @@ treasuryio
 pystmark
 bitly_api
 git+https://github.com/tlevine/smtpcli.git
-s3cmd

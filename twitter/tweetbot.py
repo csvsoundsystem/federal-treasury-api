@@ -294,8 +294,9 @@ def dist_to_debt_ceiling_tweet():
                    FROM t3c a
                    INNER JOIN t3c b ON a.date = b.date
                    WHERE a.item = "Statutory Debt Limit" AND b.item = "Total Public Debt Subject to Limit"
+                   AND a.year = "2008"
                    ORDER BY a.date DESC
-                   LIMIT 1
+                   LIMIT 100
                 ''')
 
 @tweet
