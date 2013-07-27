@@ -38,11 +38,10 @@ else:
 end_date = datetime.date.today()
 
 # download all teh fixies!
-fnames = download_fms_fixies.download_fixies(start_date, end_date)
+download_fms_fixies.download_fixies(start_date, end_date)
 
 # check all downloaded fixies against all parsed csvs
-downloaded_files = set([fixie.split('.')[0] for fixie in os.listdir(FIXIE_DIR)
-	if fixie.endswith('.txt')])
+downloaded_files = set([fixie.split('.')[0] for fixie in os.listdir(FIXIE_DIR) if fixie.endswith('.txt')])
 def parsed_files():
 	return set([csv.split('_')[0] for csv in os.listdir(DAILY_CSV_DIR) if csv.endswith('.csv')])
 
@@ -138,7 +137,12 @@ TABLES = [
 	},
 ]
 
-connection = sqlite3.connect(os.path.join('..', 'data', 'treasury_data.db'))
+# delete the db and promptly rewrite it from csvs
+print "INFO: building sqlite database"
+db = os.path.join('..', 'data', 'treasury_data.db')
+os.system("rm " + db)
+
+connection = sqlite3.connect(db)
 connection.text_factory = str # bad, but pandas doesn't work otherwise
 
 for table in TABLES:
@@ -152,9 +156,7 @@ for table in TABLES:
 		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d").date())
 		df = df[df.date < table_v_end]
 
-	pandas.io.sql.write_frame(df, '_table_%s' % table['raw-table'], connection)
-	connection.execute('DROP TABLE IF EXISTS "%s";' % table['new-table'])
-	connection.execute('ALTER TABLE "_table_%s" RENAME TO "%s";' % (table['raw-table'], table['new-table']))
+	pandas.io.sql.write_frame(df, table['new-table'], connection)
 
 # Commit
 connection.commit()

@@ -5,6 +5,9 @@
 .Rapp.history
 .gitconfig
 .selected_editor
+.node-gyp/
+.npm/
+.gnupg/
 
 # Data
 data/fixie/
@@ -12,11 +15,15 @@ data/daily_csv/
 data/lifetime_csv/
 data/treasury_data.db
 data/treasury_data.db-journal
+logs/
 
 # tweet bot
 twitter/api.yml
 twitter/*.pyc
 bitly.yml
+
+#postmark tests
+postmark.yml
 
 # ScraperWiki box
 .bash_history
@@ -28,3 +35,10 @@ env/
 .sqlite_history
 .twitter.yml
 .smtpcli.conf
+
+#schema builder
+schema-builder/node_modules
+schema-builder/table_schema.json
+
+# AWS
+.s3cfg

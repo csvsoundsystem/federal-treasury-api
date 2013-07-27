@@ -3,6 +3,7 @@ import json
 import datetime
 import pandas as pd
 import re
+import requests
 
 # Global Vars
 NORMALIZE_FIELD_TABLE = json.load(open("../parser/normalize_field_table.json"))
@@ -14,6 +15,12 @@ T4_USE_ITEMS = [
 	'Federal Reserve Account Total',
 	'Federal Reserve Account Depositaries'
 ]
+
+ERRANT_FOOTNOTE_PATTERNS = [p for p in open("../parser/errant_footnote_patterns.txt").read().split('\n') if p is not '']
+
+################################################################################
+def is_errant_footnote(line):
+	return any([re.search(p, line, flags=re.IGNORECASE) for p in ERRANT_FOOTNOTE_PATTERNS])
 
 ################################################################################
 def normalize_fields(text, table, field):
@@ -75,17 +82,30 @@ def get_footnote(line):
 		return [footnote.group(1), footnote.group(2)]
 	return None
 
+def check_fixie_url(url):
+	print "INFO: checking %s to make sure it's valid" % url
+	r = requests.get(url)
+	if r.status_code==200:
+		return url
+	else:
+		# what directory are we in?
+		bad_dir = re.search('.*dir=([aw])$', url).group(1)
+		if bad_dir == 'a':
+			good_dir = 'w'
+		elif bad_dir == 'w':
+			good_dir = 'a'
+		return re.sub("dir="+bad_dir, "dir="+good_dir, url)
+
 ################################################################################
 def parse_file(f_name, verbose=False):
-
 	f = open(f_name, 'rb').read()
 
 	#raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
-	raw_tables = re.split(r'(\s+TABLE[\s_]+[\w_-]+.*)', f)
+	raw_tables = re.split(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', f)
 	tables = []
 	for raw_table in raw_tables[1:]:
 		#if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
-		if re.search(r'\s+TABLE[\s_]+[\w_-]+.*', raw_table):
+		if re.search(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', raw_table):
 			table_name = raw_table
 			# fix malformed fixie table names, BLERGH GOV'T!
 			table_name = re.sub(r'_+', ' ', table_name)
@@ -96,17 +116,36 @@ def parse_file(f_name, verbose=False):
 
 	# file metadata
 	date = get_date_from_fname(f_name)
-	print 'INFO: parsing', f_name, '(', date, ')'
 
+	# simplify file name for url creation
+	new_f_name = re.sub(r'\.\./data/fixie/', '', f_name)
+
+	# arbitrary cutoff to determine archive and working directories
+	rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
+	if date < rolling_cutoff:
+		f_dir = "a"
+	else:
+		f_dir = "w"
+
+	# format the url
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_f_name, f_dir)
+	
+	# now lets check urls that fall within 15 days before and after our rolling cutoff
+	check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
+	check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
+	if date > check_cutoff_start and date < check_cutoff_end:
+		url = check_fixie_url(url)
+	verbose = False
+	print 'INFO: parsing', f_name, '(', date, ')'
 	dfs = {}
 	for table in tables:
 		table_index = tables.index(table)
-		dfs[table_index] = parse_table(table, date, verbose=verbose)
+		dfs[table_index] = parse_table(table, date, url, verbose=verbose)
 
 	return dfs
 
 ################################################################################
-def parse_table(table, date, verbose=False):
+def parse_table(table, date, url, verbose=False):
 
 	# table defaults
 	t4_total_count = 0
@@ -124,14 +163,6 @@ def parse_table(table, date, verbose=False):
 		two_line_delta = 1
 	else:
 		two_line_delta = -1
-
-	# hack to figure out the url w/o having to make a request
-	if date < datetime.date(2013, 5, 16):
-		f_dir = "a"
-	else:
-		f_dir = "w"
-
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s00.txt&dir=%s" % (datetime.date.strftime(date, '%y%m%d'), f_dir)
 
 	parsed_table = []
 	for line in table:
@@ -163,10 +194,9 @@ def parse_table(table, date, verbose=False):
 			continue
 
 		# HARD CODED HACKS
-
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
-			continue
+		    continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
 			break
@@ -176,30 +206,7 @@ def parse_table(table, date, verbose=False):
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
 			continue
-		# comment about food stamp program euphemism
-		elif re.search(r'\s*The Food Stamp Program has been renamed', line, flags=re.IGNORECASE):
-			break
-		# final footer of file
-		elif re.search(r"\s+This statement summarizes\s+the United States Treasury's cash and debt", line):
-			break
-		# final footer of file -- above line should make this redundant! but just in case
-		elif re.search(r'\s+SOURCE:\s+Financial\s+Management', line):
-			break
-		elif re.search(r'.*were no longer reported as.*', line):
-			break
-		elif re.search(r'.*leaving a portion of the funds.*', line):
-			break
-		elif re.search(r'.*not include million offset .*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*began a pilot program for the repurchase.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*and million for the fiscal year to date for.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*dated December.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*Treasury reduced the amount of Debt Subject.*', line, re.IGNORECASE):
-			break
-		elif re.search(r'.*ery Act of Public Law \( \) These long term nonmarketable.*', line, flags=re.IGNORECASE):
+		elif is_errant_footnote(line):
 			break
 
 		# skip table header rows

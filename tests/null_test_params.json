@@ -1,0 +1,90 @@
+{
+    "t1": {
+        "fields" : [
+            "account"
+        ],
+        "values" : [
+            "close_today",
+            "open_today",
+            "open_mo",
+            "open_fy"
+        ]
+    },
+    "t2": {
+        "fields" : [
+           "item",
+           "account"
+        ],
+        "values" : [
+            "today",
+            "mtd",
+            "fytd"
+        ]
+    },
+    "t3a": {
+        "fields" : [
+            "item"
+        ],
+        "values" : [
+            "today",
+            "mtd",
+            "fytd"
+        ]
+    },
+    "t3b": {
+        "fields" : [
+            "item"
+        ],
+        "values" : [
+            "today",
+            "mtd",
+            "fytd"
+        ]
+    },
+    "t3c": {
+        "fields" : [
+            "item"
+        ],
+        "ignore": [
+            {"item": "Statutory Debt Limit"}
+
+        ],
+        "values" : [
+            "close_today",
+            "open_today",
+            "open_mo",
+            "open_fy"
+        ]
+    },
+    "t4": {
+        "fields" : [
+            "classification"  
+            ],
+        "values" : [
+            "today",
+            "mtd",
+            "fytd"
+            ]
+    },
+    "t5": {         
+        "fields" : [
+            "balance_transactions"
+            ],
+        "values" : [
+            "depositary_type_a ",
+            "depositary_type_b",
+            "depositary_type_c"
+            ]
+        },
+             
+    "t6": {
+        "fields" : [
+            "classification"  
+        ],
+        "values" : [
+            "today",
+            "mtd",
+            "fytd"
+        ]
+    }
+}

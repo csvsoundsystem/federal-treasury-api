@@ -4,14 +4,17 @@ import json
 import datetime
 from requests import get
 from optparse import OptionParser
+from postmark import email
 
-def load_options():
-    parser = OptionParser()
-    parser.add_option("-t", "--tweet", dest="tweet", default=False,
-                  help="Whether or not to tweet results for test")
-    (options, args) = parser.parse_args()
-    return options
 
+# gmail helper
+
+def query(sql):
+    url = 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql'
+    r = get(url, params = {'q': sql})
+    return r.json()
+
+# is it running?
 def date_pair(date_date):
     return {
         'days': (datetime.date.today() - date_date).days,
@@ -19,11 +22,8 @@ def date_pair(date_date):
     }
 
 def observed_data():
-    url = 'https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql'
     sql = '''SELECT MAX(date) FROM t1;'''
-
-    r = get(url, params = {'q': sql})
-    date_string = json.loads(r.text)[0]['MAX(date)']
+    date_string = query(sql)[0]['MAX(date)']
     date_date = datetime.datetime.strptime(date_string, '%Y-%m-%d').date()
 
     return date_pair(date_date)
@@ -36,17 +36,38 @@ def expected_data():
         adate -= datetime.timedelta(days=1)
     return date_pair(adate)
 
-def gen_test_message():
+@email
+def is_it_running():
+    print "\nINFO: Testing whether the server is running as it should\n"
     observed = observed_data()
     expected = expected_data()
+    today = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    subject = "[treasury.io tests] is_it_running.py | %s" % today
 
-   #if observed['days'] > expected['days']:
-   #    print "The parser last ran on %s. Something is definitely wrong!" % observed['date']
-   #el
-    if observed['date'] < expected['date']:
-        print "Unless %s is a holiday, something is up!" % expected['date']
+    if (expected['days']  - observed['days']) > 3:
+        msg =   """
+                <p> Hello, </p>
+                <p> The parser last ran on <em>%s.</em> Something is up!</p> 
+                <p> xoxo, </p>
+                <p> \t treasury.io</p>
+                """ % expected['date']
+
+        print "\nEMAIL: %s" % msg
+        return "ERROR: " + subject, msg
+        
     else:
-        print "All seems well!"
+        msg =   """
+                <p> Hello, </p>
+                <p> All seems well at <em>%s</em></p> 
+                <p> xoxo, </p>
+                <p> \t treasury.io</p>
+                """ % today
+
+        print "\nEMAIL: %s" % msg
+        return subject, msg
 
 if __name__ == '__main__':
-    gen_test_message()
+    try:
+        is_it_running()
+    except TypeError:
+        pass

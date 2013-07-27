@@ -18,11 +18,5 @@ if [ -d ../data/lifetime_csv ]; then
     rm -r ../data/lifetime_csv/
 fi
 
-if [ -f ../data/treasury_data.db ]; then
-  echo "Removing data/treasury_data.db"
-    rm -r ../data/treasury_data.db
-fi
-
-cd ../parser
-./download_and_parse_fms_fixies.py
-
+cd ./parser
+python parse_and_download_fms_fixies.py

@@ -9,5 +9,6 @@ fi
 git checkout master
 git pull origin master
 
+# tweet
 cd ./twitter
 python tweetbot.py -t $1

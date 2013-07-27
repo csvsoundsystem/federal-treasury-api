@@ -141,7 +141,7 @@ function addValuesToColumn(obj_to_push){
   var table_name = obj_to_push.name;
   table_schema.tables[table_name] = obj_to_push;
 
-  console.log('Adding', obj_to_push.name);
+  console.log('INFO: Adding', obj_to_push.name);
   writeToFile_after(table_schema);
 };
 
@@ -211,7 +211,6 @@ function writeSchema(table_names){
       })(table_name)
     };
   };
-};
 
 writeSchema(table_names);
 
