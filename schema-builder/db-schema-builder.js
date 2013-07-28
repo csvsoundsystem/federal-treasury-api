@@ -6,36 +6,43 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
     db_tables  = {
       "t1": {
         "label": "t1: Operating Cash Balance",
-        "type_parents": null
+        "whitelisted_cols": ["date", "is_total", "account", "close_today", "open_today", "open_mo", "open_fy"],
+        "type_parents": ["is_total"]
       },
       "t2": { 
         "label": "t2: Deposits and Withdrawals",
-        "whitelisted_cols": ["date", "account", "type", "item", "today", "mtd", "fytd"],
-        "type_parents": ["account", "type"]
+        "whitelisted_cols": ["date", "account", "type", "parent_item", "is_total", "item", "today", "mtd", "fytd"],
+        "type_parents": ["account", "type", "is_total"]
       },
       "t3a": { 
         "label": "t3a: Public Debt Transactions",
-        "type_parents": null
+        "whitelisted_cols": ["date", "transaction_type", "debt_type", "parent_item", "is_total", "item", "today", "mtd", "fytd"],
+        "type_parents": ["transaction_type", "debt_type", "is_total"]
       },
       "t3b": { 
         "label": "t3b: Adjustment of Public Debt Transactions",
-        "type_parents": null
+        "whitelisted_cols": ["date", "transaction_type", "parent_item", "is_total", "item", "today", "mtd", "fytd"],
+        "type_parents": ["transaction_type", "is_total"]
       },
       "t3c": { 
         "label": "t3c: Debt Subject to Limit",
-        "type_parents": null
+        "whitelisted_cols": ["date", "is_total", "item", "close_today", "open_today", "open_mo", "open_fy"],
+        "type_parents": ["is_total"]
       },
       "t4": { 
         "label": "t4: Federal Tax Deposits",
-        "type_parents": null
+        "whitelisted_cols": ["date", "type", "is_total", "classification", "today", "mtd", "fytd"],
+        "type_parents": ["type", "is_total"]
       },
         "t5": { 
         "label": "t5: Short-Term Cash Investments",
-        "type_parents": null
+        "whitelisted_cols": ["date", "transaction_type", "is_total", "balance_transactions", "depositary_type_a", "depositary_type_b", "depositary_type_c", "total"],
+        "type_parents": ["transaction_type", "is_total"]
       },
       "t6": { 
         "label": "t6: Income Tax Refunds Issued",
-        "type_parents": null
+        "whitelisted_cols": ["date", "refund_method", "refund_type", "today", "mtd", "fytd"],
+        "type_parents": ["refund_method"]
       }
      },
      db_schema = {
@@ -161,8 +168,8 @@ function writeToFile(db_schema){
   fs.writeFileSync('db_schema.json', JSON.stringify(db_schema) );
 };
 
-var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test
-// var writeToFile_after = _.after(_.size(db_tables), writeToFile); // Only invoked after all the tables have been processed
+/* var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test */
+var writeToFile_after = _.after(_.size(db_tables), writeToFile); // Only invoked after all the tables have been processed
 
 function treasuryIo(query){
   return $.ajax({
@@ -189,7 +196,7 @@ function insertTableToDbSchema(table_data){
   var table_name = table_data.name;
   db_schema.tables[table_name] = table_data;
 
-  console.log('Adding', table_data.name);
+  console.log('Inserting', table_data.name, 'to db_schema');
   writeToFile_after(db_schema);
 };
 
@@ -200,7 +207,7 @@ function addDatatoColumnInfo(column_info, key, values){
 };
 
 function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, insertTableToDbSchema_after){
-  console.log('Inserting column', column_name, 'in', table_obj.name)
+  console.log('Inserting column', column_name, 'into', table_obj.name)
   table_obj.columns[column_name] = column_info;
   // After all of the columns in this table have been processed we'll add the table object to the db object
   insertTableToDbSchema_after(table_obj);
@@ -209,7 +216,7 @@ function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, ins
 
 for (var table_name in db_tables){
   if (_.has(db_tables, table_name)){
-    if (table_name == 't2'){ // Limit it just to t2 for testing
+    /*if (table_name == 't2'){ // Limit it just to t2 for testing*/
 
     // Get a table scheme for each table, use a closure becaue it's done asynchronously and you need to know what table this ajax call refers to
     (function(table_name){
@@ -282,16 +289,15 @@ for (var table_name in db_tables){
                           if (_.indexOf(db_tables[table_obj.name].type_parents, column_info.name) != -1){
                             /* If the column we're on is not a designated parent item column */
                             query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
-                            value_obj.is_parent = true;
+                            value_obj.is_type_parent = true;
                           }else{
                             /* If the column we're on is not a designated parent item column the it's child and we therefore need to query what parents it exists under */
                             query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return '"' + col + '"'}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
-                            value_obj.is_parent = false;
+                            value_obj.is_type_parent = false;
                           };
 
                           treasuryIo(query_string)
                             .done( function(date_range_response){
-                              // console.log(date_range_response);
                               value_obj.name       = value;
                               value_obj.date_range = [date_range_response[0].min, date_range_response[0].max];
 
@@ -308,7 +314,7 @@ for (var table_name in db_tables){
                               delete date_range_response[0].min;
                               delete date_range_response[0].max;
                               // delete date_range_response[0].parent_item;
-                              if (!value_obj.is_parent){
+                              if (!value_obj.is_type_parent){
                                 value_obj.type_parents = _.values(date_range_response[0]);
                               };
 
@@ -338,7 +344,7 @@ for (var table_name in db_tables){
           });
         }); 
     })(table_name);
-    } // Limiting t2 if statement for testing
+    /* } // Limiting t2 if statement for testing */
   };
 };
 
