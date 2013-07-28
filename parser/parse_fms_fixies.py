@@ -168,6 +168,7 @@ def parse_table(table, date, url, verbose=False):
 
 	parsed_table = []
 	for line in table:
+		#print '|' + line + '|'
 		row = {}
 
 		# a variety of date formats -- for your convenience
@@ -197,38 +198,24 @@ def parse_table(table, date, url, verbose=False):
 		# HARD CODED HACKS
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
-			if int(page_number) == 3:
-				continue
-			else:
-				break
+		    continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
-			if int(page_number) == 3:
-				continue
-			else:
-				break
+			break
 		# comment on whatever this is; above line may make this redundant
 		elif re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
-			if int(page_number) == 3:
-				continue
-			else:
-				break
+			break
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
-			if int(page_number) == 3:
-				continue
-			else:
-				break
+			continue
 		elif is_errant_footnote(line):
-			if int(page_number) == 3:
-				continue
-			else:
-				break
+			break
 
 		# skip table header rows
 		if get_table_name(line):
 			table_name = get_table_name(line)
 			continue
+			
 		row['table'] = table_name
 
 		# save footnotes for later assignment to their rows
@@ -258,15 +245,10 @@ def parse_table(table, date, url, verbose=False):
 				last_line = table[index + i]
 
 			except IndexError:
-				if int(page_number) == 3:
-					continue
-				else:
-					break
+				break
 			if not get_footnote(last_line):
-				if int(page_number) == 3:
-					continue
-				else:
-					break
+				break
+
 		# note rows with footnote markers for later assignment
 		if re.search(r'\d+\/', line):
 			row['footnote'] = re.search(r'(\d+)\/', line).group(1)
