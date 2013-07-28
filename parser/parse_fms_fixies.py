@@ -77,7 +77,7 @@ def normalize_page_text(page):
 
 ################################################################################
 def get_footnote(line):
-	footnote = re.search(r'^\s*(\d)\/([\w\s,\.]+.*)', line)
+	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
@@ -368,7 +368,10 @@ def parse_table(table, date, url, verbose=False):
 				# now handle items with sub-classification
 				if row.get('subtype') is not None:
 					row_subtype = row['subtype']
+					row_item = row['item']
 					row['parent_item'] = row_subtype
+					row['item'] = row_subtype + ': ' + row_item
+					row['item_raw'] = row_subtype + ': ' + row_item_raw
 					row.pop('subtype')
 			except:
 				if verbose is True:
@@ -386,7 +389,10 @@ def parse_table(table, date, url, verbose=False):
 				# now handle items with sub-classification
 				if row.get('subtype') is not None:
 					row_subtype = row['subtype']
+					row_item = row['item']
 					row['parent_item'] = row_subtype
+					row['item'] = row_subtype + ': ' + row_item
+					row['item_raw'] = row_subtype + ': ' + row_item_raw
 					row.pop('subtype')
 			except:
 				if verbose is True:
@@ -404,7 +410,10 @@ def parse_table(table, date, url, verbose=False):
 				# now handle items with sub-classification
 				if row.get('subtype') is not None:
 					row_subtype = row['subtype']
+					row_item = row['item']
 					row['parent_item'] = row_subtype
+					row['item'] = row_subtype + ': ' + row_item
+					row['item_raw'] = row_subtype + ': ' + row_item_raw
 					row.pop('subtype')
 			except:
 				if verbose is True:
