@@ -15,7 +15,7 @@ if not os.path.split(os.getcwd())[-1] == 'parser':
 		os.chdir('parser')
 		print '\n*INFO: current working directory set to', os.getcwd()
 	else:
-		raise Exception('This script must be run from the fms_parser/parser directory!')
+		raise Exception('This script must be run from the /parser directory!')
 
 # auto-make data directories, if not present
 FIXIE_DIR = os.path.join('..', 'data', 'fixie')
