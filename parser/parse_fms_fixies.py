@@ -219,7 +219,6 @@ def parse_table(table, date, url, verbose=False):
 
 		# save footnotes for later assignment to their rows
 		footnote = get_footnote(line)
-		print footnote
 		if footnote is not None:
 			# while footnote does not end in valid sentence-ending punctuation...
 			i = 1
