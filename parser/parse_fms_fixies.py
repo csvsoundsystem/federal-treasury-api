@@ -82,6 +82,7 @@ def get_footnote(line):
 		return [footnote.group(1), footnote.group(2)]
 	return None
 
+################################################################################
 def check_fixie_url(url):
 	print "INFO: checking %s to make sure it's valid" % url
 	r = requests.get(url)
@@ -135,7 +136,7 @@ def parse_file(f_name, verbose=False):
 	check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
 	if date > check_cutoff_start and date < check_cutoff_end:
 		url = check_fixie_url(url)
-	verbose = False
+
 	print 'INFO: parsing', f_name, '(', date, ')'
 	dfs = {}
 	for table in tables:
@@ -153,6 +154,7 @@ def parse_table(table, date, url, verbose=False):
 	footnotes = {}
 	index = surtype_index = type_index = subtype_index = used_index = -1
 	type_indent = subtype_indent = -1
+	page_number = -1
 	type_ = subtype = None
 	table_name = None
 
@@ -184,7 +186,7 @@ def parse_table(table, date, url, verbose=False):
 		indent = len(re.search(r'^\s*', line).group())
 
 		# Rows that we definitely want to skip
-		# empty or centered header rows
+		# empty rows or centered header rows
 		if re.match(r'^\s{7,}', line): continue
 
 		# page number rows
@@ -263,7 +265,7 @@ def parse_table(table, date, url, verbose=False):
 			digits = [str((-1)*int(digit)) for digit in digits]
 
 		# bug fix, to remove the govt's usage of 'r/' in front of numbers
-		# to denote revised values
+		# to denote revised values, and the abhorrent usage of '(-)''
 		text = ' '.join(word for word in words if word not in ['r', '(-)'])
 
 		# get type row
@@ -285,8 +287,8 @@ def parse_table(table, date, url, verbose=False):
 			subtype_index = index
 			continue
 
-		if index == subtype_index + 1: pass # maybe unnecessary
-
+		if index == subtype_index + 1:
+			pass # possibly unnecessary
 		elif indent <= subtype_indent:
 			subtype = None
 
@@ -331,22 +333,17 @@ def parse_table(table, date, url, verbose=False):
 				except IndexError:
 					pass
 
-
-		#print len(digits), '||', digits
 		# skip table annotations that aren't footnotes
 		# this is a band-aid at best, sorry folks
 		if len(digits) == 0:
 			continue
-
 		if len(text) > 80:
 			continue
 
 		row['is_total'] = int('total' in text.lower())
 
-		# parse one table at a time
-
+		# parse one table at a time...
 		if re.search(r'TABLE I\s', row.get('table', '')):
-
 			try:
 				row['account_raw'] = text
 				row['account'] = normalize_fields(text, 't1', 'account')
@@ -354,13 +351,11 @@ def parse_table(table, date, url, verbose=False):
 				row['open_today'] = digits[-3]
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 
 		elif re.search(r'TABLE II\s', row.get('table', '')):
-
 			try:
 				row['item_raw'] = text
 				row['item'] = normalize_fields(text, 't2', 'item')
@@ -368,69 +363,66 @@ def parse_table(table, date, url, verbose=False):
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 				# tweak column names
-				row['account'] = row['type']
+				row['account'] = row.get('type')
 				# this is a hack, deal with it :-/
-				row['type'] = 'deposit'
-
+				row['transaction_type'] = 'deposit'
 				if int(page_number) == 3:
-					row['type'] = 'withdrawal'
-
-				if row.get('subtype'):
-					subtype = row['subtype']
-					row['subitem'] = row['item']
-					row['subitem_raw'] = row['item_raw']
-					row['item'] = subtype
+					row['transaction_type'] = 'withdrawal'
+				# now handle items with sub-classification
+				if row.get('subtype') is not None:
+					row_subtype = row['subtype']
+					row_item = row['item']
+					row['parent_item'] = row_subtype
+					row['item'] = row_subtype + ': ' + row_item
+					row['item_raw'] = row_subtype + ': ' + row_item_raw
 					row.pop('subtype')
-					row.pop('item_raw')
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 
 		elif re.search(r'TABLE III-A', row.get('table', '')):
-
 			try:
 				row['item_raw'] = text
 				row['item'] = normalize_fields(text, "t3a", 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
-
-				if row.get('subtype'):
-					subtype = row['subtype']
-					row['subitem'] = row['item']
-					row['subitem_raw'] = row['item_raw']
-					row['item'] = subtype
+				# tweak column names
+				row['debt_type'] = row.get('type')
+				# now handle items with sub-classification
+				if row.get('subtype') is not None:
+					row_subtype = row['subtype']
+					row_item = row['item']
+					row['parent_item'] = row_subtype
+					row['item'] = row_subtype + ': ' + row_item
+					row['item_raw'] = row_subtype + ': ' + row_item_raw
 					row.pop('subtype')
-					row.pop('item_raw')
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 
 		elif re.search(r'TABLE III-B', row.get('table', '')):
-
 			try:
 				row['item_raw'] = text
 				row['item'] = normalize_fields(text, "t3b", 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
-
-				if row.get('subtype'):
-					subtype = row['subtype']
-					row['subitem'] = row['item']
-					row['subitem_raw'] = row['item_raw']
-					row['item'] = subtype
+				# tweak column names
+				row['transaction_type'] = row.get('type')
+				# now handle items with sub-classification
+				if row.get('subtype') is not None:
+					row_subtype = row['subtype']
+					row_item = row['item']
+					row['parent_item'] = row_subtype
+					row['item'] = row_subtype + ': ' + row_item
+					row['item_raw'] = row_subtype + ': ' + row_item_raw
 					row.pop('subtype')
-					row.pop('item_raw')
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 
 		elif re.search(r'TABLE III-C', row.get('table', '')):
-
 			try:
 				row['item_raw'] = text
 				row['item'] = normalize_fields(text, 't3c', 'item')
@@ -438,13 +430,11 @@ def parse_table(table, date, url, verbose=False):
 				row['open_today'] = digits[-3]
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 
 		elif re.search(r'TABLE IV', row.get('table', '')):
-
 			try:
 				row['type'] = ''
 				row['classification_raw'] = text
@@ -453,10 +443,8 @@ def parse_table(table, date, url, verbose=False):
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
-
 				# increment Total counts
 				if this_class == "Total": t4_total_count += 1
-
 				# assign source and use types
 				if t4_total_count == 1 and this_class == "Total":
 					row['type'] = "source"
@@ -466,20 +454,19 @@ def parse_table(table, date, url, verbose=False):
 					row['type'] = "source"
 				else:
 					row['type'] = "use"
-
 			except:
 				if verbose is True:
 					print 'WARNING:', line
 
 		elif re.search(r'TABLE V\s', row.get('table', '')):
-
 			try:
 				row['balance_transactions'] = text
 				row['depositary_type_a'] = digits[-4]
 				row['depositary_type_b'] = digits[-3]
 				row['depositary_type_c'] = digits[-2]
 				row['total'] = digits[-1]
-
+				# tweak column names
+				row['transaction_type'] = row.get('type')
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -492,11 +479,10 @@ def parse_table(table, date, url, verbose=False):
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
 				if '( eft )' in row.get('classification_raw', '').lower():
-					row['type'] = 'EFT'
+					row['refund_method'] = 'EFT'
 
 				elif '( checks )' in row.get('classification_raw', '').lower():
-					row['type'] = 'CHECKS'
-
+					row['refund_method'] = 'CHECKS'
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -511,35 +497,35 @@ def parse_table(table, date, url, verbose=False):
 		if row.get('item'):
 			if row['item'].lower().strip() == 'total issues':
 				surtype_index = parsed_table.index(row)
-				row['surtype'] = 'issue'
+				row['transaction_type'] = 'issue'
 
 	# after-the-fact surtype assignment
 	if surtype_index != -1:
 		for row in parsed_table[:surtype_index]:
-			row['surtype'] = 'issue'
+			row['transaction_type'] = 'issue'
 		for row in parsed_table[surtype_index + 1:]:
-			row['surtype'] = 'redemption'
+			row['transaction_type'] = 'redemption'
 
 	# create data frame from table list of row dicts
 	df = pd.DataFrame(parsed_table)
 
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'account_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-A', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'surtype', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'debt_type', 'parent_item', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-B', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'item', 'item_raw', 'subitem', 'subitem_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'parent_item', 'item', 'item_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'item', 'item_raw', 'is_total', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 	elif re.search(r'TABLE IV', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'is_total', 'today', 'mtd', 'fytd', 'footnote'])
 	elif re.search(r'TABLE V\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
 	elif re.search(r'TABLE VI', row.get('table', '')):
-		df = df.reindex(columns=['table', 'date', 'url', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'refund_method', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
 
 	return df
 
