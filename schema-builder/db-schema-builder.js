@@ -38,7 +38,7 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
         "type_parents": null
       }
      },
-     table_schema = {
+     db_schema = {
         "tables": { 
           "t1":  {},
           "t2":  {},
@@ -131,9 +131,9 @@ Array.prototype.move = function (old_index, new_index) {
 };
 
 
-function cleanPragmaObj(json, table_name){
-  var clean_json = [];
-  _.each(json, function(obj, index){
+function cleanPragmaObj(table_schema, table_name){
+  var whitelisted_schema = [];
+  _.each(table_schema, function(obj, index){
 
     /* 
     The PRAGMA command returns an object with a bunch of properties, we only want the name and type though 
@@ -149,16 +149,16 @@ function cleanPragmaObj(json, table_name){
     Nor do we need "year_month" because we'll have a datepicker
     */
     if (_.indexOf(db_tables[table_name].whitelisted_cols, clean_obj.name) != -1 ){
-      clean_json.push(clean_obj);
+      whitelisted_schema.push(clean_obj);
     };
   });
 
-  return clean_json;
+  return whitelisted_schema;
 };
 
-function writeToFile(table_schema){
+function writeToFile(db_schema){
   console.log('Writing file...');
-  fs.writeFileSync('table_schema2.json', JSON.stringify(table_schema) );
+  fs.writeFileSync('db_schema.json', JSON.stringify(db_schema) );
 };
 
 var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test
@@ -170,13 +170,40 @@ function treasuryIo(query){
   });
 };
 
+function createDbSchemaColumnOrder(table_obj, columns_info){
+  /* 
+  This function adds the names of each column as keys in the `columns` key of the db_schema.
+  This would happen automatically in `addColumnInfoToAssociatedTable` but since the column data is fetched asynchronously, the order won't be what we set it to up top.
+  By allowing to be in order, the UI might be a bit nicer. Terrible to set the UI positioning on an object's keys because objects are by their nature unordered.
+  But go with me here...
+  */
+  _.each(columns_info, function(column_info){
+    table_obj.columns[column_info.name] = null;
+  });
 
-function addValuesToColumn(obj_to_push){
-  var table_name = obj_to_push.name;
-  table_schema.tables[table_name] = obj_to_push;
+  return table_obj;
+}
 
-  console.log('Adding', obj_to_push.name);
-  writeToFile_after(table_schema);
+
+function insertTableToDbSchema(table_data){
+  var table_name = table_data.name;
+  db_schema.tables[table_name] = table_data;
+
+  console.log('Adding', table_data.name);
+  writeToFile_after(db_schema);
+};
+
+function addDatatoColumnInfo(column_info, key, values){
+  // Make sure they're sorted
+  sorted_values = _.sortBy(values, function(val) { return val } );
+  column_info[key] = values;
+};
+
+function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, insertTableToDbSchema_after){
+  console.log('Inserting column', column_name, 'in', table_obj.name)
+  table_obj.columns[column_name] = column_info;
+  // After all of the columns in this table have been processed we'll add the table object to the db object
+  insertTableToDbSchema_after(table_obj);
 };
 
 
@@ -189,25 +216,27 @@ for (var table_name in db_tables){
       treasuryIo('PRAGMA table_info(' + table_name +')')
         .done( function(response){
 
-          var name_types = cleanPragmaObj(response, table_name),
+          var column_infos = cleanPragmaObj(response, table_name),
               table_obj = {
                 "label": db_tables[table_name].label,
                 "name" : table_name,
                 "columns": {}
-              };
+              },
+              insertTableToDbSchema_after = _.after(_.size(column_infos), insertTableToDbSchema); // Only invoked after all of the columns in a given table are processed
 
-          var addValuesToColumn_after = _.after(_.size(name_types), addValuesToColumn); // Only invoked after all of the columns in a given table are processed
+          // Make the keys for the `columns` key in what will be `db_schema.tables[table_name].columns`, currently `table_obj.columns`, to the order they're given in the config array.
+          table_obj = createDbSchemaColumnOrder(table_obj, column_infos);
 
-          // Loop through each item that was returned from PRAGMA, again using a closure so it knows what column it's acting on
-          _.each(name_types, function(name_type){
-            (function(name_type, table_obj){
+          // Loop through each column object, which contains a name and a type, that was returned from PRAGMA, again using a closure so it knows what column it's acting on
+          _.each(column_infos, function(column_info){
+            (function(column_info, table_obj){
               var query_text;
 
               // We don't want every single integer, so if it's numeric, find the range instead of the DISTINCT values
-              if (name_type.type == 'TEXT' && (name_type.name != 'date' && name_type.name != 'year_month')){
-                query_text = 'SELECT DISTINCT "' + name_type.name + '" FROM ' + table_obj.name;
+              if (column_info.type == 'TEXT' && (column_info.name != 'date' && column_info.name != 'year_month')){
+                query_text = 'SELECT DISTINCT "' + column_info.name + '" FROM ' + table_obj.name;
               }else{
-                query_text = 'SELECT min("' + name_type.name + '") as min, max("' + name_type.name + '") as max FROM ' + table_obj.name;
+                query_text = 'SELECT min("' + column_info.name + '") as min, max("' + column_info.name + '") as max FROM ' + table_obj.name;
               };
 
               treasuryIo(query_text)
@@ -215,56 +244,67 @@ for (var table_name in db_tables){
 
                   // Process the json response into a single flat, ascending sorted array of values
                   var values = _.flatten(_.map(response, function(value){ return _.values(value)})),
-                      values_with_blank = _.map(values, function(val) { return ((val != null) ? val : '(blank)' )} ),
-                      sorted_values_with_blank = _.sortBy(values_with_blank, function(val) { return val } );
+                      values_with_blank = _.map(values, function(val) { return ((val != null) ? val : '(blank)' )} );
 
                   // If there's a blank value, make it the last item in the array
-                  var blank_index = _.indexOf(sorted_values_with_blank, '(blank)');
+                  var blank_index = _.indexOf(values_with_blank, '(blank)');
                   if (blank_index != -1){
-                    sorted_values_with_blank.move(blank_index, (sorted_values_with_blank.length - 1) );
+                    values_with_blank.move(blank_index, (values_with_blank.length - 1) );
                   };
 
                   // If we're adding weekdays, make it so that they're sorted Monday - Friday, even if all the days aren't present
-                  if (name_type.name == 'weekday'){
+                  if (column_info.name == 'weekday'){
                     _.each(weekdays_arr, function(weekday){
-                      var weekday_indx = _.indexOf(sorted_values_with_blank, weekday);
+                      var weekday_indx = _.indexOf(values_with_blank, weekday);
                       if (weekday_indx != -1){
-                        sorted_values_with_blank.move(weekday_indx, 0);
+                        values_with_blank.move(weekday_indx, 0);
                       }; 
                     });
                   };
 
-                  if (name_type.type == 'TEXT'){
-                    if (name_type.name == 'date'){
-                      name_type['date_range'] = sorted_values_with_blank;
+                  if (column_info.type == 'TEXT'){
+                    if (column_info.name == 'date'){
+                      addDatatoColumnInfo(column_info, 'date_range', values_with_blank);
+                      // The column now has all of its values added, so you can add that completed column information to the designated table
+                      addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+
                     }else{
+                      var addDatatoColumnInfo_after            = _.after(values_with_blank.length, addDatatoColumnInfo),
+                          addColumnInfoToAssociatedTable_after = _.after(values_with_blank.length, addColumnInfoToAssociatedTable),
+                          column_values                        = [];
+
                       /* Get information for each value such as name, date range, its limiting parents or if it is a parent */
-                      _.each(sorted_values_with_blank, function(value){
-                        (function(value, name_type, table_obj){
+                      _.each(values_with_blank, function(value){
+                        (function(value, column_info, table_obj){
                           var value_obj = {},
                               query_string;
 
-                          if (_.indexOf(db_tables[table_obj.name].type_parents, name_type.name) != -1){
+                          if (_.indexOf(db_tables[table_obj.name].type_parents, column_info.name) != -1){
                             /* If the column we're on is not a designated parent item column */
-                            query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + name_type.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
+                            query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
                             value_obj.is_parent = true;
                           }else{
                             /* If the column we're on is not a designated parent item column the it's child and we therefore need to query what parents it exists under */
-                            query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return '"' + col + '"'}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + name_type.name + '" = \'' + value + '\''
+                            query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return '"' + col + '"'}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
                             value_obj.is_parent = false;
                           };
 
                           treasuryIo(query_string)
                             .done( function(date_range_response){
                               // console.log(date_range_response);
+                              value_obj.name       = value;
                               value_obj.date_range = [date_range_response[0].min, date_range_response[0].max];
 
 
                               if (date_range_response.parent_item){
-                                value_obj.parent_item = date_range_response[0].parent_item
-                              };
+                                value_obj.parent_item = date_range_response[0].parent_item;
+                              };/* else{
+                                value_obj.parent_item = null;
+                              }; 
+                              This might be useful to add a null field, or it might be easier to just omit it entirely.
+                              */
 
-                              // After deleting the min and max and parent_item, the remaining object will have the parent_type limiters 
+                              // After deleting the min and max and parent_item from the sql response, the remaining object will have the parent_type limiters 
                               delete date_range_response[0].min;
                               delete date_range_response[0].max;
                               // delete date_range_response[0].parent_item;
@@ -272,27 +312,29 @@ for (var table_name in db_tables){
                                 value_obj.type_parents = _.values(date_range_response[0]);
                               };
 
-                              console.log(value_obj);
+                              column_values.push(value_obj);
+                              console.log('Processed', value, 'in', column_info.name, 'in', table_obj.name);
 
+                              addDatatoColumnInfo_after(column_info, 'values', column_values);
+                              // The column now has all of its values added, so you can add that completed column information to the designated table
+                              addColumnInfoToAssociatedTable_after(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
 
                               /* TODO, add field definition link when that is done and made into a JSON object */
                             });
 
-                        })(value, name_type, table_obj);
+                        })(value, column_info, table_obj);
                       });
                       
-                    }
+                    };
                   }else{
-                    name_type['values'] = sorted_values_with_blank;
+                    addDatatoColumnInfo(column_info, 'values', values_with_blank);
+                    // The column now has all of its values added, so you can add that completed column information to the designated table
+                    addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
                   };
 
-                  table_obj.columns[name_type.name] = name_type;
-
-
-                  addValuesToColumn_after(table_obj);
 
                 });
-            })(name_type, table_obj);
+            })(column_info, table_obj);
           });
         }); 
     })(table_name);

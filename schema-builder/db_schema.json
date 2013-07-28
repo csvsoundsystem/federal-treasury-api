@@ -1,0 +1,1585 @@
+{
+  "tables": {
+    "t1": {},
+    "t2": {
+      "label": "t2: Deposits and Withdrawals",
+      "name": "t2",
+      "columns": {
+        "date": {
+          "name": "date",
+          "type": "TEXT",
+          "date_range": [
+            "2005-06-09",
+            "2013-07-25"
+          ]
+        },
+        "account": {
+          "name": "account",
+          "type": "TEXT",
+          "values": [
+            {
+              "is_parent": true,
+              "name": "Federal Reserve Account",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ]
+            },
+            {
+              "is_parent": true,
+              "name": "Tax and Loan Note Accounts",
+              "date_range": [
+                "2005-06-09",
+                "2012-09-28"
+              ]
+            },
+            {
+              "is_parent": true,
+              "name": "(blank)",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ]
+            },
+            {
+              "is_parent": true,
+              "name": "Short Term Cash Investments",
+              "date_range": [
+                "2012-10-01",
+                "2013-07-25"
+              ]
+            }
+          ]
+        },
+        "type": {
+          "name": "type",
+          "type": "TEXT",
+          "values": [
+            {
+              "is_parent": true,
+              "name": "deposit",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ]
+            },
+            {
+              "is_parent": true,
+              "name": "(blank)",
+              "date_range": [
+                "2006-03-31",
+                "2008-10-01"
+              ]
+            },
+            {
+              "is_parent": true,
+              "name": "withdrawal",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ]
+            }
+          ]
+        },
+        "item": {
+          "name": "item",
+          "type": "TEXT",
+          "values": [
+            {
+              "is_parent": false,
+              "name": "Agriculture Loan Repayments ( misc )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Supplemental Security Income",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Commodity Credit Corporation programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Customs and Certain Excise Taxes",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Education Department programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Unemployment",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Reserve Earnings",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Estate and Gift Taxes",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "FTDs Received",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Energy Department programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Foreign Deposits Military Sales",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Justice Department programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Housing and Urban Development programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Individual Income and Employment Taxes Not Withheld",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interest recd from cash investments",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Change in Balance of Uncollected Funds closing balance",
+              "date_range": [
+                "2005-06-09",
+                "2010-09-30"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Postal Service",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Total Other Deposits",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Public Debt Cash Issues ( Table III B )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Transfers from Federal Reserve Account Table V",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                null,
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Transfers from Depositaries",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Total Deposits ( excluding transfers )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                null,
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Total Tax and Loan Note Accounts Table V",
+              "date_range": [
+                "2005-06-09",
+                "2012-09-28"
+              ],
+              "type_parents": [
+                null,
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Total Federal Reserve Account",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Employees Insurance Payments",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Fed Highway Administration programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Defense Vendor Payments ( EFT )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Salaries ( EFT )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Food and Nutrition Service ( misc )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Health and Human Services Grants ( misc )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "GSA Programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Food Stamps",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Medicaid",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interest on Treasury Securities",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Labor Dept prgms ( excl unemployment )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "NASA programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Postal Service Money Orders and Other",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Medicare",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Public Debt Cash Redemp ( Table III B )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Veterans Affairs Programs",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Social Security Benefits ( EFT )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Other Withdrawals",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Transfers to Depositaries",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Unemployment Insurance Benefits",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Temporary Assistance for Needy Families ( HHS )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Transfers to Federal Reserve Account Table V",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Short Term Cash Investments",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Farm Credit System Ins Corp",
+              "date_range": [
+                "2005-06-10",
+                "2012-01-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Air Transport Security Fees",
+              "date_range": [
+                "2005-06-14",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Total Withdrawals ( excluding transfers )",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                null,
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Net Change in Operating Cash Balance",
+              "date_range": [
+                "2005-06-09",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                null,
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Housing Admin: Note Sales",
+              "date_range": [
+                "2005-06-10",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interntl Security Assistance ( DSCA )",
+              "date_range": [
+                "2005-06-16",
+                "2010-06-16"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Minerals Management Svc Collections",
+              "date_range": [
+                "2005-06-20",
+                "2013-07-01"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Defense Finance Accounting Service",
+              "date_range": [
+                "2005-06-14",
+                "2013-07-15"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Railroad Unemployment Ins",
+              "date_range": [
+                "2005-06-16",
+                "2013-05-01"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Thrift Savings Plan Transfer",
+              "date_range": [
+                "2005-06-27",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Pension Benefit Guaranty Corp",
+              "date_range": [
+                "2005-06-29",
+                "2013-07-19"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "FSA Tobacco Assessments",
+              "date_range": [
+                "2005-06-30",
+                "2013-06-28"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Lend Lease Receipts",
+              "date_range": [
+                "2005-07-15",
+                "2006-12-29"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Agency for International Development",
+              "date_range": [
+                "2005-07-01",
+                "2013-07-01"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Corps of Engineers",
+              "date_range": [
+                "2005-07-26",
+                "2013-05-09"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Comptroller of the Currency Assessment",
+              "date_range": [
+                "2005-08-01",
+                "2013-03-29"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Ofc of Thrift Supervision ( Assessments )",
+              "date_range": [
+                "2005-07-29",
+                "2011-01-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Animal Plant Health Inspection svcs",
+              "date_range": [
+                "2005-08-01",
+                "2013-04-30"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Securities and Exchange Commission",
+              "date_range": [
+                "2005-08-19",
+                "2013-06-10"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Small Business Admin Loan Sales",
+              "date_range": [
+                "2005-08-23",
+                "2013-01-16"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interior: Bureau of Land Management",
+              "date_range": [
+                "2005-08-04",
+                "2012-07-06"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Natl Railroad Retirement Inv Trust",
+              "date_range": [
+                "2005-09-01",
+                "2013-07-01"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Emergency Prep Response ( DHS )",
+              "date_range": [
+                "2005-09-23",
+                "2012-06-19"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Communications Commission",
+              "date_range": [
+                "2005-09-06",
+                "2012-09-13"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Represents a return of million previously reported on September",
+              "date_range": [
+                "2005-09-23",
+                "2005-09-23"
+              ],
+              "type_parents": [
+                null,
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "SEC: Stock Exchange Fees",
+              "date_range": [
+                "2005-09-29",
+                "2013-03-15"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "National Credit Union Administration",
+              "date_range": [
+                "2005-10-18",
+                "2013-04-15"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Asset Sale: U S Enrichment Corp",
+              "date_range": [
+                "2005-10-03",
+                "2007-08-15"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Defense Energy Supply Center",
+              "date_range": [
+                "2006-02-02",
+                "2006-02-22"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Environmental Protection Agency",
+              "date_range": [
+                "2006-03-21",
+                "2008-03-19"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "revised DAILY TREASURY STATEMENT PAGE:",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                null,
+                null
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Gas and Oil Lease Sales Proceeds",
+              "date_range": [
+                "2005-11-29",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Fed Crop Ins Corp Fund Premiums",
+              "date_range": [
+                "2005-10-31",
+                "2013-05-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "IRS Tax Refunds Business ( EFT )",
+              "date_range": [
+                "2006-03-31",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Financing Bank ( net )",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Transit Admin",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Military Active Duty Pay ( EFT )",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "IRS Tax Refunds Individual ( EFT )",
+              "date_range": [
+                "2006-03-31",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Tennessee Valley Authority ( net )",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Supple Security Income Benefits ( EFT )",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Veterans Benefits ( EFT )",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "U S District Courts ( net )",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Prepayment of Treasury Securities ( net )",
+              "date_range": [
+                "2006-08-31",
+                "2011-10-14"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Employees Insurance Receipt",
+              "date_range": [
+                "2006-08-30",
+                "2013-07-22"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Unclassified",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Maritime Administration",
+              "date_range": [
+                "2006-04-27",
+                "2012-04-04"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Total Other Withdrawals",
+              "date_range": [
+                "2006-03-31",
+                "2006-03-31"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Medicare Premiums",
+              "date_range": [
+                "2008-02-21",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Commodity Futures Trading Commission",
+              "date_range": [
+                "2007-11-23",
+                "2013-02-11"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Library of Congress",
+              "date_range": [
+                "2007-08-29",
+                "2013-03-01"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "State Department",
+              "date_range": [
+                "2007-06-08",
+                "2013-05-14"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "U S Enrichment Corp",
+              "date_range": [
+                "2007-07-16",
+                "2007-07-16"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Trade Commission",
+              "date_range": [
+                "2008-05-08",
+                "2010-06-18"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Veterans Assets Sales",
+              "date_range": [
+                "2008-04-24",
+                "2011-10-20"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interior: Bureau of Reclamation",
+              "date_range": [
+                "2008-04-04",
+                "2010-11-26"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Transportation Security Admin ( DHS )",
+              "date_range": [
+                "2008-10-01",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "withdrawal"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Prem ESF Money Mkt Guar Facility",
+              "date_range": [
+                "2008-09-29",
+                "2009-11-23"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Export Import Bank",
+              "date_range": [
+                "2008-10-15",
+                "2013-06-20"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "International Monetary Fund",
+              "date_range": [
+                "2008-10-23",
+                "2013-05-08"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interior: Office of Surface Mining",
+              "date_range": [
+                "2008-10-30",
+                "2012-10-30"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Revised DAILY TREASURY STATEMENT PAGE:",
+              "date_range": [
+                "2008-10-01",
+                "2008-10-01"
+              ],
+              "type_parents": [
+                null,
+                null
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Deposit Insurance Fund ( net )",
+              "date_range": [
+                "2008-10-28",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "TARP",
+              "date_range": [
+                "2008-12-01",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Overseas Private Investment Co ( net )",
+              "date_range": [
+                "2008-12-15",
+                "2012-05-22"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "GSE Dividends",
+              "date_range": [
+                "2008-12-31",
+                "2013-06-28"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Interior",
+              "date_range": [
+                "2009-01-12",
+                "2013-05-28"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "FSLIC Resolution Fund",
+              "date_range": [
+                "2010-08-18",
+                "2010-08-18"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Change in Balance of Uncollected Funds",
+              "date_range": [
+                "2010-10-01",
+                "2013-07-25"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "Federal Finance Bank",
+              "date_range": [
+                "2008-12-23",
+                "2013-07-01"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "GSE MBS Purchase Program Income",
+              "date_range": [
+                "2011-04-13",
+                "2012-09-28"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            },
+            {
+              "is_parent": false,
+              "name": "USDA: Forest Service",
+              "date_range": [
+                "2011-11-18",
+                "2011-11-18"
+              ],
+              "type_parents": [
+                "Federal Reserve Account",
+                "deposit"
+              ]
+            }
+          ]
+        },
+        "today": {
+          "name": "today",
+          "type": "REAL",
+          "values": [
+            -119990,
+            242974
+          ]
+        },
+        "mtd": {
+          "name": "mtd",
+          "type": "REAL",
+          "values": [
+            -239579,
+            1554152
+          ]
+        },
+        "fytd": {
+          "name": "fytd",
+          "type": "REAL",
+          "values": [
+            -298906,
+            22055434
+          ]
+        }
+      }
+    },
+    "t3": {},
+    "t3a": {},
+    "t3b": {},
+    "t3c": {},
+    "t4": {},
+    "t5": {},
+    "t6": {}
+  },
+  "types": [
+    {
+      "name": "TEXT",
+      "operators": [
+        {
+          "name": "=",
+          "label": "is"
+        },
+        {
+          "name": "<>",
+          "label": "is not"
+        }
+      ]
+    },
+    {
+      "name": "DATE",
+      "operators": [
+        {
+          "name": "=",
+          "label": "is"
+        },
+        {
+          "name": "<>",
+          "label": "is not"
+        },
+        {
+          "name": "<",
+          "label": "is before"
+        },
+        {
+          "name": ">",
+          "label": "is after"
+        }
+      ]
+    },
+    {
+      "name": "INTEGER",
+      "operators": [
+        {
+          "name": "=",
+          "label": "is"
+        },
+        {
+          "name": "<>",
+          "label": "is not"
+        },
+        {
+          "name": "<",
+          "label": "less than"
+        },
+        {
+          "name": ">",
+          "label": "greater than"
+        }
+      ]
+    }
+  ]
+}
