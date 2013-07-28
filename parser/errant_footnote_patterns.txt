@@ -12,4 +12,3 @@
 .*dated December.*
 .*Treasury reduced the amount of Debt Subject.*
 .*r.*revised.*
-.*aspx.*
