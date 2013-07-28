@@ -79,7 +79,7 @@
              
     "t6": {
         "fields" : [
-            "classification"  
+            "refund_type"  
         ],
         "values" : [
             "today",

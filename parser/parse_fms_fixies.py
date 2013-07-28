@@ -77,7 +77,7 @@ def normalize_page_text(page):
 
 ################################################################################
 def get_footnote(line):
-	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
+	footnote = re.search(r'^\s*(\d)\/([\w\s,\.]+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
@@ -219,6 +219,7 @@ def parse_table(table, date, url, verbose=False):
 
 		# save footnotes for later assignment to their rows
 		footnote = get_footnote(line)
+		print footnote
 		if footnote is not None:
 			# while footnote does not end in valid sentence-ending punctuation...
 			i = 1
