@@ -168,6 +168,7 @@ def parse_table(table, date, url, verbose=False):
 
 	parsed_table = []
 	for line in table:
+		# print "|", line, "|"
 		row = {}
 
 		# a variety of date formats -- for your convenience
@@ -191,7 +192,6 @@ def parse_table(table, date, url, verbose=False):
 		# page number rows
 		page_number_match = re.search(r'\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', line)
 		if page_number_match:
-			print page_number
 			page_number = page_number_match.group(1)
 			print page_number
 			continue
@@ -245,10 +245,10 @@ def parse_table(table, date, url, verbose=False):
 				last_line = table[index + i]
 
 			except IndexError:
-				break
+				continue
 
 			if not get_footnote(last_line):
-				break
+				continue
 
 			# JUST IN CASE?! BJD: figure out why this is needed...
 			continue
