@@ -191,9 +191,7 @@ def parse_table(table, date, url, verbose=False):
 		# page number rows
 		page_number_match = re.search(r'\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', line)
 		if page_number_match:
-			print page_number
 			page_number = page_number_match.group(1)
-			print page_number
 			continue
 
 		# HARD CODED HACKS
