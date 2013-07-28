@@ -168,7 +168,6 @@ def parse_table(table, date, url, verbose=False):
 
 	parsed_table = []
 	for line in table:
-		#print '|' + line + '|'
 		row = {}
 
 		# a variety of date formats -- for your convenience
@@ -192,7 +191,9 @@ def parse_table(table, date, url, verbose=False):
 		# page number rows
 		page_number_match = re.search(r'\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', line)
 		if page_number_match:
+			print page_number
 			page_number = page_number_match.group(1)
+			print page_number
 			continue
 
 		# HARD CODED HACKS
@@ -201,15 +202,15 @@ def parse_table(table, date, url, verbose=False):
 		    continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
-			break
+			continue
 		# comment on whatever this is; above line may make this redundant
 		elif re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
-			break
+			continue
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
 			continue
 		elif is_errant_footnote(line):
-			break
+			continue
 
 		# skip table header rows
 		if get_table_name(line):
