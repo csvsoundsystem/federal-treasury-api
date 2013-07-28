@@ -77,7 +77,7 @@ def normalize_page_text(page):
 
 ################################################################################
 def get_footnote(line):
-	footnote = re.search(r'^\s*(\d)\/(\w+.*)', line)
+	footnote = re.search(r'^\s*(\d)\/([\w\s\.,]+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
