@@ -125,7 +125,7 @@ function cleanPragmaObj(json){
 
 function writeToFile(table_schema){
   console.log('Writing file...');
-  fs.writeFileSync('table_schema.json', JSON.stringify(table_schema) );
+  fs.writeFileSync('table_schema_simple.json', JSON.stringify(table_schema) );
 };
 
 var writeToFile_after = _.after(_.size(table_names), writeToFile); // Only invoked after all the tables have been processed
