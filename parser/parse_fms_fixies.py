@@ -473,15 +473,15 @@ def parse_table(table, date, url, verbose=False):
 
 		elif re.search(r'TABLE VI', row.get('table', '')):
 			try:
-				row['classification_raw'] = text
-				row['classification'] = normalize_fields(text, 't6', 'classification')
+				row['refund_type_raw'] = text
+				row['refund_type'] = normalize_fields(text, 't6', 'classification')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
 				row['fytd'] = digits[-1]
-				if '( eft )' in row.get('classification_raw', '').lower():
+				if '( eft )' in row.get('refund_type_raw', '').lower():
 					row['refund_method'] = 'EFT'
 
-				elif '( checks )' in row.get('classification_raw', '').lower():
+				elif '( checks )' in row.get('refund_type_raw', '').lower():
 					row['refund_method'] = 'CHECKS'
 			except:
 				if verbose is True:
@@ -525,7 +525,7 @@ def parse_table(table, date, url, verbose=False):
 	elif re.search(r'TABLE V\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'balance_transactions', 'is_total', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
 	elif re.search(r'TABLE VI', row.get('table', '')):
-		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'refund_method', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'refund_method', 'refund_type', 'refund_type_raw', 'today', 'mtd', 'fytd', 'footnote'])
 
 	return df
 
