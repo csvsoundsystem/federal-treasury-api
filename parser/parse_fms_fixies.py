@@ -517,11 +517,6 @@ def parse_table(table, date, url, verbose=False):
 	# create data frame from table list of row dicts
 	df = pd.DataFrame(parsed_table)
 
-	if "The Daily Treasury Statement ( DTS ) is available by p m the following,The Daily Treasury Statement ( DTS ) is available by p m the following" in list(df['refund_type']):
-		print "fail"
-	else:
-		print "success"
-
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'account', 'account_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
