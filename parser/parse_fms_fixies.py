@@ -225,7 +225,7 @@ def parse_table(table, date, url, verbose=False):
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
 			continue #ok
-		elif re.search(r'.*r-revised.*', line):
+		elif re.search(r'.*r\-revised.*', line):
 			continue #ok
 		elif is_errant_footnote(line):
 			break #ok
@@ -252,16 +252,16 @@ def parse_table(table, date, url, verbose=False):
 				# and next line is not itself a new footnote...
 				else:
 					if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', next_line):
-						break
+						break #ok
 					if not get_footnote(next_line):
 						# add next line text to current footnote
 						footnote[1] = ''.join([footnote[1], next_line])
 						used_index = index + i
 						i += 1
 					if footnote[1].endswith("program."):
-						continue
+						continue #ok
 					elif re.search(r'[.!?]$', footnote[1]):
-						break
+						break #ok
 
 			# make our merged footnote hack official!
 			footnotes[footnote[0]] = re.sub("\s{2,}", "", footnote[1])
@@ -272,15 +272,15 @@ def parse_table(table, date, url, verbose=False):
 				last_line = table[index + i]
 
 			except IndexError:
-				break
+				break #ok
 
 			else:
 				if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', last_line):
-					continue
+					continue #ok
 				elif re.search(r'\.aspx\.', last_line):
-					continue
+					continue #ok
 				elif not get_footnote(last_line):
-					break
+					break #ok
 
 			# *****THIS LINE MUST BE HERE TO ENSURE THAT FOOTNOTES AREN'T INCLUDED AS ITEMS ******#
 			continue
