@@ -246,18 +246,20 @@ def parse_table(table, date, url, verbose=False):
 				try:
 					next_line = table[index + i]
 				except IndexError:
-					break
+					next_step = False
 				# and next line is not itself a new footnote...
-				if not get_footnote(next_line):
+				if footnote[1].endswith("program."):
+					next_step = True
+
+				elif re.search(r'[.!?]$', footnote[1]):
+					next_step = False
+					
+				elif not get_footnote(next_line):
 					# add next line text to current footnote
 					footnote[1] = ''.join([footnote[1], next_line])
 					used_index = index + i
 					i += 1
-				if footnote[1].endswith("program."):
-					next_step = True
-				elif re.search(r'[.!?]$', footnote[1]):
-					next_step = False
-				footnote[1] = re.sub("\s{2,}", "", footnote[1])
+				footnote[1] = re.sub("\s{1,}", " ", footnote[1])
 
 			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]
