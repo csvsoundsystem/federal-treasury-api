@@ -78,8 +78,8 @@ def distinct_tests():
              """
     postscript = """
                 <p> The parameters for these tests can be set in: </p>  
-                <p> https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/distict_fields.json </p> 
-                <p> https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/distict_tests_params.json </p>
+                <p> https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/distinct_fields.json </p> 
+                <p> https://github.com/csvsoundsystem/federal-treasury-api/blob/master/tests/distinct_tests_params.json </p>
                 <p> xoxo, </p>
                 <p> \t treasury.io</p>
                 """ 
