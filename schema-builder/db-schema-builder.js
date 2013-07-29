@@ -11,17 +11,17 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
       },
       "t2": { 
         "label": "t2: Deposits and Withdrawals",
-        "whitelisted_cols": ["date", "account", "type", "parent_item", "is_total", "item", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "account", "type", "is_total", "item", "today", "mtd", "fytd"],
         "type_parents": ["account", "type", "is_total"]
       },
       "t3a": { 
         "label": "t3a: Public Debt Transactions",
-        "whitelisted_cols": ["date", "transaction_type", "debt_type", "parent_item", "is_total", "item", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "transaction_type", "debt_type", "is_total", "item", "today", "mtd", "fytd"],
         "type_parents": ["transaction_type", "debt_type", "is_total"]
       },
       "t3b": { 
         "label": "t3b: Adjustment of Public Debt Transactions",
-        "whitelisted_cols": ["date", "transaction_type", "parent_item", "is_total", "item", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "transaction_type", "is_total", "item", "today", "mtd", "fytd"],
         "type_parents": ["transaction_type", "is_total"]
       },
       "t3c": { 
@@ -287,12 +287,12 @@ for (var table_name in db_tables){
                               query_string;
 
                           if (_.indexOf(db_tables[table_obj.name].type_parents, column_info.name) != -1){
-                            /* If the column we're on is not a designated parent item column */
+                            /* If the column we're on is a designated parent item column */
                             query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
                             value_obj.is_type_parent = true;
                           }else{
-                            /* If the column we're on is not a designated parent item column the it's child and we therefore need to query what parents it exists under */
-                            query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return '"' + col + '"'}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
+                            /* If the column we're on is not a designated parent item column then it's child and we therefore need to query what parents it exists under */
+                            query_string = 'SELECT min("date") as min, max("date") as max, "parent_item", ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return '"' + col + '"'}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
                             value_obj.is_type_parent = false;
                           };
 
@@ -301,8 +301,9 @@ for (var table_name in db_tables){
                               value_obj.name       = value;
                               value_obj.date_range = [date_range_response[0].min, date_range_response[0].max];
 
+                              console.log(date_range_response)
 
-                              if (date_range_response.parent_item){
+                              if (date_range_response.parent_item != null){
                                 value_obj.parent_item = date_range_response[0].parent_item;
                               };/* else{
                                 value_obj.parent_item = null;
@@ -310,10 +311,11 @@ for (var table_name in db_tables){
                               This might be useful to add a null field, or it might be easier to just omit it entirely.
                               */
 
-                              // After deleting the min and max and parent_item from the sql response, the remaining object will have the parent_type limiters 
+                              // After deleting the min and max and parent_item from the sql response, the remaining object will have the `type_parents` limiters, which will be inserted as an array `type_parents`
                               delete date_range_response[0].min;
                               delete date_range_response[0].max;
-                              // delete date_range_response[0].parent_item;
+                              delete date_range_response[0].parent_item;
+
                               if (!value_obj.is_type_parent){
                                 value_obj.type_parents = _.values(date_range_response[0]);
                               };
