@@ -122,7 +122,17 @@ def gen_fixie_url(f_name, date):
 	return url
 
 def check_for_nulls(df, table):
-	print "do something here"
+	print "TO DO"
+	# test_params = NULL_TEST_PARAMS[table]
+	# null_rows = []
+	# for v in test_params["values"]:
+	# 	null_row = df.loc(i, ) for i in df.index if pd.isnull(df[v][i])
+	# 	null_rows.append(null_row)
+	# null_field_values = []
+	# for f in test_params['fields']
+	# 	[r[f] for r in null_rows
+
+
 ################################################################################
 def parse_file(f_name, verbose=False):
 	f = open(f_name, 'rb').read()
@@ -175,10 +185,9 @@ def parse_table(table, date, url, verbose=False):
 		two_line_delta = -1
 
 	parsed_table = []
-	for line in table:
-		#print '|' + line + '|'
+	for i, line in enumerate(table):
+		# print '|' + line + '|', '<', i, '>'
 		row = {}
-
 		# a variety of date formats -- for your convenience
 		row['date'] = date
 		row['year'] = date.year
@@ -206,18 +215,18 @@ def parse_table(table, date, url, verbose=False):
 		# HARD CODED HACKS
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
-			continue
+			continue #ok
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
-			continue
+			break #ok
 		# comment on whatever this is; above line may make this redundant
 		elif re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
-			break
+			break #ok
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
-			continue
+			continue #ok
 		elif is_errant_footnote(line):
-			continue
+			break #ok
 
 		# skip table header rows
 		if get_table_name(line):
@@ -231,7 +240,8 @@ def parse_table(table, date, url, verbose=False):
 		if footnote is not None:
 			# while footnote does not end in valid sentence-ending punctuation...
 			i = 1
-			while not re.search(r'[.!?]$', footnote[1]):
+			next_step = True
+			while next_step:
 				# get next line, if it exists
 				try:
 					next_line = table[index + i]
@@ -243,6 +253,11 @@ def parse_table(table, date, url, verbose=False):
 					footnote[1] = ''.join([footnote[1], next_line])
 					used_index = index + i
 					i += 1
+				if footnote[1].endswith("program."):
+					next_step = True
+				elif re.search(r'[.!?]$', footnote[1]):
+					next_step = False
+				footnote[1] = re.sub("\s{2,}", "", footnote[1])
 
 			# make our merged footnote hack official!
 			footnotes[footnote[0]] = footnote[1]
@@ -253,8 +268,10 @@ def parse_table(table, date, url, verbose=False):
 				last_line = table[index + i]
 
 			except IndexError:
-				break
-			if not get_footnote(last_line):
+				break #ok
+			if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', last_line):
+				continue
+			elif not get_footnote(last_line):
 				break
 
 			# *****THIS LINE MUST BE HERE TO ENSURE THAT FOOTNOTES AREN'T INCLUDED AS ITEMS ******#
