@@ -186,7 +186,7 @@ def parse_table(table, date, url, verbose=False):
 
 	parsed_table = []
 	for i, line in enumerate(table):
-		# print '|' + line + '|', '<', i, '>'
+		print '|' + line + '|', '<', i, '>'
 		row = {}
 		# a variety of date formats -- for your convenience
 		row['date'] = date
@@ -548,6 +548,8 @@ def parse_table(table, date, url, verbose=False):
 		# check_for_nulls(df, "t1")
 	elif re.search(r'TABLE II\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item','is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		if 'withdrawal' not in set(list(df['transaction_type'])):
+			print "ERROR: No withdrawal items in t2 for %s" % df['date'][0]
 		# check_for_nulls(df, "t2")
 	elif re.search(r'TABLE III-A', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'debt_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
