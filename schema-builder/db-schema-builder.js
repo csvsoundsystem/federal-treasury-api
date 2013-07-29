@@ -49,7 +49,6 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
         "tables": { 
           "t1":  {},
           "t2":  {},
-          "t3":  {},
           "t3a": {},
           "t3b": {},
           "t3c": {},
