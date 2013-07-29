@@ -1,0 +1,43 @@
+{
+    "t1": {
+        "fields" : [
+            "account"
+        ]
+    },
+    "t2": {
+        "fields" : [
+           "item",
+           "account"
+        ]
+    },
+    "t3a": {
+        "fields" : [
+            "item"
+        ]
+    },
+    "t3b": {
+        "fields" : [
+            "item"
+        ]
+    },
+    "t3c": {
+        "fields" : [
+            "item"
+        ]
+    },
+    "t4": {
+        "fields" : [
+            "classification"  
+            ]
+    },
+    "t5": {         
+        "fields" : [
+            "balance_transactions"
+            ]
+        },       
+    "t6": {
+        "fields" : [
+            "refund_type"  
+        ]
+    }
+}
