@@ -237,32 +237,32 @@ def parse_table(table, date, url, verbose=False):
 
 		# save footnotes for later assignment to their rows
 		footnote = get_footnote(line)
+		
 		if footnote is not None:
 			# while footnote does not end in valid sentence-ending punctuation...
 			i = 1
-			next_step = True
-			while next_step:
+			while True:
 				# get next line, if it exists
 				try:
 					next_line = table[index + i]
 				except IndexError:
-					next_step = False
+					break
 				# and next line is not itself a new footnote...
-				if footnote[1].endswith("program."):
-					next_step = True
-
-				elif re.search(r'[.!?]$', footnote[1]):
-					next_step = False
-					
-				elif not get_footnote(next_line):
-					# add next line text to current footnote
-					footnote[1] = ''.join([footnote[1], next_line])
-					used_index = index + i
-					i += 1
-				footnote[1] = re.sub("\s{1,}", " ", footnote[1])
+				else:
+					if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', next_line):
+						break
+					if not get_footnote(next_line):
+						# add next line text to current footnote
+						footnote[1] = ''.join([footnote[1], next_line])
+						used_index = index + i
+						i += 1
+					if footnote[1].endswith("program."):
+						continue
+					elif re.search(r'[.!?]$', footnote[1]):
+						break
 
 			# make our merged footnote hack official!
-			footnotes[footnote[0]] = footnote[1]
+			footnotes[footnote[0]] = re.sub("\s{2,}", "", footnote[1])
 
 			# if next line after footnote is not another footnote
 			# it is most assuredly extra comments we don't need
@@ -270,11 +270,15 @@ def parse_table(table, date, url, verbose=False):
 				last_line = table[index + i]
 
 			except IndexError:
-				break #ok
-			if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', last_line):
-				continue
-			elif not get_footnote(last_line):
 				break
+
+			else:
+				if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', last_line):
+					continue
+				elif re.search(r'\.aspx\.', last_line):
+					continue
+				elif not get_footnote(last_line):
+					break
 
 			# *****THIS LINE MUST BE HERE TO ENSURE THAT FOOTNOTES AREN'T INCLUDED AS ITEMS ******#
 			continue
