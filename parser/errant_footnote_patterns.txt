@@ -1,9 +1,9 @@
+.*\s+SOURCE:\s+Financial\s+Management.*
+.*\s+This statement summarizes\s+the United States Treasury's cash and debt.*
 .*Represents a return of million previously reported on September.*
 .*ery Act of Public Law \( \) These long term nonmarketable.*
 .*very Act of Public Law \( \) These long term nonmarketable.*
 .*\s*The Food Stamp Program has been renamed.*
-.*\s+This statement summarizes\s+the United States Treasury's cash and debt.*
-.*\s+SOURCE:\s+Financial\s+Management.*
 .*were no longer reported as.*
 .*leaving a portion of the funds.*
 .*not include million offset.*
@@ -11,4 +11,5 @@
 .*and million for the fiscal year to date for.*
 .*dated December.*
 .*Treasury reduced the amount of Debt Subject.*
+.*r/ Revised.*
 

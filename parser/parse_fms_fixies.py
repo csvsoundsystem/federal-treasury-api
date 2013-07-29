@@ -225,6 +225,8 @@ def parse_table(table, date, url, verbose=False):
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
 			continue #ok
+		elif re.search(r'.*r-revised.*', line):
+			continue #ok
 		elif is_errant_footnote(line):
 			break #ok
 
