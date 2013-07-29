@@ -186,7 +186,7 @@ def parse_table(table, date, url, verbose=False):
 
 	parsed_table = []
 	for i, line in enumerate(table):
-		print '|' + line + '|', '<', i, '>'
+		# print '|' + line + '|', '<', i, '>'
 		row = {}
 		# a variety of date formats -- for your convenience
 		row['date'] = date
