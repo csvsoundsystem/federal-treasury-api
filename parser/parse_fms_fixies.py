@@ -120,6 +120,9 @@ def gen_fixie_url(f_name, date):
 		url = check_fixie_url(url)
 
 	return url
+
+def check_for_nulls(df, table):
+	print "do something here"
 ################################################################################
 def parse_file(f_name, verbose=False):
 	f = open(f_name, 'rb').read()
@@ -252,7 +255,7 @@ def parse_table(table, date, url, verbose=False):
 			except IndexError:
 				break
 			if not get_footnote(last_line):
-				continue
+				break
 
 			# *****THIS LINE MUST BE HERE TO ENSURE THAT FOOTNOTES AREN'T INCLUDED AS ITEMS ******#
 			continue
@@ -514,23 +517,36 @@ def parse_table(table, date, url, verbose=False):
 	# create data frame from table list of row dicts
 	df = pd.DataFrame(parsed_table)
 
+	if "The Daily Treasury Statement ( DTS ) is available by p m the following,The Daily Treasury Statement ( DTS ) is available by p m the following" in list(df['refund_type']):
+		print "fail"
+	else:
+		print "success"
+
 	# and pretty them up
 	if re.search(r'TABLE I\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'account', 'account_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		# check_for_nulls(df, "t1")
 	elif re.search(r'TABLE II\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item','is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		# check_for_nulls(df, "t2")
 	elif re.search(r'TABLE III-A', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'debt_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		# check_for_nulls(df, "t3a")
 	elif re.search(r'TABLE III-B', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		# check_for_nulls(df, "t3b")
 	elif re.search(r'TABLE III-C', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'item', 'item_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		# check_for_nulls(df, "t3c")
 	elif re.search(r'TABLE IV', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'is_total', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		# check_for_nulls(df, "t4")
 	elif re.search(r'TABLE V\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'is_total', 'balance_transactions', 'depositary_type_a', 'depositary_type_b', 'depositary_type_c', 'total', 'footnote'])
+		# check_for_nulls(df, "t5")
 	elif re.search(r'TABLE VI', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'refund_method', 'refund_type', 'refund_type_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		# check_for_nulls(df, "t6")
 
 	return df
 
