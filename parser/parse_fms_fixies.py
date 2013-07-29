@@ -18,6 +18,8 @@ T4_USE_ITEMS = [
 
 ERRANT_FOOTNOTE_PATTERNS = [p for p in open("../parser/errant_footnote_patterns.txt").read().split('\n') if p is not '']
 
+NULL_TEST_PARAMS = json.load(open("../tests/null_test_params.json"))
+
 ################################################################################
 def is_errant_footnote(line):
 	return any([re.search(p, line, flags=re.IGNORECASE) for p in ERRANT_FOOTNOTE_PATTERNS])
@@ -96,7 +98,28 @@ def check_fixie_url(url):
 		elif bad_dir == 'w':
 			good_dir = 'a'
 		return re.sub("dir="+bad_dir, "dir="+good_dir, url)
+################################################################################
+def gen_fixie_url(f_name, date):
+	# simplify file name for url creation
+	new_f_name = re.sub(r'\.\./data/fixie/', '', f_name)
 
+	# arbitrary cutoff to determine archive and working directories
+	rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
+	if date < rolling_cutoff:
+		f_dir = "a"
+	else:
+		f_dir = "w"
+
+	# format the url
+	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_f_name, f_dir)
+	
+	# now lets check urls that fall within 15 days before and after our rolling cutoff
+	check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
+	check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
+	if date > check_cutoff_start and date < check_cutoff_end:
+		url = check_fixie_url(url)
+
+	return url
 ################################################################################
 def parse_file(f_name, verbose=False):
 	f = open(f_name, 'rb').read()
@@ -117,25 +140,7 @@ def parse_file(f_name, verbose=False):
 
 	# file metadata
 	date = get_date_from_fname(f_name)
-
-	# simplify file name for url creation
-	new_f_name = re.sub(r'\.\./data/fixie/', '', f_name)
-
-	# arbitrary cutoff to determine archive and working directories
-	rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
-	if date < rolling_cutoff:
-		f_dir = "a"
-	else:
-		f_dir = "w"
-
-	# format the url
-	url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_f_name, f_dir)
-	
-	# now lets check urls that fall within 15 days before and after our rolling cutoff
-	check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
-	check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
-	if date > check_cutoff_start and date < check_cutoff_end:
-		url = check_fixie_url(url)
+	url = gen_fixie_url(f_name, date)
 
 	print 'INFO: parsing', f_name, '(', date, ')'
 	dfs = {}
@@ -198,13 +203,13 @@ def parse_table(table, date, url, verbose=False):
 		# HARD CODED HACKS
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
-		    continue
+			continue
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
 			continue
 		# comment on whatever this is; above line may make this redundant
 		elif re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
-			continue
+			break
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
 			continue
@@ -248,6 +253,7 @@ def parse_table(table, date, url, verbose=False):
 				break
 			if not get_footnote(last_line):
 				continue
+
 			# *****THIS LINE MUST BE HERE TO ENSURE THAT FOOTNOTES AREN'T INCLUDED AS ITEMS ******#
 			continue
 
@@ -372,8 +378,8 @@ def parse_table(table, date, url, verbose=False):
 					row_subtype = row['subtype']
 					row_item = row['item']
 					row['parent_item'] = row_subtype
-					row['item'] = row_subtype + ': ' + row_item
-					row['item_raw'] = row_subtype + ': ' + row_item_raw
+					row['item'] = row_item
+					row['item_raw'] = row_item_raw
 					row.pop('subtype')
 			except:
 				if verbose is True:
@@ -393,8 +399,8 @@ def parse_table(table, date, url, verbose=False):
 					row_subtype = row['subtype']
 					row_item = row['item']
 					row['parent_item'] = row_subtype
-					row['item'] = row_subtype + ': ' + row_item
-					row['item_raw'] = row_subtype + ': ' + row_item_raw
+					row['item'] = row_item
+					row['item_raw'] = row_item_raw
 					row.pop('subtype')
 			except:
 				if verbose is True:
@@ -414,8 +420,8 @@ def parse_table(table, date, url, verbose=False):
 					row_subtype = row['subtype']
 					row_item = row['item']
 					row['parent_item'] = row_subtype
-					row['item'] = row_subtype + ': ' + row_item
-					row['item_raw'] = row_subtype + ': ' + row_item_raw
+					row['item'] = row_item
+					row['item_raw'] = row_item_raw
 					row.pop('subtype')
 			except:
 				if verbose is True:
