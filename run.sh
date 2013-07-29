@@ -26,9 +26,9 @@ echo "INFO: Running tests\r\n"
 echo "INFO: Building schema_table.json \r\n"
 (
   cd ./schema-builder
-  node schema-builder.js
+  node db-schema-builder.js
   echo "INFO: Uploading schema_table.json to s3\r\n"
-  s3cmd put table_schema.json s3://treasury.io/table_schema.json
+  s3cmd put table_schema.json s3://treasury.io/db_schema.json
   s3cmd setacl s3://treasury.io/ --acl-public --recursive
   cd ..
 )
