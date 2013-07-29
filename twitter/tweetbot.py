@@ -183,7 +183,7 @@ def random_comparison_tweet():
 
     df = query('''SELECT date, item, fytd, url
                   FROM t2
-                  WHERE type = 'withdrawal' AND date = (SELECT max(date) FROM t2)''')
+                  WHERE transaction_type = 'withdrawal' AND date = (SELECT max(date) FROM t2)''')
 
     # get two random items to compare
     item_1_df = df[df.item==choice([i for i in df.item if i in set(T2_ITEM_DICT.keys())])]
@@ -210,12 +210,12 @@ def random_comparison_tweet():
     btly = gen_bitly_link(str(df['url'][0]))
     vals = (per, item_1, item_2, btly)
 
-    return "The US Gov has spent %s more on %s than on %s this year - %s" % vals
+    return "The US Gov has spent %s more on %s than on %s this fiscal year - %s" % vals
 
 @tweet
 def random_item_tweet():
 
-    df = query('''SELECT date, item, today, type, url
+    df = query('''SELECT date, item, today, transaction_type, url
                   FROM t2
                   WHERE date = (SELECT max(date) FROM t2)''')
 
@@ -223,15 +223,15 @@ def random_item_tweet():
 
     # determine change
     if len(the_df) == 1:
-        if the_df['type'] == "deposit":
+        if the_df['transaction_type'] == "deposit":
             change = "took in"
             preposition = "from"
-        elif the_df['type'] == "withdrawal":
+        elif the_df['transaction_type'] == "withdrawal":
             change = "spent"
             preposition = "on"
         val = int(the_df['today'])
     else:
-        val = sum(the_df[the_df.type == 'deposit']['today']) - sum(the_df[the_df.type == 'withdrawal']['today'])
+        val = sum(the_df[the_df.transaction_type == 'deposit']['today']) - sum(the_df[the_df.transaction_type == 'withdrawal']['today'])
         if val > 0:
             change = "took in"
             preposition = "from"
