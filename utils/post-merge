@@ -1,3 +1,3 @@
 #!/bin/sh
 
-curl http://treasury.io.s3.amazonaws.com/table_schema.json > schema-builder/table_schema.json
+curl https://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/http/table_schema.json > schema-builder/table_schema.json
