@@ -380,9 +380,6 @@ def parse_table(table, date, url, verbose=False):
 				except IndexError:
 					pass
 
-		# if re.search(r'TABLE III-C', row.get('table', '')):
-		# 	print text
-
 		# skip table annotations that aren't footnotes
 		# this is a band-aid at best, sorry folks
 		if len(digits) == 0:
