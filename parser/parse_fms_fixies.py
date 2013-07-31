@@ -98,6 +98,7 @@ def check_fixie_url(url):
 		elif bad_dir == 'w':
 			good_dir = 'a'
 		return re.sub("dir="+bad_dir, "dir="+good_dir, url)
+
 ################################################################################
 def gen_fixie_url(f_name, date):
 	# simplify file name for url creation
@@ -121,6 +122,7 @@ def gen_fixie_url(f_name, date):
 
 	return url
 
+################################################################################
 def check_for_nulls(df, table):
 	print "TO DO"
 	# test_params = NULL_TEST_PARAMS[table]
@@ -313,8 +315,20 @@ def parse_table(table, date, url, verbose=False):
 
 		row['type'] = type_
 
+		# special handling for table 3c
+		if re.search(r'TABLE III-C', row.get('table', '')):
+			if re.search(r'Less: Debt Not', text):
+				subtype = 'Debt Not Subject to Limit'
+				subtype_indent = indent
+				subtype_index = index
+				continue
+			elif re.search(r'Plus: Other Debt', text):
+				subtype = 'Other Debt Subject to Limit'
+				subtype_indent = indent
+				subtype_index = index
+				continue
 		# get subtype row
-		if len(digits) == 0 and text.endswith(':'):
+		elif len(digits) == 0 and text.endswith(':'):
 			subtype = text[:-1]
 			subtype_indent = indent
 			subtype_index = index
@@ -365,6 +379,9 @@ def parse_table(table, date, url, verbose=False):
 
 				except IndexError:
 					pass
+
+		# if re.search(r'TABLE III-C', row.get('table', '')):
+		# 	print text
 
 		# skip table annotations that aren't footnotes
 		# this is a band-aid at best, sorry folks
@@ -463,6 +480,10 @@ def parse_table(table, date, url, verbose=False):
 				row['open_today'] = digits[-3]
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
+				# now handle items with sub-classification
+				if row.get('subtype') is not None:
+					row['parent_item'] = row['subtype']
+					row.pop('subtype')
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -558,7 +579,7 @@ def parse_table(table, date, url, verbose=False):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
 		# check_for_nulls(df, "t3b")
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'item', 'item_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'parent_item', 'item', 'item_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 		# check_for_nulls(df, "t3c")
 	elif re.search(r'TABLE IV', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'is_total', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])
