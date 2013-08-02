@@ -79,7 +79,7 @@ def normalize_page_text(page):
 
 ################################################################################
 def get_footnote(line):
-	footnote = re.search(r'^\s*(\d)\/([\w\s\.,]+.*)', line)
+	footnote = re.search(r'^\s*(\d)\/([\w\s\./,]+.*)', line)
 	if footnote:
 		return [footnote.group(1), footnote.group(2)]
 	return None
@@ -98,6 +98,7 @@ def check_fixie_url(url):
 		elif bad_dir == 'w':
 			good_dir = 'a'
 		return re.sub("dir="+bad_dir, "dir="+good_dir, url)
+
 ################################################################################
 def gen_fixie_url(f_name, date):
 	# simplify file name for url creation
@@ -121,8 +122,19 @@ def gen_fixie_url(f_name, date):
 
 	return url
 
+################################################################################
 def check_for_nulls(df, table):
-	print "do something here"
+	print "TO DO"
+	# test_params = NULL_TEST_PARAMS[table]
+	# null_rows = []
+	# for v in test_params["values"]:
+	# 	null_row = df.loc(i, ) for i in df.index if pd.isnull(df[v][i])
+	# 	null_rows.append(null_row)
+	# null_field_values = []
+	# for f in test_params['fields']
+	# 	[r[f] for r in null_rows
+
+
 ################################################################################
 def parse_file(f_name, verbose=False):
 	f = open(f_name, 'rb').read()
@@ -175,10 +187,9 @@ def parse_table(table, date, url, verbose=False):
 		two_line_delta = -1
 
 	parsed_table = []
-	for line in table:
-		#print '|' + line + '|'
+	for i, line in enumerate(table):
+		# print '|' + line + '|', '<', i, '>'
 		row = {}
-
 		# a variety of date formats -- for your convenience
 		row['date'] = date
 		row['year'] = date.year
@@ -206,18 +217,20 @@ def parse_table(table, date, url, verbose=False):
 		# HARD CODED HACKS
 		# catch rare exceptions to the above
 		if re.search(r'DAILY\s+TREASURY\s+STATEMENT', line):
-			continue
+			continue #ok
 		# comment on statutory debt limit at end of Table III-C, and beyond
 		elif re.search(r'(As|Act) of ([A-Z]\w+ \d+, \d+|\d+\/\d+\/\d+)', line) and re.search(r'(statutory )*debt( limit)*', line):
-			continue
+			break #ok
 		# comment on whatever this is; above line may make this redundant
 		elif re.search(r'\s*Unamortized Discount represents|amortization is calculated daily', line, flags=re.IGNORECASE):
-			break
+			break #ok
 		# more cruft of a similar sort
 		elif re.search(r'billion after \d+\/\d+\/\d+', line):
-			continue
+			continue #ok
+		elif re.search(r'.*r\-revised.*', line):
+			continue #ok
 		elif is_errant_footnote(line):
-			continue
+			break #ok
 
 		# skip table header rows
 		if get_table_name(line):
@@ -228,24 +241,32 @@ def parse_table(table, date, url, verbose=False):
 
 		# save footnotes for later assignment to their rows
 		footnote = get_footnote(line)
+		
 		if footnote is not None:
 			# while footnote does not end in valid sentence-ending punctuation...
 			i = 1
-			while not re.search(r'[.!?]$', footnote[1]):
+			while True:
 				# get next line, if it exists
 				try:
 					next_line = table[index + i]
 				except IndexError:
 					break
 				# and next line is not itself a new footnote...
-				if not get_footnote(next_line):
-					# add next line text to current footnote
-					footnote[1] = ''.join([footnote[1], next_line])
-					used_index = index + i
-					i += 1
+				else:
+					if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', next_line):
+						break #ok
+					if not get_footnote(next_line):
+						# add next line text to current footnote
+						footnote[1] = ''.join([footnote[1], next_line])
+						used_index = index + i
+						i += 1
+					if footnote[1].endswith("program."):
+						continue #ok
+					elif re.search(r'[.!?]$', footnote[1]):
+						break #ok
 
 			# make our merged footnote hack official!
-			footnotes[footnote[0]] = footnote[1]
+			footnotes[footnote[0]] = re.sub("\s{2,}", "", footnote[1])
 
 			# if next line after footnote is not another footnote
 			# it is most assuredly extra comments we don't need
@@ -253,9 +274,15 @@ def parse_table(table, date, url, verbose=False):
 				last_line = table[index + i]
 
 			except IndexError:
-				break
-			if not get_footnote(last_line):
-				break
+				break #ok
+
+			else:
+				if re.search('\d+.*DAILY\s+TREASURY\s+STATEMENT.*PAGE:\s+(\d+)', last_line):
+					continue #ok
+				elif re.search(r'\.aspx\.', last_line):
+					continue #ok
+				elif not get_footnote(last_line):
+					break #ok
 
 			# *****THIS LINE MUST BE HERE TO ENSURE THAT FOOTNOTES AREN'T INCLUDED AS ITEMS ******#
 			continue
@@ -288,8 +315,20 @@ def parse_table(table, date, url, verbose=False):
 
 		row['type'] = type_
 
+		# special handling for table 3c
+		if re.search(r'TABLE III-C', row.get('table', '')):
+			if re.search(r'Less: Debt Not', text):
+				subtype = 'Debt Not Subject to Limit'
+				subtype_indent = indent
+				subtype_index = index
+				continue
+			elif re.search(r'Plus: Other Debt', text):
+				subtype = 'Other Debt Subject to Limit'
+				subtype_indent = indent
+				subtype_index = index
+				continue
 		# get subtype row
-		if len(digits) == 0 and text.endswith(':'):
+		elif len(digits) == 0 and text.endswith(':'):
 			subtype = text[:-1]
 			subtype_indent = indent
 			subtype_index = index
@@ -438,6 +477,10 @@ def parse_table(table, date, url, verbose=False):
 				row['open_today'] = digits[-3]
 				row['open_mo'] = digits[-2]
 				row['open_fy'] = digits[-1]
+				# now handle items with sub-classification
+				if row.get('subtype') is not None:
+					row['parent_item'] = row['subtype']
+					row.pop('subtype')
 			except:
 				if verbose is True:
 					print 'WARNING:', line
@@ -523,6 +566,8 @@ def parse_table(table, date, url, verbose=False):
 		# check_for_nulls(df, "t1")
 	elif re.search(r'TABLE II\s', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item','is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		if 'withdrawal' not in set(list(df['transaction_type'])):
+			print "ERROR: No withdrawal items in t2 for %s" % df['date'][0]
 		# check_for_nulls(df, "t2")
 	elif re.search(r'TABLE III-A', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'debt_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
@@ -531,7 +576,7 @@ def parse_table(table, date, url, verbose=False):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
 		# check_for_nulls(df, "t3b")
 	elif re.search(r'TABLE III-C', row.get('table', '')):
-		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'item', 'item_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'parent_item', 'item', 'item_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 		# check_for_nulls(df, "t3c")
 	elif re.search(r'TABLE IV', row.get('table', '')):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'type', 'is_total', 'classification', 'classification_raw', 'today', 'mtd', 'fytd', 'footnote'])

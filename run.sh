@@ -22,6 +22,7 @@ echo "INFO: Running tests\r\n"
   cd ./tests
   python is_it_running.py
   python null_tests.py
+  python distinct_tests.py
 )
 echo "INFO: Building schema_table.json \r\n"
 (
