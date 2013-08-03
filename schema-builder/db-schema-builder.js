@@ -1,6 +1,7 @@
 var _          = require('underscore'),
     $          = require('jquery'),
-    fs         = require('fs');
+    fs         = require('fs'),
+    verbose    = true;
 
 var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // This is in reverse order because it will be used to sort or weekday array by putting the days first going in order Friday to Monday.
     db_tables  = {
@@ -136,6 +137,17 @@ Array.prototype.move = function (old_index, new_index) {
     /* return this; // for testing purposes */
 };
 
+function distinctWhere(list_obj, value){
+  var vals = [],
+      uniq_vals = [];
+  _.each(list_obj, function(obj){
+    var val = obj[value];
+    vals.push(val);
+  });
+  uniq_vals = _.uniq(vals);
+  return uniq_vals;
+};
+
 function getKeyByValue(object, value){
   var key_list = [];
   for( var prop in object ) {
@@ -145,6 +157,14 @@ function getKeyByValue(object, value){
     };
   };
   return key_list;
+};
+
+function reportStatus(msgs){
+  var msg;
+  if (verbose == true){
+    msg = msgs.join('---')
+    console.log(msg);
+  };
 };
 
 
@@ -174,8 +194,8 @@ function cleanPragmaObj(table_schema, table_name){
 };
 
 function writeToFile(db_schema){
-  console.log('Writing file...');
-  fs.writeFileSync('db_schema.json', JSON.stringify(db_schema) );
+  reportStatus(['Writing file...']);
+  fs.writeFileSync('db_schema.json', JSON.stringify(db_schema));
 };
 
 /* var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test */
@@ -206,7 +226,7 @@ function insertTableToDbSchema(table_data){
   var table_name = table_data.name;
   db_schema.tables[table_name] = table_data;
 
-  console.log('Inserting', table_data.name, 'to db_schema');
+  reportStatus(['Inserting', table_data.name, 'to db_schema']);
   writeToFile_after(db_schema);
 };
 
@@ -217,7 +237,7 @@ function addDatatoColumnInfo(column_info, key, values){
 };
 
 function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, insertTableToDbSchema_after){
-  console.log('Inserting column', column_name, 'into', table_obj.name)
+  reportStatus(['Inserting column', column_name, 'into', table_obj.name])
   table_obj.columns[column_name] = column_info;
   // After all of the columns in this table have been processed we'll add the table object to the db object
   insertTableToDbSchema_after(table_obj);
@@ -226,7 +246,7 @@ function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, ins
 
 for (var table_name in db_tables){
   if (_.has(db_tables, table_name)){
-    /*if (table_name == 't2'){ // Limit it just to t2 for testing*/
+    if (table_name == 't2'){ // Limit it just to t2 for testing
 
     // Get a table scheme for each table, use a closure becaue it's done asynchronously and you need to know what table this ajax call refers to
     (function(table_name){
@@ -305,14 +325,14 @@ for (var table_name in db_tables){
                             column_info.model = 'TypeParentModel';
                           }else{
                             /* If the column we're on is not a designated type parent column then it's child and we therefore need to query what parents it exists under */
-                            query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return '"' + col + '"'}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
+                            query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return 'group_concat(DISTINCT "' + col + '") as ' + col}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
                             // value_obj.is_type_parent = false;
                             column_info.model = 'ItemModel';
                           };
 
                           treasuryIo(query_string)
                             .done( function(date_range_response){
-                              value_obj.value       = value;
+                              value_obj.value      = value;
                               value_obj.date_range = [date_range_response[0].min, date_range_response[0].max];
 
                               if (date_range_response.parent_item != 'undefined' && date_range_response[0].parent_item != null){
@@ -325,20 +345,27 @@ for (var table_name in db_tables){
                               delete date_range_response[0].parent_item;
 
                               if (column_info.model == 'ItemModel'){ 
-                                var parents = _.values(date_range_response[0]);
-                                if ( _.contains(parents, null) ){
-                                  parents = _.filter(parents, function(val){ return val != null });
-                                  parents.push('hasnull');
-                                  // TODO clean up how it handles parents tht are null
-                                  // keys_with_nulls = getKeyByValue(date_range_response[0]);
-                                  // parents = _.union(parents, keys_with_nulls);
-                                };
-                                value_obj.type_parents = parents;
+                                // Convert each value into an array 
+                                _.each(date_range_response[0], function(value, key, list) { 
+                                    if(value){
+                                      list[key] = value.split(',');
+                                    }else{
+                                      list[key] = [null];
+                                    };
+                                });
+                                  // TODO clean up how it handles parents that are null
+                                // if ( _.contains(parents, null) ){
+                                //   parents = _.filter(parents, function(val){ return val != null });
+                                //   // parents.push('hasnull');
+                                //   // keys_with_nulls = getKeyByValue(date_range_response[0]);
+                                //   // parents = _.union(parents, keys_with_nulls);
+                                // };
+                                value_obj.type_parents = date_range_response[0];
 
                               };
 
                               column_values.push(value_obj);
-                              console.log('Processed', value, 'in', column_info.name, 'in', table_obj.name);
+                              reportStatus(['Processed', value, 'in', column_info.name, 'in', table_obj.name]);
 
                               addDatatoColumnInfo_after(column_info, 'values', column_values);
                               // The column now has all of its values added, so you can add that completed column information to the designated table
@@ -369,7 +396,7 @@ for (var table_name in db_tables){
           });
         }); 
     })(table_name);
-    /* } // Limiting t2 if statement for testing */
+     } // Limiting t2 if statement for testing 
   };
 };
 
