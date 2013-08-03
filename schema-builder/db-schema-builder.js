@@ -348,7 +348,13 @@ for (var table_name in db_tables){
                                 // Convert each value into an array 
                                 _.each(date_range_response[0], function(value, key, list) { 
                                     if(value){
-                                      list[key] = value.split(',');
+                                      list[key] = _.map(value.split(','), function(val) { 
+                                        if (!isNaN(Number(val))){
+                                          return Number(val);
+                                        }else{
+                                          return val;
+                                        }
+                                      });
                                     }else{
                                       list[key] = [null];
                                     };
