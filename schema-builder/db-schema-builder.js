@@ -246,7 +246,7 @@ function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, ins
 
 for (var table_name in db_tables){
   if (_.has(db_tables, table_name)){
-    if (table_name == 't2'){ // Limit it just to t2 for testing
+    // if (table_name == 't2'){ // Limit it just to t2 for testing
 
     // Get a table scheme for each table, use a closure becaue it's done asynchronously and you need to know what table this ajax call refers to
     (function(table_name){
@@ -396,7 +396,7 @@ for (var table_name in db_tables){
           });
         }); 
     })(table_name);
-     } // Limiting t2 if statement for testing 
+     // } // Limiting t2 if statement for testing 
   };
 };
 
