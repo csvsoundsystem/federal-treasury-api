@@ -38,7 +38,7 @@ env/
 
 #schema builder
 schema-builder/node_modules
-schema-builder/table_schema.json
+schema-builder/db_schema.json
 
 # AWS
 .s3cfg

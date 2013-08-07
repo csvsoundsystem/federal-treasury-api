@@ -20,6 +20,8 @@ ERRANT_FOOTNOTE_PATTERNS = [p for p in open("../parser/errant_footnote_patterns.
 
 NULL_TEST_PARAMS = json.load(open("../tests/null_test_params.json"))
 
+re_net = re.compile(".*\(.*net.*\).*", flags=re.IGNORECASE)
+
 ################################################################################
 def is_errant_footnote(line):
 	return any([re.search(p, line, flags=re.IGNORECASE) for p in ERRANT_FOOTNOTE_PATTERNS])
@@ -405,6 +407,13 @@ def parse_table(table, date, url, verbose=False):
 		elif re.search(r'TABLE II\s', row.get('table', '')):
 			try:
 				row['item_raw'] = text
+
+				# determine whether item is calculated as a net
+				if re_net.search(text):
+					row['is_net'] = 1
+				else:
+					row['is_net'] = 0
+
 				row['item'] = normalize_fields(text, 't2', 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
@@ -565,7 +574,7 @@ def parse_table(table, date, url, verbose=False):
 		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'account', 'account_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
 		# check_for_nulls(df, "t1")
 	elif re.search(r'TABLE II\s', row.get('table', '')):
-		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item','is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+		df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item','is_total', 'is_net', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
 		if 'withdrawal' not in set(list(df['transaction_type'])):
 			print "ERROR: No withdrawal items in t2 for %s" % df['date'][0]
 		# check_for_nulls(df, "t2")
