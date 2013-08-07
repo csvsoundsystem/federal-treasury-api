@@ -277,6 +277,8 @@ for (var table_name in db_tables){
                 query_text = 'SELECT min("' + column_info.name + '") as min, max("' + column_info.name + '") as max FROM ' + table_obj.name;
               };
 
+              console.log(query_text)
+
               treasuryIo(query_text)
                 .done( function(response){
 
@@ -303,7 +305,7 @@ for (var table_name in db_tables){
 
                   if (column_info.type == 'TEXT'){
                     if (column_info.name == 'date'){
-                      column_info.element_type = 'date';
+                      column_info.column_type = 'date';
                       addDatatoColumnInfo(column_info, 'date_range', values_with_blank);
                       // The column now has all of its values added, so you can add that completed column information to the designated table
                       addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
@@ -322,12 +324,12 @@ for (var table_name in db_tables){
                           if (_.indexOf(db_tables[table_obj.name].type_parents, column_info.name) != -1){
                             /* If the column we're on is a designated type parent column */
                             query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
-                            column_info.element_type = 'parent';
+                            column_info.column_type = 'parent';
                           }else{
                             /* If the column we're on is not a designated type parent column then it's child and we therefore need to query what parents it exists under */
                             query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return 'group_concat(DISTINCT "' + col + '") as ' + col}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
                             // value_obj.is_type_parent = false;
-                            column_info.element_type = 'item';
+                            column_info.column_type = 'item';
                           };
 
                           treasuryIo(query_string)
@@ -344,7 +346,7 @@ for (var table_name in db_tables){
                               delete date_range_response[0].max;
                               delete date_range_response[0].parent_item;
 
-                              if (column_info.element_type == 'item'){ 
+                              if (column_info.column_type == 'item'){ 
                                 // Convert each value into an array 
                                 _.each(date_range_response[0], function(value, key, list) { 
                                     if(value){
@@ -380,9 +382,9 @@ for (var table_name in db_tables){
 
                   }else{ // INTEGER or REAL
                     if (column_info.name == 'is_total'){
-                      column_info.element_type = 'is_total';
+                      column_info.column_type = 'is_total';
                     }else{
-                      column_info.element_type = 'numeric';
+                      column_info.column_type = 'numeric';
                     };
                     addDatatoColumnInfo(column_info, 'values', values_with_blank);
                     // The column now has all of its values added, so you can add that completed column information to the designated table
