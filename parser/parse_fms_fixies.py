@@ -21,6 +21,7 @@ ERRANT_FOOTNOTE_PATTERNS = [p for p in open("../parser/errant_footnote_patterns.
 NULL_TEST_PARAMS = json.load(open("../tests/null_test_params.json"))
 
 re_net = re.compile(".*\(.*net.*\).*", flags=re.IGNORECASE)
+re_net_remove = re.compile('\(.*net.*\)', flags=re.IGNORECASE)
 
 ################################################################################
 def is_errant_footnote(line):
@@ -414,6 +415,10 @@ def parse_table(table, date, url, verbose=False):
 				else:
 					row['is_net'] = 0
 
+				# remove net from items
+				text = re_net_remove.sub("", text).strip()
+
+				# proceed
 				row['item'] = normalize_fields(text, 't2', 'item')
 				row['today'] = digits[-3]
 				row['mtd'] = digits[-2]
