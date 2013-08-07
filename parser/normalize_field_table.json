@@ -13,30 +13,35 @@
         "item": {
             "Agency for Internat l Development": "Agency for International Development",
             "Animal Plant Health Inspection Svcs": "Animal Plant Health Inspection svcs",
-            "Deposit Insurance Fund": "Deposit Insurance Fund ( net )",
+            "Deposit Insurance Fund ( net )": "Deposit Insurance Fund",
             "Farm Services Agency": "FSA Tobacco Assessments",
             "Interest recd from T L Depositaries": "Interest recd from cash investments",
-            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities ( net )",
+            "Prepayment of Treasury Securities ( net )": "Prepayment of Treasury Securities",
             "GSA programs": "GSA Programs",
             "GSA": "GSA Programs",
             "Transfer by HHS from Federal Tax Refund Offset Program to various State age": "Transfer by HHS from Federal Tax Refund Offset Program to various State agencies",
             "Temporary Assistance for Needy Families HHS": "Temporary Assistance for Needy Families ( HHS )",
             "Interior: Bureau of Land Mgmt": "Interior: Bureau of Land Management",
             "Veterans Affairs programs": "Veterans Affairs Programs",
-            "Overseas Private Investment Co": "Overseas Private Investment Co ( net )",
+            "Overseas Private Investment Co ( net )": "Overseas Private Investment Co",
             "Supple Nutrition Assist Program ( SNAP )": "Food Stamps",
             "Cash FTD s Received ( Table IV )" : "FTDs Received",
             "FTD s Received ( Table IV )" : "FTDs Received",
-            "Unemployment Insurance Benefits" : "Unemployment",
-            "FSLIC Resolution Fund": "FSLIC Resolution Fund ( net )"
+            "Unemployment" : "Unemployment Insurance Benefits",
+            "FSLIC Resolution Fund ( net )": "FSLIC Resolution Fund",
+            "Change in Balance of Uncollected Funds closing balance": "Change in Balance of Uncollected Funds",
+            "Export Import Bank ( net )": "Export Import Bank",
+            "Federal Employees Insurance Payments": "Federal Employees Insurance",
+            "Federal Employees Insurance Receipt": "Federal Employees Insurance",
+            "Minerals Management Svc Collections": "Minerals Management Service",
+            "Minerals Mgmt Svc Pmts to States": "Minerals Management Service",
+            "Farm Credit System Ins Corp": "Farm Credit Insurance Corp"
           }
     },
     "t3a": {
         "item": {
             "Agency for Internat l Development": "Agency for International Development",
-            "Deposit Insurance Fund": "Deposit Insurance Fund ( net )",
             "GSA programs": "GSA Programs",
-            "Prepayment of Treasury Securities": "Prepayment of Treasury Securities ( net )",
             "Veterans Affairs programs": "Veterans Affairs Programs"
           }
     },
