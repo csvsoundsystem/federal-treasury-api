@@ -55,65 +55,8 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
           "t3c": {},
           "t4":  {},
           "t5":  {},
-          "t6":  {},
-        },
-        "types":[
-          {
-            "name":"TEXT",
-            "operators":[
-              {
-                "name":"=",
-                "label":"is",
-              },
-              {
-                "name":"<>",
-                "label":"is not",
-              }
-            ]
-          },
-          {
-            "name":"DATE",
-            "operators":[
-              {
-                "name":"=",
-                "label":"is",
-              },
-              {
-                "name":"<>",
-                "label":"is not",
-              },
-              {
-                "name":"<",
-                "label":"is before",
-              },
-              {
-                "name":">",
-                "label":"is after",
-              }
-            ]
-          },
-          {
-            "name":"INTEGER",
-            "operators":[
-              {
-                "name":"=",
-                "label":"is",
-              },
-              {
-                "name":"<>",
-                "label":"is not",
-              },
-              {
-                "name":"<",
-                "label":"less than",
-              },
-              {
-                "name":">",
-                "label":"greater than",
-              }
-            ]
-          }
-        ]
+          "t6":  {}
+        }
       },
       tables = [];
 
@@ -302,11 +245,34 @@ for (var table_name in db_tables){
                     });
                   };
 
+          //   table_name: 't2',
+          //   column_name: 'date',
+          //   comparinator: '>',
+          //   value: t2.columns[column_name].date_range[0],
+          //   checked: true
+          // }),
+          // new models.DateModel({ 
+          //   table_name: 't2',
+          //   column_name: 'date',
+          //   comparinator: '<',
+          //   value: t2.columns[column_name].date_range[1],
+          //   checked: true
+
 
                   if (column_info.type == 'TEXT'){
                     if (column_info.name == 'date'){
                       column_info.column_type = 'date';
-                      addDatatoColumnInfo(column_info, 'date_range', values_with_blank);
+                      var date_item_values = [
+                        {
+                          comparinator: '>',
+                          value: values_with_blank[0]
+                        },
+                        {
+                          comparinator: '<',
+                          value: values_with_blank[1]
+                        }
+                      ];
+                      addDatatoColumnInfo(column_info, 'item_values', date_item_values);
                       // The column now has all of its values added, so you can add that completed column information to the designated table
                       addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
 
@@ -368,7 +334,7 @@ for (var table_name in db_tables){
                               column_values.push(value_obj);
                               reportStatus(['Processed', value, 'in', column_info.name, 'in', table_obj.name]);
 
-                              addDatatoColumnInfo_after(column_info, 'values', column_values);
+                              addDatatoColumnInfo_after(column_info, 'item_values', column_values);
                               // The column now has all of its values added, so you can add that completed column information to the designated table
                               addColumnInfoToAssociatedTable_after(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
 
@@ -381,12 +347,32 @@ for (var table_name in db_tables){
                     };
 
                   }else{ // INTEGER or REAL
+                    var int_real_vals = [];
                     if (column_info.name == 'is_total'){
                       column_info.column_type = 'is_total';
+                      int_real_vals = [
+                        {
+                          value: values_with_blank[0]
+                        },
+                        {
+                          value: values_with_blank[1]
+                        }
+                      ];
                     }else{
                       column_info.column_type = 'numeric';
+
+                      int_real_vals = [
+                        {
+                          comparinator: '>',
+                          value: values_with_blank[0]
+                        },
+                        {
+                          comparinator: '<',
+                          value: values_with_blank[1]
+                        }
+                      ];
                     };
-                    addDatatoColumnInfo(column_info, 'values', values_with_blank);
+                    addDatatoColumnInfo(column_info, 'item_values', int_real_vals);
                     // The column now has all of its values added, so you can add that completed column information to the designated table
                     addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
                   };
