@@ -245,20 +245,6 @@ for (var table_name in db_tables){
                     });
                   };
 
-          //   table_name: 't2',
-          //   column_name: 'date',
-          //   comparinator: '>',
-          //   value: t2.columns[column_name].date_range[0],
-          //   checked: true
-          // }),
-          // new models.DateModel({ 
-          //   table_name: 't2',
-          //   column_name: 'date',
-          //   comparinator: '<',
-          //   value: t2.columns[column_name].date_range[1],
-          //   checked: true
-
-
                   if (column_info.type == 'TEXT'){
                     if (column_info.name == 'date'){
                       column_info.column_type = 'date';
