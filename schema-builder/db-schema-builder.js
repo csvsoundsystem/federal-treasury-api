@@ -110,6 +110,22 @@ function reportStatus(msgs){
   };
 };
 
+function grabAllCols(table_schema){
+  var all_cols = [];
+  _.each(table_schema, function(obj, index){
+
+    /* 
+    The PRAGMA command returns an object with a bunch of properties, we only want the name though
+    */
+    all_cols.push(obj.name)
+    var clean_obj = {
+      name: obj.name
+    };
+
+  });
+
+  return all_cols;
+}
 
 function cleanPragmaObj(table_schema, table_name){
   var whitelisted_schema = [];
@@ -196,10 +212,11 @@ for (var table_name in db_tables){
       treasuryIo('PRAGMA table_info(' + table_name +')')
         .done( function(response){
 
-          
+          var all_cols = grabAllCols(response);
           var table_obj = {
                 "label": db_tables[table_name].label,
                 "name" : table_name,
+                "all_cols": all_cols,
                 "columns": {}
               },
               column_infos = cleanPragmaObj(response, table_name),
@@ -297,7 +314,6 @@ for (var table_name in db_tables){
                             var q_string = 'SELECT DISTINCT "item" FROM t2 WHERE "transaction_type" = \'' + value + '\'';
                             treasuryIo(q_string)
                               .done( function(children){
-                                counttttt++
                                 var val_with_children = {
                                   comparinator: '=',
                                   value: value,
