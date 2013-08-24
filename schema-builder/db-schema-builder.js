@@ -1,48 +1,48 @@
 var _          = require('underscore'),
     $          = require('jquery'),
     fs         = require('fs'),
-    verbose    = true;
+    verbose    = false;
 
 var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // This is in reverse order because it will be used to sort or weekday array by putting the days first going in order Friday to Monday.
     db_tables  = {
       "t1": {
         "label": "t1: Operating Cash Balance",
-        "whitelisted_cols": ["date", "is_total", "account", "close_today", "open_today", "open_mo", "open_fy"],
+        "whitelisted_cols": ["date",],
         "type_parents": ["is_total"]
       },
       "t2": { 
         "label": "t2: Deposits and Withdrawals",
-        "whitelisted_cols": ["date", "account", "transaction_type", "is_total", "item", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "transaction_type"],
         "type_parents": ["account", "transaction_type", "is_total", "parent_item"]
       },
       "t3a": { 
         "label": "t3a: Public Debt Transactions",
-        "whitelisted_cols": ["date", "transaction_type", "Debtt_type", "is_total", "item", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "transaction_type"],
         "type_parents": ["transaction_type", "debt_type", "is_total", "parent_item"]
       },
       "t3b": { 
         "label": "t3b: Adjustment of Public Debt Transactions",
-        "whitelisted_cols": ["date", "transaction_type", "is_total", "item", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "transaction_type"],
         "type_parents": ["transaction_type", "is_total", "parent_item"]
       },
       "t3c": { 
         "label": "t3c: Debt Subject to Limit",
-        "whitelisted_cols": ["date", "is_total", "item", "close_today", "open_today", "open_mo", "open_fy"],
+        "whitelisted_cols": ["date", "item"],
         "type_parents": ["is_total", "parent_item"]
       },
       "t4": { 
         "label": "t4: Federal Tax Deposits",
-        "whitelisted_cols": ["date", "type", "is_total", "classification", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "classification"],
         "type_parents": ["type", "is_total"]
       },
         "t5": { 
         "label": "t5: Short-Term Cash Investments",
-        "whitelisted_cols": ["date", "transaction_type", "is_total", "balance_transactions", "depositary_type_a", "depositary_type_b", "depositary_type_c", "total"],
+        "whitelisted_cols": ["date", "transaction_type"],
         "type_parents": ["transaction_type", "is_total"]
       },
       "t6": { 
         "label": "t6: Income Tax Refunds Issued",
-        "whitelisted_cols": ["date", "refund_method", "refund_type", "today", "mtd", "fytd"],
+        "whitelisted_cols": ["date", "refund_type"],
         "type_parents": ["refund_method"]
       }
      },
@@ -263,22 +263,77 @@ for (var table_name in db_tables){
                       addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
 
                     }else{
+                      var t = table_obj.name,
+                          item_values = [];
+                      if (t != 't2' && t != 't3'){
+                        _.each(values_with_blank, function(value){
+                          var val_obj = {
+                            comparinator: '=',
+                            value: value
+                          };
+                          item_values.push(val_obj);
+                        });
+                        addDatatoColumnInfo(column_info, 'item_values', item_values);
+                        // The column now has all of its values added, so you can add that completed column information to the designated table
+                        addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                      }else if (t == 't3c'){
+                       var date_item_values = [
+                          {
+                            comparinator: '=',
+                            value: 'Total Public Debt Subject to Limit'
+                          },
+                          {
+                            comparinator: '=',
+                            value: 'Statutory Debt Limit'
+                          }
+                        ];     
+                        addDatatoColumnInfo(column_info, 'item_values', item_values);
+                        // The column now has all of its values added, so you can add that completed column information to the designated table
+                        addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                 
+                      }else if (t == 't2'){
+                        _.each(values_with_blank, function(value){
+                          (function(value, column_info, table_obj){
+                            var q_string = 'SELECT DISTINCT "item" FROM t2 WHERE "transaction_type" = \'' + value + '\'';
+                            treasuryIo(q_string)
+                              .done( function(children){
+                                counttttt++
+                                var val_with_children = {
+                                  comparinator: '=',
+                                  value: value,
+                                  children: children
+                                }
+                                item_values.push(val_with_children);
+                                addDatatoColumnInfo(column_info, 'item_values', item_values);
+                                addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+
+                              })
+                              .fail( function(err){
+                                console.log(err)
+                              })
+                          })(value, column_info, table_obj);
+                        });
+                      }
+                      // console.log(table_obj.name, values_with_blank)
+
+/*
                       var addDatatoColumnInfo_after            = _.after(values_with_blank.length, addDatatoColumnInfo),
                           addColumnInfoToAssociatedTable_after = _.after(values_with_blank.length, addColumnInfoToAssociatedTable),
                           column_values                        = [];
 
-                      /* Get information for each value such as name, date range, its limiting parents or if it is a parent */
+                      //Get information for each value such as name, date range, its limiting parents or if it is a parent 
                       _.each(values_with_blank, function(value){
                         (function(value, column_info, table_obj){
-                          var value_obj = {},
-                              query_string;
+                          var value_obj = {};
+
+                          var query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
 
                           if (_.indexOf(db_tables[table_obj.name].type_parents, column_info.name) != -1){
-                            /* If the column we're on is a designated type parent column */
+                            // If the column we're on is a designated type parent column 
                             query_string = 'SELECT min("date") as min, max("date") as max FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" ' + ((value == '(blank)') ? 'IS NULL' : ("= '" + value + "'") )
                             column_info.column_type = 'parent';
                           }else{
-                            /* If the column we're on is not a designated type parent column then it's child and we therefore need to query what parents it exists under */
+                            // If the column we're on is not a designated type parent column then it's child and we therefore need to query what parents it exists under 
                             query_string = 'SELECT min("date") as min, max("date") as max, ' + _.map(db_tables[table_obj.name].type_parents, function(col){ return 'group_concat(DISTINCT "' + col + '") as ' + col}).join(', ') + ' FROM ' + table_obj.name + ' WHERE "' + column_info.name + '" = \'' + value + '\''
                             // value_obj.is_type_parent = false;
                             column_info.column_type = 'item';
@@ -287,35 +342,9 @@ for (var table_name in db_tables){
                           treasuryIo(query_string)
                             .done( function(date_range_response){
                               value_obj.value      = value;
-                              value_obj.date_range = [date_range_response[0].min, date_range_response[0].max];
+                              // value_obj.date_range = [date_range_response[0].min, date_range_response[0].max];
 
-                              if (date_range_response.parent_item != 'undefined' && date_range_response[0].parent_item != null){
-                                value_obj.parent_item = date_range_response[0].parent_item;
-                              };
-
-                              // After deleting the min and max and parent_item from the sql response, the remaining object will have the `type_parents` limiters, which will be inserted as an array `type_parents`
-                              delete date_range_response[0].min;
-                              delete date_range_response[0].max;
-                              delete date_range_response[0].parent_item;
-
-                              if (column_info.column_type == 'item'){ 
-                                // Convert each value into an array 
-                                _.each(date_range_response[0], function(value, key, list) { 
-                                    if(value){
-                                      list[key] = _.map(value.split(','), function(val) { 
-                                        if (!isNaN(Number(val))){
-                                          return Number(val);
-                                        }else{
-                                          return val;
-                                        }
-                                      });
-                                    }else{
-                                      list[key] = [null];
-                                    };
-                                });
-                                value_obj.type_parents = date_range_response[0];
-
-                              };
+                              console.log('value ob', value_obj)
 
                               column_values.push(value_obj);
                               reportStatus(['Processed', value, 'in', column_info.name, 'in', table_obj.name]);
@@ -324,11 +353,12 @@ for (var table_name in db_tables){
                               // The column now has all of its values added, so you can add that completed column information to the designated table
                               addColumnInfoToAssociatedTable_after(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
 
-                              /* TODO, add field definition link when that is done and made into a JSON object */
+                              // TODO, add field definition link when that is done and made into a JSON object
                             });
 
                         })(value, column_info, table_obj);
                       });
+*/
                       
                     };
 
