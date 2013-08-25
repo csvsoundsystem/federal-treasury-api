@@ -118,11 +118,11 @@ function grabAllCols(table_schema){
     The PRAGMA command returns an object with a bunch of properties, we only want the name though
     */
     all_cols.push(obj.name)
-    var clean_obj = {
-      name: obj.name
-    };
-
   });
+
+  // Move `url` to the last item in the array so that it displays nicer on the internets when we preview the query, it's also pretty ancillary info, so put it last
+  var url_index = _.indexOf(all_cols, 'url');
+  all_cols.move(url_index, all_cols.length - 1);
 
   return all_cols;
 }
