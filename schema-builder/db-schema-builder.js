@@ -12,7 +12,7 @@ var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // 
       },
       "t2": { 
         "label": "t2: Deposits and Withdrawals",
-        "whitelisted_cols": ["date", "transaction_type"],
+        "whitelisted_cols": ["date", "transaction_type", "item"],
         "type_parents": ["account", "transaction_type", "is_total", "parent_item"]
       },
       "t3a": { 
@@ -237,11 +237,10 @@ for (var table_name in db_tables){
                 query_text = 'SELECT min("' + column_info.name + '") as min, max("' + column_info.name + '") as max FROM ' + table_obj.name;
               };
 
-              console.log(query_text)
+              // console.log(query_text)
 
               treasuryIo(query_text)
                 .done( function(response){
-
                   // Process the json response into a single flat, ascending sorted array of values
                   var values = _.flatten(_.map(response, function(value){ return _.values(value)})),
                       values_with_blank = _.map(values, function(val) { return ((val != null) ? val : '(blank)' )} );
@@ -309,26 +308,59 @@ for (var table_name in db_tables){
                         addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
                  
                       }else if (t == 't2'){
-                        _.each(values_with_blank, function(value){
-                          (function(value, column_info, table_obj){
-                            var q_string = 'SELECT DISTINCT "item" FROM t2 WHERE "transaction_type" = \'' + value + '\'';
-                            treasuryIo(q_string)
-                              .done( function(children){
-                                var val_with_children = {
-                                  comparinator: '=',
-                                  value: value,
-                                  children: children
-                                }
-                                item_values.push(val_with_children);
-                                addDatatoColumnInfo(column_info, 'item_values', item_values);
-                                addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                        if (column_info.name != 'item'){
+                          _.each(values_with_blank, function(value){
+                            var val_with_children = {
+                              comparinator: '=',
+                              value: value
+                            };
+                            item_values.push(val_with_children);
+                            addDatatoColumnInfo(column_info, 'item_values', item_values);
+                            addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                          });
+                        }else{
+                          (function(column_info, table_obj){
+                            _.each(values_with_blank, function(value){
+                              var parent_query = 'SELECT group_concat(DISTINCT transaction_type) as t_type_parents FROM t2 WHERE "item" = \'' + value + '\''
+                              
+                              treasuryIo(parent_query)
+                                .done(function(r){
+                                  var parent_t_types = r[0].t_type_parents.split(',')
+                                  var val_with_children = {
+                                    comparinator: '=',
+                                    value: value,
+                                    parents: parent_t_types
+                                  };
+                                  item_values.push(val_with_children);
+                                  addDatatoColumnInfo(column_info, 'item_values', item_values);
+                                  addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                                })
+                                .fail(function(err){
+                                  console.log(err)
+                                })
+                            })
+                          })(column_info, table_obj)
+                        }
+                        // _.each(values_with_blank, function(value){
+                        //   (function(value, column_info, table_obj){
+                        //     var q_string = 'SELECT DISTINCT "item" FROM t2 WHERE "transaction_type" = \'' + value + '\'';
+                        //     treasuryIo(q_string)
+                        //       .done( function(children){
+                        //         var val_with_children = {
+                        //           comparinator: '=',
+                        //           value: value,
+                        //           children: children
+                        //         }
+                        //         item_values.push(val_with_children);
+                        //         addDatatoColumnInfo(column_info, 'item_values', item_values);
+                        //         addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
 
-                              })
-                              .fail( function(err){
-                                console.log(err)
-                              })
-                          })(value, column_info, table_obj);
-                        });
+                        //       })
+                        //       .fail( function(err){
+                        //         console.log(err)
+                        //       })
+                        //   })(value, column_info, table_obj);
+                        // });
                       }
                       // console.log(table_obj.name, values_with_blank)
 
