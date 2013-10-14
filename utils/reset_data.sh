@@ -8,15 +8,15 @@ fi
 git checkout master
 git pull origin master
 
-if [ -d  ../data/daily_csv ]; then
+if [ -d  data/daily_csv ]; then
     echo "Removing data/daily_csv/"
-    rm -r ../data/daily_csv/
+    rm -r data/daily_csv/
 fi
 
-if [ -d ../data/lifetime_csv ]; then
+if [ -d data/lifetime_csv ]; then
     echo "Removing data/lifetime_csv/"
-    rm -r ../data/lifetime_csv/
+    rm -r data/lifetime_csv/
 fi
 
-cd ./parser
+cd parser
 python download_and_parse_fms_fixies.py
