@@ -19,4 +19,4 @@ if [ -d ../data/lifetime_csv ]; then
 fi
 
 cd ./parser
-python parse_and_download_fms_fixies.py
+python download_and_parse_fms_fixies.py
