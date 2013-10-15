@@ -53,11 +53,18 @@ First run this:
 Now navigate to [http://localhost:5000/](http://localhost:5000/)
 
 
-Run `crontab -e` to edit the schedule later.
+## Querying the API
+parameters:
 
-### Testing
+  - `q`= A url-encoded SQL query
+  - `format` = `json` or `csv`
 
-## Tables
+example:
+
+[http://localhost:5000/?q=SELECT%20*%20FROM%20t2%20LIMIT%20100](http://localhost:5000/?q=SELECT%20*%20FROM%20t2%20LIMIT%20100)
+
+
+## About the data
 There are eight tables.
 
 * I. Operating Cash Balance (`t1`)
