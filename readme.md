@@ -94,6 +94,12 @@ to: mypersonalgmail+federal-treasury-api-tests@gmail.com
 api_key: dfasfdsdga-dgasg-gdsag-dgasgd-dgasdg
 ```
 
+You'll also need to install the following modules:
+
+```
+pip install pystmark pyyaml
+```
+
 ## Cron
 Run everything each day around 4:30 - right after the data has been released.
 
