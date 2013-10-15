@@ -21,6 +21,10 @@
    €
 ```
 
+## About this branch
+the `just-the-api` branch of `federal-treasury-api` contains just the code needed to download the data locally and host a queryable api. `master` contains code specific to running on ScraperWiki.
+
+## About the API
 `federal-treasury-api` is the first-ever electronically-searchable database of the Federal government's daily cash spending and borrowing. It updates daily and the data can be exported in various formats and loaded into various systems.
 
 ## About the data
@@ -37,25 +41,20 @@ There are eight tables.
 
 Check out our comprehensive [data dictionary](https://github.com/csvsoundsystem/federal-treasury-api/wiki/Treasury.io-Data-Dictionary) and [treasury.io](http://treasury.io) for more information.
 
-
-## ABOUT THIS BRANCH
-the `just-the-api` branch of `federal-treasury-api` contains just the code needed to download the data locally and host a queryable api. `master` contains code specific to running on ScraperWiki.
-
-
-## Dependencies
+## Obtaining the data
+### Dependencies
 
     pip install -r requirements.pip
 
-
-## Obtaining the data
-### POSIX / MAC OSX
+### Download, parse raw data, and build database
+#### POSIX / MAC OSX
 This one command downloads the (new) fixies and converts them to an SQLite3 database.
 
     ./run.sh
 
 _Warning_: this will take a while... ~10-15 minutes on my laptop.
 
-### Windows
+#### Windows
 Run everything
 
     cd parser
