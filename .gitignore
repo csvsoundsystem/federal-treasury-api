@@ -1,0 +1,19 @@
+# Crud
+*/*.pyc
+*/*/*/.DS_Store
+*/*/.DS_Store
+*/.DS_Store
+.DS_Store
+
+# Data
+data/fixie/
+data/daily_csv/
+data/lifetime_csv/
+data/treasury_data.db
+data/treasury_data.db-journal
+
+# ScraperWiki box
+scraperwiki.sqlite
+
+
+

@@ -1,0 +1,15 @@
+.*\s+SOURCE:\s+Financial\s+Management.*
+.*\s+This statement summarizes\s+the United States Treasury's cash and debt.*
+.*Represents a return of million previously reported on September.*
+.*ery Act of 2008, Public Law.*
+.*securities have been issued to the FFB.*
+.*\s*The Food Stamp Program has been renamed.*
+.*were no longer reported as.*
+.*leaving a portion of the funds.*
+.*not include million offset.*
+.*began a pilot program for the repurchase.*
+.*and million for the fiscal year to date for.*
+.*dated December.*
+.*Treasury reduced the amount of Debt Subject.*
+.*r/ Revised.*
+
