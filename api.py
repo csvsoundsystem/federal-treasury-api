@@ -8,7 +8,6 @@ import csv
 app = flask.Flask(__name__)
 db = dataset.connect('sqlite:///data/treasury_data.db')
 
-
 # csv ouput
 def row2string(row):
     si = StringIO.StringIO()
