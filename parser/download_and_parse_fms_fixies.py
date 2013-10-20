@@ -138,9 +138,12 @@ TABLES = [
 	},
 ]
 
+
 # delete the db and promptly rewrite it from csvs
 print "INFO: building sqlite database"
 db = os.path.join('..', 'data', 'treasury_data.db')
+
+# delete the database first, then regenerate it.
 os.system("rm " + db)
 
 connection = sqlite3.connect(db)
