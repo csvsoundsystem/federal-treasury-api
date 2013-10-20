@@ -4,7 +4,10 @@ import yaml
 # gmail helper
 def _send_email(tupl):
     subject, message = tupl
-    c = yaml.safe_load(open('../postmark.yml'))
+    try:
+        c = yaml.safe_load(open('../postmark.yml'))
+    except:
+        return
     """
     a decorator to send an email
 
