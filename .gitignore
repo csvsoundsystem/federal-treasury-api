@@ -14,3 +14,4 @@ data/treasury_data.db-journal
 
 # ScraperWiki box
 scraperwiki.sqlite
+schema-builder/

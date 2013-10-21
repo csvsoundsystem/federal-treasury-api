@@ -52,7 +52,7 @@ This one command downloads the (new) fixies and converts them to an SQLite3 data
 
     ./run.sh
 
-_Warning_: this will take a while... ~10-15 minutes on my laptop.
+_Warning_: this will take a while... ~ 15-20 minutes on a 5 mbps connection.
 
 #### Windows
 Run everything
@@ -99,6 +99,10 @@ You'll also need to install the following modules:
 ```
 pip install pystmark pyyaml
 ```
+
+#### Submitting Errors
+If you get an emailed error, it means that we've probably got one too. But if we haven't gotten around to fixing it yet, please submit an issue to the repo.
+
 
 ## Cron
 Run everything each day around 4:30 - right after the data has been released.
