@@ -151,7 +151,7 @@ for table in TABLES:
 	# WARNING SERIOUS HACKS FOLLOW #
 	# FILTER OUT TABLE 5 AFTER  2012-04-02 - HACK BUT WORKS FOR NOW #
 	if table['new-table']=="t5":
-		print "HACK: filtering out invalid dates for TABLE V"
+		print "INFO: filtering out invalid dates for TABLE V (deprecated as of 2012-04-02) "
 		table_v_end = datetime.date(2012, 4, 2)
 		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d").date())
 		df = df[df.date < table_v_end]
