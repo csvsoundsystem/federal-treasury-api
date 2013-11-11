@@ -25,13 +25,9 @@ echo "INFO: Running tests\r\n"
   python distinct_tests.py
   cd ..
 )
-echo "INFO: Building schema_table.json \r\n"
+echo "INFO: Building db_schema.json \r\n"
 (
   cd ./schema-builder
   node db-schema-builder.js
-  echo "INFO: Uploading db_schema.json to s3\r\n"
-  s3cmd put table_schema.json s3://treasury.io/db_schema.json
-  s3cmd setacl s3://treasury.io/ --acl-public --recursive
-  cd ..
 )
 echo "\r\nDone!\r\n"

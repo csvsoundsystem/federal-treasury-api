@@ -8,6 +8,7 @@
 .node-gyp/
 .npm/
 .gnupg/
+.subversion/
 
 # Data
 data/fixie/
@@ -38,7 +39,7 @@ env/
 
 #schema builder
 schema-builder/node_modules
-schema-builder/db_schema.json
+http/db_schema.json
 
 # AWS
 .s3cfg
