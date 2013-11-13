@@ -1,7 +1,7 @@
 var _          = require('underscore'),
     $          = require('jquery'),
     fs         = require('fs'),
-    verbose    = false;
+    verbose    = true;
 
 var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // This is in reverse order because it will be used to sort or weekday array by putting the days first going in order Friday to Monday.
     db_tables  = {
@@ -154,7 +154,7 @@ function cleanPragmaObj(table_schema, table_name){
 
 function writeToFile(db_schema){
   reportStatus(['Writing file...']);
-  fs.writeFileSync('../http/db_schema.json', JSON.stringify(db_schema));
+  fs.writeFileSync('../http/db_schema.js', 'callback(' + JSON.stringify(db_schema) + ')');
 };
 
 /* var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test */
