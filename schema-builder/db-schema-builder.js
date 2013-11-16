@@ -154,7 +154,7 @@ function cleanPragmaObj(table_schema, table_name){
 
 function writeToFile(db_schema){
   reportStatus(['Writing file...']);
-  fs.writeFileSync('../http/db_schema.js', 'callback(' + JSON.stringify(db_schema) + ')');
+  fs.writeFileSync('../http/db_schema.js', JSON.stringify(db_schema));
 };
 
 /* var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test */
