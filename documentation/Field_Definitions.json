@@ -1,17 +1,769 @@
-
 {
-    "t1": {
-        "account": {
-            "Federal Reserve Account": "The checking account of the U.S. government. It is the main account through which the Treasury pays all the bills of the federal government.",
-            "Financial Institution Account": "This was an account Treasury created to bail out Wall Street. The account was only used during FY 2009 and FY 2010.",
-            "Short Term Cash Investments ( Table V )": "Please see Tax and Loan Note Accounts.",
-            "Supplementary Financing Program": "The Supplementary Financing Program was another bailout-era initiative the Treasury used to pump money into the financial system in 2008. Read more about it here: http://www.treasury.gov/press-center/press-releases/Pages/hp1144.aspx",
-            "Tax and Loan Note Accounts ( Table V )": "Treasury used these accounts to invest its excess cash until November 2008, when it suspended and later decommissioned the program. In October 2012, it renamed the program \"Short Term Cash Investments.\" The accounts are no longer in use.",
-            "Total Operating Balance": "This is the total cash the Treasury has on hand each day across all the accounts listed in the Daily Treasury Statement."    
-        }
-        },
-    "t2": {
-        "item": {
-            "Item name": "Definition",
-          }
-
+	"t1": {
+		"Account": {
+			"Federal Reserve Account": {
+			    "Name": "Federal Reserve Account",
+			    "Definition": "The checking account of the U.S. government. It is the main account through which the Treasury pays all the bills of the federal government."
+			},
+			"Financial Institution Account": {
+			    "Name": "Financial Institution Account",
+			    "Definition": "This was an account Treasury created to bail out Wall Street. The account was only used during FY 2009 and FY 2010."
+			},
+			"Short Term Cash Investments ( Table V )": {
+			    "Name": "Short Term Cash Investments ( Table V )",
+			    "Definition": "Please see Tax and Loan Note Accounts."
+			},
+			"Supplementary Financing Program": {
+			    "Name": "Supplementary Financing Program",
+			    "Definition": "The Supplementary Financing Program was another bailout-era initiative the Treasury used to pump money into the financial system in 2008. Read more about it here: http://www.treasury.gov/press-center/press-releases/Pages/hp1144.aspx"
+			},
+			"Tax and Loan Note Accounts ( Table V )": {
+			    "Name": "Supplementary Financing Program",
+			    "Definition": "Treasury used these accounts to invest its excess cash until November 2008, when it suspended and later decommissioned the program. In October 2012, it renamed the program \"Short Term Cash Investments.\" The accounts are no longer in use."
+			},
+			"Total Operating Balance": {
+			    "Name": "Short Term Cash Investments ( Table V )",
+			    "Definition": "This is the total cash the Treasury has on hand each day across all the accounts listed in the Daily Treasury Statement."
+			},
+		}
+	},
+	"t2": {
+		"Item": {
+			"African Development Fund": {
+			    "Name": "African Development Fund",
+			    "URL": "http://www.adf.gov/",
+			    "Definition": "This is the U.S. agency that provides aid to Africa"
+			},
+			"Agency for International Development": {
+			    "Name": "Agency for International Development",
+			    "URL": "http://www.usaid.gov/",
+			    "Definition": "This is the U.S. agency that grants assistance to foreign countries"
+			},
+			"Agriculture": {
+			    "Name": "Agriculture",
+			    "URL": "http://www.usda.gov/",
+			    "Definition": "This line item reflects Department of Agriculture programs not separately broken out in other line items"
+			},
+			"Agriculture Loan Payments ( misc )": {
+			    "Name": "Agriculture Loan Payments ( misc )",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Agriculture Loan Repayments ( misc )": {
+			    "Name": "Agriculture Loan Repayments ( misc )",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Air Transport Security Fees": {
+			    "Name": "Air Transport Security Fees",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Animal Plant Health Inspection svcs": {
+			    "Name": "Animal Plant Health Inspection svcs",
+			    "URL": "http://www.aphis.usda.gov/",
+			    "Definition": "This is the arm of the USDA that regulates farm animal safety"
+			},
+			"Asian Development Bank Payment": {
+			    "Name": "Asian Development Bank Payment",
+			    "URL": "http://www.adb.org/",
+			    "Definition": "These are payments the Treasury makes to the Asian Development Bank"
+			},
+			"Asset Sale: U S Enrichment Corp": {
+			    "Name": "Asset Sale: U S Enrichment Corp",
+			    "URL": "http://www.usec.com/",
+			    "Definition": "This line item reflects the proceeds from the Treasury's 1998 privatization of the U.S. Enrichment Corporation, a former subsidiary of the U.S. government that enriched uranium for commercial use in nuclear power plants."
+			},
+			"Bank Insurance Fund": {
+			    "Name": "Bank Insurance Fund",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Capital Purchase Program ( TARP )": {
+			    "Name": "Capital Purchase Program ( TARP )",
+			    "URL": "http://www.treasury.gov/initiatives/financial-stability/TARP-Programs/bank-investment-programs/cap/Pages/default.aspx",
+			    "Definition": "This was the portion of the TARP bailout fund through which the Treasury made investments in financial institutions during the financial crisis. As these investments get repaid, the repayments are recorded under the separate 'TARP' line item"
+			},
+			"Centers for Disease Control": {
+			    "Name": "Centers for Disease Control",
+			    "URL": "http://www.cdc.gov/",
+			    "Definition": "This is the arm of the government that responds to disease outbreaks"
+			},
+			"Change in Balance of Uncollected Funds": {
+			    "Name": "Change in Balance of Uncollected Funds",
+			    "URL": "",
+			    "Definition": "This is money the Treasury hasn't yet collected from Federal agencies"
+			},
+			"Civil Service Retirement ( EFT )": {
+			    "Name": "Civil Service Retirement ( EFT )",
+			    "URL": "http://www.opm.gov/retirement-services/csrs-information/",
+			    "Definition": "These are defined benefit payments made to Federal employees from the U.S. Government's Thrift Savings Plan"
+			},
+			"Commerce Programs": {
+			    "Name": "Commerce Programs",
+			    "URL": "http://www.commerce.gov/",
+			    "Definition": "These are the oparations of the U.S. Department of Commerce"
+			},
+			"Commodity Credit Corporation programs": {
+			    "Name": "Commodity Credit Corporation programs",
+			    "URL": "http://www.fsa.usda.gov/FSA/webapp?area=about&subject=landing&topic=sao-cc",
+			    "Definition": "The U.S. Commodity Credit Corporation is unit of the USDA that makes loans to farmers and other agrigultural producers"
+			},
+			"Commodity Futures Trading Commission": {
+			    "Name": "Commodity Futures Trading Commission",
+			    "URL": "http://www.cftc.gov/index.htm",
+			    "Definition": "The CFTC regulates U.S. commodity futures and option markets"
+			},
+			"Comptroller of the Currency Assessment": {
+			    "Name": "Comptroller of the Currency Assessment",
+			    "URL": "http://www.occ.gov/index.html",
+			    "Definition": "These are fees the Office of the Comptroller of the Currency collects from its bank supervisory activities and deposites with the U.S. Treasury"
+			},
+			"Corps of Engineers": {
+			    "Name": "Corps of Engineers",
+			    "URL": "http://www.usace.army.mil/",
+			    "Definition": "This is the U.S. Army Corps of Engineers"
+			},
+			"Customs and Borders Protection ( DHS )": {
+			    "Name": "Customs and Borders Protection ( DHS )",
+			    "URL": "http://www.cbp.gov/",
+			    "Definition": "This is the DHS agency in charge of U.S. border security"
+			},
+			"Customs and Certain Excise Taxes": {
+			    "Name": "Customs and Certain Excise Taxes",
+			    "URL": "",
+			    "Definition": "These are import taxes collected by the U.S. government"
+			},
+			"Defense Energy Supply Center": {
+			    "Name": "Defense Energy Supply Center",
+			    "URL": "http://www.energy.dla.mil/Pages/default.aspx",
+			    "Definition": "This is the arm of the Department of Devense that procures and manages fuel supply"
+			},
+			"Defense Finance Accounting Service": {
+			    "Name": "Defense Finance Accounting Service",
+			    "URL": "http://www.dfas.mil/",
+			    "Definition": "This is the accounting arm of the Department of Defense"
+			},
+			"Defense Vendor Payments ( EFT )": {
+			    "Name": "Defense Vendor Payments ( EFT )",
+			    "URL": "http://www.dfas.mil/contractorsvendors.html",
+			    "Definition": "These are payments to all the contractors hired to serve the Department of Defense"
+			},
+			"Deposit Insurance Fund": {
+			    "Name": "Deposit Insurance Fund",
+			    "URL": "http://www.fdic.gov/deposit/deposits/dis/",
+			    "Definition": "These are the operations of the fund that insures deposits at U.S. banks for up to $250,000"
+			},
+			"District of Columbia": {
+			    "Name": "District of Columbia",
+			    "URL": "http://dc.gov/",
+			    "Definition": "These are Treasury payments to the District of Columbia"
+			},
+			"Education Department programs": {
+			    "Name": "Education Department programs",
+			    "URL": "http://www.ed.gov/",
+			    "Definition": "These are the oparations of the U.S. Department of Education"
+			},
+			"Emergency Prep Response ( DHS )": {
+			    "Name": "Emergency Prep Response ( DHS )",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Energy Department programs": {
+			    "Name": "Energy Department programs",
+			    "URL": "http://energy.gov/",
+			    "Definition": "These are the oparations of the U.S. Department of Energy"
+			},
+			"Environmental Protection Agency": {
+			    "Name": "Environmental Protection Agency",
+			    "URL": "http://www.epa.gov/",
+			    "Definition": "These are the oparations of the U.S. Environmental Protection Agency"
+			},
+			"Estate and Gift Taxes": {
+			    "Name": "Estate and Gift Taxes",
+			    "URL": "http://www.irs.gov/Businesses/Small-Businesses-%26-Self-Employed/Estate-and-Gift-Taxes",
+			    "Definition": "These are IRS collections of estate and gift taxes"
+			},
+			"Export Import Bank": {
+			    "Name": "Export Import Bank",
+			    "URL": "http://www.exim.gov/",
+			    "Definition": "This is the official export credit agency of the U.S. government"
+			},
+			"Farm Credit Insurance Corp": {
+			    "Name": "Farm Credit Insurance Corp",
+			    "URL": "http://www.fcsic.gov/index.html",
+			    "Definition": "This is a government-run corporation that insures the debt of the Farm Credit System"
+			},
+			"Fed Crop Ins Corp Fund Premiums": {
+			    "Name": "Fed Crop Ins Corp Fund Premiums",
+			    "URL": "http://www.fcsic.gov/index.html",
+			    "Definition": "These are insurance premiums collected by Treasury to fund the Farm Credit System Insurance Corporation's Crop Insurance Fund"
+			},
+			"Fed Highway Administration programs": {
+			    "Name": "Fed Highway Administration programs",
+			    "URL": "http://www.fhwa.dot.gov/",
+			    "Definition": "This is the arm of the Department of Transportation that finances and maintains federal highways"
+			},
+			"Federal Aviation Administration": {
+			    "Name": "Federal Aviation Administration",
+			    "URL": "http://www.faa.gov/",
+			    "Definition": "This is the arm of the Department of Transportation that regulates air transportation"
+			},
+			"Federal Communications Commission": {
+			    "Name": "Federal Communications Commission",
+			    "URL": "http://www.fcc.gov/",
+			    "Definition": "This is the government agency that regulates interstate communication"
+			},
+			"Federal Crop Ins Corp": {
+			    "Name": "Federal Crop Ins Corp",
+			    "URL": "http://www.rma.usda.gov/fcic/",
+			    "Definition": "These are insurance premiums collected by Treasury to fund the Federal Crop Insurance Corporation's Federal Crop Insurance Fund"
+			},
+			"Federal Employees Insurance": {
+			    "Name": "Federal Employees Insurance",
+			    "URL": "http://www.opm.gov/healthcare-insurance/healthcare/",
+			    "Definition": "Premiums received and payments made under the Federal Employees Health Benefits Program"
+			},
+			"Federal Finance Bank": {
+			    "Name": "Federal Finance Bank",
+			    "URL": "http://www.treasury.gov/ffb/",
+			    "Definition": "This is the off-balance sheet lending arm of the U.S. Treasury, created in 1973 by Congress to buy up the debt of Federal agencies so that their borrowing wouldn't compete with Treasury securities in the market for government-backed debt."
+			},
+			"Federal Financing Bank": {
+			    "Name": "Federal Financing Bank",
+			    "URL": "http://www.treasury.gov/ffb/",
+			    "Definition": "This is the off-balance sheet lending arm of the U.S. Treasury, created in 1973 by Congress to buy up the debt of Federal agencies so that their borrowing wouldn't compete with Treasury securities in the market for government-backed debt."
+			},
+			"Federal Housing Admin: Note Sales": {
+			    "Name": "Federal Housing Admin: Note Sales",
+			    "URL": "http://portal.hud.gov/hudportal/HUD?src=/press/press_releases_media_advisories/2013/HUDNo.13-066",
+			    "Definition": "These are sales of pools of mortgages insured by the Federal Housing Administration that are headed for foreclosure"
+			},
+			"Federal Railroad Admin": {
+			    "Name": "Federal Railroad Admin",
+			    "URL": "http://www.fra.dot.gov/Page/P0001",
+			    "Definition": "This is the arm of the Department of Transportation that regulates railroads"
+			},
+			"Federal Reserve Earnings": {
+			    "Name": "Federal Reserve Earnings",
+			    "URL": "http://www.federalreserve.gov/",
+			    "Definition": "This is interest the Treasury earns on the cash it holds on deposit with the Federal Reserve in its Federal Reserve Account"
+			},
+			"Federal Salaries ( EFT )": {
+			    "Name": "Federal Salaries ( EFT )",
+			    "URL": "http://www.opm.gov/",
+			    "Definition": "These are salary payments to Federal employees, except for military active duty personnel, whose payroll is processed separately"
+			},
+			"Federal Trade Commission": {
+			    "Name": "Federal Trade Commission",
+			    "URL": "http://www.ftc.gov/",
+			    "Definition": "This is the govenment agency that reviews mergers and complaints of unfair competition by businesess"
+			},
+			"Federal Transit Admin": {
+			    "Name": "Federal Transit Admin",
+			    "URL": "http://www.fta.dot.gov/",
+			    "Definition": "This is the arm of the Department of Transportation that finances public transit"
+			},
+			"FHA Debentures": {
+			    "Name": "FHA Debentures",
+			    "URL": "http://www.treasurydirect.gov/govt/apps/slgs/spin/spin_fha.htm",
+			    "Definition": "Debt issued by the Treasury on behalf of the Federal Housing Administration to make payments for insured mortgages"
+			},
+			"Food and Nutrition Service ( misc )": {
+			    "Name": "Food and Nutrition Service ( misc )",
+			    "URL": "http://www.fns.usda.gov/snap/supplemental-nutrition-assistance-program-snap",
+			    "Definition": "The Food Stamps line item and 'Food and Nutrition Service ( misc )' together add up to payments for the Supplemental Nutrition Assistance Program (SNAP), which helps low-income families buy food."
+			},
+			"Food Stamps": {
+			    "Name": "Food Stamps",
+			    "URL": "http://www.fns.usda.gov/snap/supplemental-nutrition-assistance-program-snap",
+			    "Definition": "The Food Stamps line item and 'Food and Nutrition Service ( misc )' together add up to payments for the Supplemental Nutrition Assistance Program (SNAP), which helps low-income families buy food."
+			},
+			"Foreign Deposits Military Sales": {
+			    "Name": "Foreign Deposits Military Sales",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Foreign Military Sales Program": {
+			    "Name": "Foreign Military Sales Program",
+			    "URL": "http://www.uscg.mil/hq/cg9/international/fms.asp",
+			    "Definition": "These are government-to-government sales of military weapons between the U.S. and its allies"
+			},
+			"FSA Tobacco Assessments": {
+			    "Name": "FSA Tobacco Assessments",
+			    "URL": "http://www.fsa.usda.gov/FSA/webapp?area=home&subject=toba&topic=landing",
+			    "Definition": "These are fees Treasury collects once a quarter for the USDA's 'tobacco buy-out' program that is supposed to help tobacco producers and importers transition to a free market."
+			},
+			"FSLIC Resolution Fund": {
+			    "Name": "FSLIC Resolution Fund",
+			    "URL": "http://www.fdic.gov/about/strategic/report/2010highlight/chpt3-02.html",
+			    "Definition": "This is a fund set up in 1989 to take over the assets of the Federal Savings and Loan Insurance Corporation (FSLIC) and wind down its operations. The FSLIC was an FDIC-like deposit insurer for the savings and loan industry, which experienced a wave of failures during the 1980s"
+			},
+			"FSLIC Resolution Funds": {
+			    "Name": "FSLIC Resolution Funds",
+			    "URL": "http://www.fdic.gov/about/strategic/report/2010highlight/chpt3-02.html",
+			    "Definition": "This is a fund set up in 1989 to take over the assets of the Federal Savings and Loan Insurance Corporation (FSLIC) and wind down its operations. The FSLIC was an FDIC-like deposit insurer for the savings and loan industry, which experienced a wave of failures during the 1980s"
+			},
+			"FTDs Received": {
+			    "Name": "FTDs Received",
+			    "URL": "http://www.irs.gov/",
+			    "Definition": "These are cash Federal tax deposits (FTDs) received by the Treasury, as calculated in Table IV"
+			},
+			"Gas and Oil Lease Sales Proceeds": {
+			    "Name": "Gas and Oil Lease Sales Proceeds",
+			    "URL": "http://www.blm.gov/ak/st/en/prog/energy/oil_gas/npra.html",
+			    "Definition": "These are proceeds from leases of Federal land for oil ang gas drilling on the National Petroleum Reserve in Alaska"
+			},
+			"GSA Programs": {
+			    "Name": "GSA Programs",
+			    "URL": "http://www.gsa.gov/portal/category/100000",
+			    "Definition": "These are the operations of the U.S. General Services Administration, which is the real estate management arm of the Federal government"
+			},
+			"GSE Dividends": {
+			    "Name": "GSE Dividends",
+			    "URL": "http://www.treasury.gov/Pages/default.aspx",
+			    "Definition": "These are dividends received from Fannie Mae and Freddie Mac under the Treasury's September 2008 bailout for the two Federally-backed mortgage lenders"
+			},
+			"GSE Investment": {
+			    "Name": "GSE Investment",
+			    "URL": "http://www.treasury.gov/Pages/default.aspx",
+			    "Definition": "These are periodic payments Treasury makes to Fannie Mae and Freddie Mac under its September 2008 bailout for the two Federally-backed mortgage lenders"
+			},
+			"GSE MBS Purchase Program Income": {
+			    "Name": "GSE MBS Purchase Program Income",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"GSE Obligations HFA Initiative": {
+			    "Name": "GSE Obligations HFA Initiative",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Health and Human Services Grants ( misc )": {
+			    "Name": "Health and Human Services Grants ( misc )",
+			    "URL": "http://www.hhs.gov/grants/",
+			    "Definition": "This line items totals grants awarded by the Department of Health and Human Services, the largest grant-making agency within the Federal government"
+			},
+			"HHS Deposit Fund Transfers to States": {
+			    "Name": "HHS Deposit Fund Transfers to States",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"HHS: Indian Health Service": {
+			    "Name": "HHS: Indian Health Service",
+			    "URL": "http://www.ihs.gov/",
+			    "Definition": "The Indian Health Service is an agency within the Department of Health and Human Services responsible for providing Federal health services to Native American Indians and Alaska Natives"
+			},
+			"Housing and Urban Development programs": {
+			    "Name": "Housing and Urban Development programs",
+			    "URL": "http://portal.hud.gov/hudportal/HUD",
+			    "Definition": "These are all the programs managed by the Department of Housing and Urban Development, which finances and regulates the U.S. housing markets"
+			},
+			"HUD: Hurricane Relief": {
+			    "Name": "HUD: Hurricane Relief",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Individual Income and Employment Taxes Not Withheld": {
+			    "Name": "Individual Income and Employment Taxes Not Withheld",
+			    "URL": "http://www.irs.gov/",
+			    "Definition": "These are personal income and employment taxes collected directly by the IRS, not via an employer withholding"
+			},
+			"Inter American Development Bank": {
+			    "Name": "Inter American Development Bank",
+			    "URL": "http://www.iadb.org/",
+			    "Definition": "These are payments made by the Treasury to the Inter-American Development Bank"
+			},
+			"Interest on Treasury Securities": {
+			    "Name": "Interest on Treasury Securities",
+			    "URL": "http://www.fiscal.treasury.gov/",
+			    "Definition": "This is interest the Treasury pays to investors who have bought Treasury securities"
+			},
+			"Interest recd from cash investments": {
+			    "Name": "Interest recd from cash investments",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Interior": {
+			    "Name": "Interior",
+			    "URL": "http://www.doi.gov/index.cfm",
+			    "Definition": "This is a line item for programs run by the Department of the Interior not separately broken out elsewhere"
+			},
+			"Interior: Bureau of Land Management": {
+			    "Name": "Interior: Bureau of Land Management",
+			    "URL": "http://www.blm.gov/wo/st/en.html",
+			    "Definition": "This is the division of the Department of the Interior that looks after all the land owned by the Federal government"
+			},
+			"Interior: Bureau of Reclamation": {
+			    "Name": "Interior: Bureau of Reclamation",
+			    "URL": "http://www.usbr.gov/",
+			    "Definition": "The Department of the Interior's Bureau of Reclamation is a wholesale water provider in the Western U.S."
+			},
+			"Interior: Office of Surface Mining": {
+			    "Name": "Interior: Office of Surface Mining",
+			    "URL": "http://www.osmre.gov/",
+			    "Definition": "This is the division of the Department of the Interior in charge of regulating the surface coal mining industry"
+			},
+			"Interior: Office of Territories": {
+			    "Name": "Interior: Office of Territories",
+			    "URL": "http://www.doi.gov/oia/index.cfm",
+			    "Definition": "This is the division of the Department of the Interior's Office of Insular Affairs, which administers U.S. territories"
+			},
+			"International Monetary Fund": {
+			    "Name": "International Monetary Fund",
+			    "URL": "http://www.imf.org/external/index.htm",
+			    "Definition": "These are Treasury payments by the Treasury to the International Monetary Fund"
+			},
+			"Interntl Security Assistance ( DSCA )": {
+			    "Name": "Interntl Security Assistance ( DSCA )",
+			    "URL": "http://www.dsca.mil/",
+			    "Definition": "The Defense Security Cooperation Agency sells weapons and provides related training to U.S. allies"
+			},
+			"IRS Tax Refunds Business ( EFT )": {
+			    "Name": "IRS Tax Refunds Business ( EFT )",
+			    "URL": "http://www.irs.gov/",
+			    "Definition": "These are IRS tax refunds to businesses processed as electronic funds transfers"
+			},
+			"IRS Tax Refunds Individual ( EFT )": {
+			    "Name": "IRS Tax Refunds Individual ( EFT )",
+			    "URL": "http://www.irs.gov/",
+			    "Definition": "These are IRS tax refunds to individuals processed as electronic funds transfers"
+			},
+			"Justice Department programs": {
+			    "Name": "Justice Department programs",
+			    "URL": "http://www.justice.gov/",
+			    "Definition": "This line item reflects the activities of the Department of Justice, excluding U.S. courts"
+			},
+			"Labor Dept prgms ( excl unemployment )": {
+			    "Name": "Labor Dept prgms ( excl unemployment )",
+			    "URL": "http://www.dol.gov/",
+			    "Definition": "This line item reflects the activities of the Department of Labor, excluding unemployment insurance"
+			},
+			"Lend Lease Receipts": {
+			    "Name": "Lend Lease Receipts",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Library of Congress": {
+			    "Name": "Library of Congress",
+			    "URL": "http://www.loc.gov/index.html",
+			    "Definition": "This is the research library of the United States Congress"
+			},
+			"Maritime Administration": {
+			    "Name": "Maritime Administration",
+			    "URL": "http://www.marad.dot.gov/",
+			    "Definition": "This is the division of the Department of Transportation that administers waterborne transportation"
+			},
+			"Medicaid": {
+			    "Name": "Medicaid",
+			    "URL": "http://www.medicaid.gov/",
+			    "Definition": "Medicaid is the Federal healthcare provider for low-income families and individuals. This line item reflects payments Medicaid makes on behalf of its beneficiaries"
+			},
+			"Medicare": {
+			    "Name": "Medicare",
+			    "URL": "http://www.medicare.gov/",
+			    "Definition": "Medicare is the Federal healthcare provider for the elderly. This line item reflects payments Medicare makes on behalf of its beneficiaries"
+			},
+			"Medicare Premiums": {
+			    "Name": "Medicare Premiums",
+			    "URL": "http://www.medicare.gov/",
+			    "Definition": "Medicare is the Federal healthcare provider for the elderly. This line item reflects premiums that Medicare beneficiaries pay for their coverage"
+			},
+			"Military Active Duty Pay ( EFT )": {
+			    "Name": "Military Active Duty Pay ( EFT )",
+			    "URL": "http://www.dfas.mil/",
+			    "Definition": "These are paychecks issued to military active duty personnel via electronic funds transfers"
+			},
+			"Military Retirement ( EFT )": {
+			    "Name": "Military Retirement ( EFT )",
+			    "URL": "http://www.dfas.mil/",
+			    "Definition": "These are monthly retirement benefits paid via electronic funds transfers to retired members of the U.S. armed forces paid by the Defense Finance and Accounting Service"
+			},
+			"Minerals Management Service": {
+			    "Name": "Minerals Management Service",
+			    "URL": "http://www.boemre.gov/",
+			    "Definition": "This line item reflects the activities of the former Minerals Management Service, which collected mining and drilling lease revenues for the Department of the Interior prior to an October 2010 reorganization. The Minerals Management Service no longer exists, but this line item is still used to keep track of payments and receipts for the three agencies that succeeded it."
+			},
+			"NASA programs": {
+			    "Name": "NASA programs",
+			    "URL": "http://www.nasa.gov/",
+			    "Definition": "This is the agency that administers U.S. space exploration and reserach programs."
+			},
+			"National Credit Union Administration": {
+			    "Name": "National Credit Union Administration",
+			    "URL": "http://www.ncua.gov/Pages/default.aspx",
+			    "Definition": "This is the agency that regulates, charters and supervises federal credit unions"
+			},
+			"National Highway Traffic Safety Admin": {
+			    "Name": "National Highway Traffic Safety Admin",
+			    "URL": "http://www.nhtsa.gov/",
+			    "Definition": "This is the agency in charge of writing and enforcing vehicle safety standards and collecting data on traffic fatalities"
+			},
+			"Natl Railroad Retirement Inv Trust": {
+			    "Name": "Natl Railroad Retirement Inv Trust",
+			    "URL": "http://www.rrb.gov/mep/nrrit.asp",
+			    "Definition": "This is the retirement fund run by the Railroad Retirement Board, which administers retirement and survivor, unemployment and sickness benefits for U.S. railroad workers and their families."
+			},
+			"Net Change in Operating Cash Balance": {
+			    "Name": "Net Change in Operating Cash Balance",
+			    "URL": "",
+			    "Definition": "This line item gives the daily net change in the Treasury's operating cash after all the cash deposits and withdrawals take place"
+			},
+			"Ofc of Thrift Supervision ( Assessments )": {
+			    "Name": "Ofc of Thrift Supervision ( Assessments )",
+			    "URL": "http://www.ots.treas.gov/index.html",
+			    "Definition": "This line item reflects fees on savings banks collected by the Office of Thrift Supervision, which supervised savings and loan banks prior to its dissolution in 2011. Its operations have been merged with the Treasury's Office of the Comptroller of the Currency"
+			},
+			"Overseas Private Investment Co": {
+			    "Name": "Overseas Private Investment Co",
+			    "URL": "http://www.opic.gov/",
+			    "Definition": "This is the arm of the government that provides loans, guarantees and other financing to U.S. businesses operating in emerging markets"
+			},
+			"Pension Benefit Guaranty Corp": {
+			    "Name": "Pension Benefit Guaranty Corp",
+			    "URL": "http://www.pbgc.gov/",
+			    "Definition": "This line item reflects insurance premium collections and benefit payments from the Pension benefit Guaranty Corporation, which insures pension plans and pays benefits in case they fail"
+			},
+			"Pmt to Corp for Pub Broadcasting": {
+			    "Name": "Pmt to Corp for Pub Broadcasting",
+			    "URL": "http://www.cpb.org/",
+			    "Definition": "This is an annual payment the Treasury makes to the Corporation for Public Broadcasting"
+			},
+			"Pmt to Int l Bk for Reconstruction": {
+			    "Name": "Pmt to Int l Bk for Reconstruction",
+			    "URL": "http://web.worldbank.org/WBSITE/EXTERNAL/EXTABOUTUS/EXTIBRD/0,,menuPK:3046081~pagePK:64168427~piPK:64168435~theSitePK:3046012,00.html",
+			    "Definition": "These are payments to the International Bank for Reconstruction and Development, which provides loans, guarantees and other financial assistance to middle-income countries"
+			},
+			"Pmt to Internat l Development Assn": {
+			    "Name": "Pmt to Internat l Development Assn",
+			    "URL": "http://www.worldbank.org/ida/",
+			    "Definition": "These are payments to the World Bank's International Development Association, which provides aid to the poorest countries"
+			},
+			"Pmt to Resolution Funding Corp ( RTC )": {
+			    "Name": "Pmt to Resolution Funding Corp ( RTC )",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Pmt to Resolution Funding Corp ( Treas )": {
+			    "Name": "Pmt to Resolution Funding Corp ( Treas )",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Postal Service": {
+			    "Name": "Postal Service",
+			    "URL": "https://www.usps.com/",
+			    "Definition": "This is the operating cash of the Postal Service, which the USPS deposits each day with the Treasury"
+			},
+			"Postal Service Money Orders and Other": {
+			    "Name": "Postal Service Money Orders and Other",
+			    "URL": "https://www.usps.com/",
+			    "Definition": "These are payments made to fulfill Postal Service Money Orders"
+			},
+			"Prem ESF Money Mkt Guar Facility": {
+			    "Name": "Prem ESF Money Mkt Guar Facility",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Prepayment of Treasury Securities": {
+			    "Name": "Prepayment of Treasury Securities",
+			    "URL": "http://www.treasury.gov/Pages/default.aspx",
+			    "Definition": "This line item represents the early redemption of Treasury debt from investors"
+			},
+			"Presidential Election Campaign Fund": {
+			    "Name": "Presidential Election Campaign Fund",
+			    "URL": "http://www.fec.gov/press/bkgnd/fund.shtml",
+			    "Definition": "This is the public fund for Presidential campaigns"
+			},
+			"Public Debt Cash Issues ( Table III B )": {
+			    "Name": "Public Debt Cash Issues ( Table III B )",
+			    "URL": "",
+			    "Definition": "This line item flows over from the cash impact of debt issues calculated in Table III B"
+			},
+			"Public Debt Cash Redemp ( Table III B )": {
+			    "Name": "Public Debt Cash Redemp ( Table III B )",
+			    "URL": "",
+			    "Definition": "This line item flows over from the cash impact of debt redemptions calculated in Table III B"
+			},
+			"Puerto Rico Refund of IRS Collections": {
+			    "Name": "Puerto Rico Refund of IRS Collections",
+			    "URL": "http://www2.pr.gov/Pages/default.aspx",
+			    "Definition": "These are tax refunds issued to the Puerto Rico government"
+			},
+			"Railroad Retirement ( EFT )": {
+			    "Name": "Railroad Retirement ( EFT )",
+			    "URL": "http://www.rrb.gov/mep/nrrit.asp",
+			    "Definition": "This line item reflects benefits paid via electronic funds transfer by the Railroad Retirement Board, which administers retirement and survivor, unemployment and sickness benefits for U.S. railroad workers and their families."
+			},
+			"Railroad Unemployment Ins": {
+			    "Name": "Railroad Unemployment Ins",
+			    "URL": "http://www.rrb.gov/mep/nrrit.asp",
+			    "Definition": "This line item reflects unemployment benefits paid by the Railroad Retirement Board, which administers retirement and survivor, unemployment and sickness benefits for U.S. railroad workers and their families."
+			},
+			"SEC: Stock Exchange Fees": {
+			    "Name": "SEC: Stock Exchange Fees",
+			    "URL": "http://www.sec.gov/",
+			    "Definition": "These are fees paid to the SEC by stock exchanges"
+			},
+			"Securities and Exchange Commission": {
+			    "Name": "Securities and Exchange Commission",
+			    "URL": "http://www.sec.gov/",
+			    "Definition": "The Securities and Exchange Commission regulates the U.S. stock markets"
+			},
+			"Small Business Admin Loan Sales": {
+			    "Name": "Small Business Admin Loan Sales",
+			    "URL": "http://www.sba.gov/",
+			    "Definition": "This line item reflects proceeds from loans sold by the Small Business Administration"
+			},
+			"Small Business Administration": {
+			    "Name": "Small Business Administration",
+			    "URL": "http://www.sba.gov/",
+			    "Definition": "The Small Business Administration oversees loan and grant programs for small businesses"
+			},
+			"Social Security Benefits ( EFT )": {
+			    "Name": "Social Security Benefits ( EFT )",
+			    "URL": "http://www.ssa.gov/",
+			    "Definition": "These are benefits paid by the Social Security Administration via electronic funds transfer"
+			},
+			"State Department": {
+			    "Name": "State Department",
+			    "URL": "http://www.state.gov/",
+			    "Definition": "The Department of State is the diplomatic arm of the U.S. government"
+			},
+			"Supple Security Income Benefits ( EFT )": {
+			    "Name": "Supple Security Income Benefits ( EFT )",
+			    "URL": "http://www.ssa.gov/pgm/ssi.htm",
+			    "Definition": "These are disability benefit payments made by the Social Security Administration via electronic funds transfer"
+			},
+			"Supplemental Security Income": {
+			    "Name": "Supplemental Security Income",
+			    "URL": "http://www.ssa.gov/pgm/ssi.htm",
+			    "Definition": "Thie line item shows money collected by states and deposited with the Treasur for the Social Security Administration's Supplemental Security Income Benefits program"
+			},
+			"TARP": {
+			    "Name": "TARP",
+			    "URL": "http://www.treasury.gov/initiatives/financial-stability/TARP-Programs/Pages/default.aspx",
+			    "Definition": "This line item tracks disbursements and repayments of the Troubled Asset Relief Program, the bailout fund created during the 2008 financial crisis to stabilize the economy. A portion of the program is accounted for separately under the line item 'Capital Purchase Program ( TARP )'"
+			},
+			"Temporary Assistance for Needy Families ( HHS )": {
+			    "Name": "Temporary Assistance for Needy Families ( HHS )",
+			    "URL": "http://www.acf.hhs.gov/programs/ofa/programs/tanf",
+			    "Definition": "This is a program that provides financial assistance to poor families, commonly referred to as welfare"
+			},
+			"Tennessee Valley Authority": {
+			    "Name": "Tennessee Valley Authority",
+			    "URL": "http://www.tva.com/",
+			    "Definition": "This is the government-owned power utility created during the Great Depression"
+			},
+			"Thrift Savings Plan Transfer": {
+			    "Name": "Thrift Savings Plan Transfer",
+			    "URL": "https://www.tsp.gov/index.shtml",
+			    "Definition": "These are rollovers of retirement plans into the Thrift Savings Plan, which manages retirement benefits for Federal employees and their spouses"
+			},
+			"Total Deposits ( excluding transfers )": {
+			    "Name": "Total Deposits ( excluding transfers )",
+			    "URL": "",
+			    "Definition": "This line item totals up all the deposits each day received by Treasury, excluding the transfers detailed in Table V"
+			},
+			"Total Federal Reserve Account": {
+			    "Name": "Total Federal Reserve Account",
+			    "URL": "",
+			    "Definition": "This line item appears on both the deposit and withdrawal side of Table II. It subtotals the deposits and withdrawals for the Treasury's Federal Reserve Account, which is the main checking account of the U.S. government"
+			},
+			"Total Other Deposits": {
+			    "Name": "Total Other Deposits",
+			    "URL": "",
+			    "Definition": "This line item subtotals the items that appear under the 'Other Deposits' portion of the deposits side of Table II each day"
+			},
+			"Total Other Withdrawals": {
+			    "Name": "Total Other Withdrawals",
+			    "URL": "",
+			    "Definition": "This line item subtotals the items that appear under the 'Other Withdrawals' portion of the withdrawals side of Table II each day"
+			},
+			"Total Tax and Loan Note Accounts Table V": {
+			    "Name": "Total Tax and Loan Note Accounts Table V",
+			    "URL": "",
+			    "Definition": "This line item is no longer in use. The Treasury Tax and Loan (TT&L) account summarized in Table V was the program through which Treasury invested its short term excess cash with outside banks until November 2008 when the program was suspended. Treasury subsequently decommissioned the legacy TT&L system through which investments were made.  In the beginning of October 2012, the program was renamed to 'Short Term Cash Investments,' which is the current name for Table V and related line items. Both names represent Treasury’s short term cash investments (i.e. short term extra cash invested with external counterparties)."
+			},
+			"Total Withdrawals ( excluding transfers )": {
+			    "Name": "Total Withdrawals ( excluding transfers )",
+			    "URL": "",
+			    "Definition": "This line item totals up all the withdrawals each day received by Treasury, excluding the transfers detailed in Table V"
+			},
+			"Transfers from Depositaries": {
+			    "Name": "Transfers from Depositaries",
+			    "URL": "",
+			    "Definition": "This line item is no longer in use. The Treasury Tax and Loan (TT&L) account summarized in Table V was the program through which Treasury invested its short term excess cash with outside banks until November 2008 when the program was suspended. Treasury subsequently decommissioned the legacy TT&L system through which investments were made.  In the beginning of October 2012, the program was renamed to 'Short Term Cash Investments,' which is the current name for Table V and related line items. Both names represent Treasury’s short term cash investments (i.e. short term extra cash invested with external counterparties)."
+			},
+			"Transfers from Federal Reserve Account Table V": {
+			    "Name": "Transfers from Federal Reserve Account Table V",
+			    "URL": "",
+			    "Definition": "This line item is no longer in use. The Treasury Tax and Loan (TT&L) account summarized in Table V was the program through which Treasury invested its short term excess cash with outside banks until November 2008 when the program was suspended. Treasury subsequently decommissioned the legacy TT&L system through which investments were made.  In the beginning of October 2012, the program was renamed to 'Short Term Cash Investments,' which is the current name for Table V and related line items. Both names represent Treasury’s short term cash investments (i.e. short term extra cash invested with external counterparties)."
+			},
+			"Transfers to Depositaries": {
+			    "Name": "Transfers to Depositaries",
+			    "URL": "",
+			    "Definition": "This line item is no longer in use. The Treasury Tax and Loan (TT&L) account summarized in Table V was the program through which Treasury invested its short term excess cash with outside banks until November 2008 when the program was suspended. Treasury subsequently decommissioned the legacy TT&L system through which investments were made.  In the beginning of October 2012, the program was renamed to 'Short Term Cash Investments,' which is the current name for Table V and related line items. Both names represent Treasury’s short term cash investments (i.e. short term extra cash invested with external counterparties)."
+			},
+			"Transfers to Federal Reserve Account Table V": {
+			    "Name": "Transfers to Federal Reserve Account Table V",
+			    "URL": "",
+			    "Definition": "This line item is no longer in use. The Treasury Tax and Loan (TT&L) account summarized in Table V was the program through which Treasury invested its short term excess cash with outside banks until November 2008 when the program was suspended. Treasury subsequently decommissioned the legacy TT&L system through which investments were made.  In the beginning of October 2012, the program was renamed to 'Short Term Cash Investments,' which is the current name for Table V and related line items. Both names represent Treasury’s short term cash investments (i.e. short term extra cash invested with external counterparties)."
+			},
+			"Transportation Security Admin ( DHS )": {
+			    "Name": "Transportation Security Admin ( DHS )",
+			    "URL": "http://www.tsa.gov/",
+			    "Definition": "This is the agency that provides security for U.S. airports"
+			},
+			"Treasury Department programs": {
+			    "Name": "Treasury Department programs",
+			    "URL": "http://www.treasury.gov/Pages/default.aspx",
+			    "Definition": "This line item covers all the government programs run by the Department of the Treasury"
+			},
+			"Treasury Dept: Claims Payments": {
+			    "Name": "Treasury Dept: Claims Payments",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"U S District Courts": {
+			    "Name": "U S District Courts",
+			    "URL": "http://www.uscourts.gov/FederalCourts/UnderstandingtheFederalCourts/DistrictCourts.aspx",
+			    "Definition": "The United States district courts are the trial courts of the federal court system"
+			},
+			"U S Enrichment Corp": {
+			    "Name": "U S Enrichment Corp",
+			    "URL": "http://www.usec.com/",
+			    "Definition": "This line item reflects transactions over $50 million for the U.S. Enrichment Corporation, a former arm of the U.S. government that enriched uranium for commercial use in nuclear power plants. Proceeds from its privatization are booked separately under 'Asset Sale: U S Enrichment Corp'"
+			},
+			"Unclassified": {
+			    "Name": "Unclassified",
+			    "URL": "",
+			    "Definition": "All other withdrawals of Treasury cash under $50 million fall under this line item"
+			},
+			"Unemployment Insurance Benefits": {
+			    "Name": "Unemployment Insurance Benefits",
+			    "URL": "",
+			    "Definition": "The Unemployment Insurance program provides temporary payments to individuals who are unemployed. This line item reflects benefits transferred to states, who make the benefits payments to eligible individuals"
+			},
+			"USDA: Forest Service": {
+			    "Name": "USDA: Forest Service",
+			    "URL": "http://www.fs.fed.us/",
+			    "Definition": "This is the division of the Department of Agriculture that cares for U.S. forests"
+			},
+			"Veterans Affairs Programs": {
+			    "Name": "Veterans Affairs Programs",
+			    "URL": "http://www.va.gov/",
+			    "Definition": "These are programs run by the Department of Veterans Affairs, which is the agency in charge of providing patient care and benefits to veterans"
+			},
+			"Veterans Assets Sales": {
+			    "Name": "Veterans Assets Sales",
+			    "URL": "",
+			    "Definition": "TK"
+			},
+			"Veterans Benefits ( EFT )": {
+			    "Name": "Veterans Benefits ( EFT )",
+			    "URL": "http://www.va.gov/",
+			    "Definition": "This line item reflects healthcare and other benefits paid to veterans by the Veterans Benefits Administration via electronic funds transfer"
+			}
+		}
+	}
+}
