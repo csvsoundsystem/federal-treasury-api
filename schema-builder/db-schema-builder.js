@@ -1,7 +1,23 @@
 var _          = require('underscore'),
     $          = require('jquery'),
     fs         = require('fs'),
+    d3         = require('d3'),
     verbose    = true;
+
+function nestItemDescs(json){
+  var nest = {};
+  _.each(json, function(item){
+    if (!nest[item.table]) { nest[item.table] = {} };
+    nest[item.table][item.item_name] = {}
+    nest[item.table][item.item_name].description = item.description;
+    nest[item.table][item.item_name].url = item.url;
+  })
+  return nest;
+}
+
+var item_desc      = fs.readFileSync('./TreasuryIO_ItemDescriptions.csv').toString(),
+    item_desc_json = d3.csv.parse(item_desc),
+    item_desc_nest = nestItemDescs(item_desc_json);
 
 var weekdays_arr = ['Friday', 'Thursday', 'Wednesday', 'Tuesday', 'Monday'], // This is in reverse order because it will be used to sort or weekday array by putting the days first going in order Friday to Monday.
     db_tables  = {
@@ -221,7 +237,6 @@ for (var table_name in db_tables){
               },
               column_infos = cleanPragmaObj(response, table_name),
               insertTableToDbSchema_after = _.after(_.size(column_infos), insertTableToDbSchema); // Only invoked after all of the columns in a given table are processed
-
           // Make the keys for the `columns` key in what will be `db_schema.tables[table_name].columns`, currently `table_obj.columns`, to the order they're given in the config array.
           table_obj = createDbSchemaColumnOrder(table_obj, column_infos);
 
@@ -331,6 +346,12 @@ for (var table_name in db_tables){
                                     value: value,
                                     parents: parent_t_types
                                   };
+
+                                  if (item_desc_nest['t2'][value]){
+                                    val_with_children.description = item_desc_nest['t2'][value].description
+                                    val_with_children.url         = item_desc_nest['t2'][value].url
+                                  }
+
                                   item_values.push(val_with_children);
                                   addDatatoColumnInfo(column_info, 'item_values', item_values);
                                   addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
