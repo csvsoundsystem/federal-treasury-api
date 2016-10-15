@@ -2,18 +2,19 @@
 from __future__ import print_function
 
 import datetime
-import download_fms_fixies
 import os
-import pandas as pd
-import pandas.io.sql
-import parse_fms_fixies
 import re
 import sqlite3
 import sys
 
+import pandas as pd
+
+import .download_fms_fixies
+import .parse_fms_fixies
+
 # script must be run from fms_parser/parser directory
 if not os.path.split(os.getcwd())[-1] == 'parser':
-	if os.path.split(os.getcwd())[-1] == 'federal-treasury-api' or os.path.split(os.getcwd())[-1]  =='fms_parser':
+	if os.path.split(os.getcwd())[-1] == 'federal-treasury-api' or os.path.split(os.getcwd())[-1] == 'fms_parser':
 		os.chdir('parser')
 		print('\n*INFO: current working directory set to', os.getcwd())
 	else:
@@ -29,7 +30,7 @@ os.system('mkdir -pv ' + LIFETIME_CSV_DIR)
 
 ## DOWNLOAD! ##################################################################
 # test for existence of downloaded fixies
-test_fixies = sorted([f for f in os.listdir(FIXIE_DIR) if f.endswith('.txt')])
+test_fixies = sorted(f for f in os.listdir(FIXIE_DIR) if f.endswith('.txt'))
 # if none, start from THE BEGINNING
 if len(test_fixies) == 0:
 	start_date = datetime.date(2005, 6, 9)
