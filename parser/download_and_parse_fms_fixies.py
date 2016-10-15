@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from __future__ import print_function
+
 import datetime
 import download_fms_fixies
 import os
@@ -13,7 +15,7 @@ import sys
 if not os.path.split(os.getcwd())[-1] == 'parser':
 	if os.path.split(os.getcwd())[-1] == 'federal-treasury-api' or os.path.split(os.getcwd())[-1]  =='fms_parser':
 		os.chdir('parser')
-		print '\n*INFO: current working directory set to', os.getcwd()
+		print('\n*INFO: current working directory set to', os.getcwd())
 	else:
 		raise Exception('This script must be run from the /parser directory!')
 
@@ -53,7 +55,6 @@ new_files = sorted(list(downloaded_files.difference(parsed_files())))
 # parse all teh fixies!
 for f in new_files:
 	fname = os.path.join(FIXIE_DIR, f+'.txt')
-	#print '\n', fname
 	dfs = parse_fms_fixies.parse_file(fname, verbose=False)
 
 	# each table for each date stored in separate csv files
@@ -63,7 +64,7 @@ for f in new_files:
 			t_name_match = re.search(r'TABLE [\w-]+', t_name)
 			t_name_short = re.sub(r'-| ', '_', t_name_match.group().lower())
 		except Exception as e:
-			print '***ERROR: tables failed to parse!', e
+			print('***ERROR: tables failed to parse!', e)
 			# go on
 			continue
 
@@ -138,7 +139,7 @@ TABLES = [
 ]
 
 # delete the db and promptly rewrite it from csvs
-print "INFO: building sqlite database"
+print("INFO: building sqlite database")
 db = os.path.join('..', 'data', 'treasury_data.db')
 os.system("rm " + db)
 
@@ -151,12 +152,13 @@ for table in TABLES:
 	# WARNING SERIOUS HACKS FOLLOW #
 	# FILTER OUT TABLE 5 AFTER  2012-04-02 - HACK BUT WORKS FOR NOW #
 	if table['new-table']=="t5":
-		print "INFO: filtering out invalid dates for TABLE V (deprecated as of 2012-04-02) "
+		print("INFO: filtering out invalid dates for TABLE V (deprecated as of 2012-04-02) ")
 		table_v_end = datetime.date(2012, 4, 2)
 		df.date = df.date.apply(lambda x: datetime.datetime.strptime(x, "%Y-%m-%d").date())
 		df = df[df.date < table_v_end]
 
-	pandas.io.sql.write_frame(df, table['new-table'], connection)
+	#pandas.io.sql.write_frame(df, table['new-table'], connection)
+	df.to_sql(table['new-table'], connection, index=False)
 
 # Commit
 connection.commit()
@@ -191,7 +193,7 @@ These are combined by table in the data/lifetime_csv directory.
 Those tables were made into a SQLite database at data/treasury_data.db, which you can load using your favorite SQLite viewer.
 If you have any questions, check out http://treasury.io for usage and a link to the support Google Group.
 """
-print csv_txt
-print soundsystem_txt
-print '*http://csvsoundsystem.com/'
-print welcome_msg
+print(csv_txt)
+print(soundsystem_txt)
+print('*http://csvsoundsystem.com/')
+print(welcome_msg)

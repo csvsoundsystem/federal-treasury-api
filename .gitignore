@@ -9,6 +9,7 @@
 .npm/
 .gnupg/
 .subversion/
+node_modules/
 
 # Data
 data/fixie/
@@ -43,3 +44,4 @@ http/db_schema.json
 
 # AWS
 .s3cfg
+
