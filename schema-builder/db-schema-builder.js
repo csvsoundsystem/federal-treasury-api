@@ -16,7 +16,7 @@ function nestItemDescs(json){
   return nest;
 }
 
-var item_desc      = fs.readFileSync('./TreasuryIO_ItemDescriptions.csv', 'utf-8'),
+var item_desc      = fs.readFileSync('./schema-builder/TreasuryIO_ItemDescriptions.csv', 'utf-8'),
     item_desc_json = dsv.csv.parse(item_desc),
     item_desc_nest = nestItemDescs(item_desc_json);
 
@@ -171,14 +171,16 @@ function cleanPragmaObj(table_schema, table_name){
 
 function writeToFile(db_schema){
   reportStatus(['Writing file...']);
-  fs.writeFileSync('../http/db_schema.js', JSON.stringify(db_schema));
+  fs.writeFileSync('./http/db_schema.js', JSON.stringify(db_schema));
 };
 
 /* var writeToFile_after = _.after(1, writeToFile); // Limit it to one table for test */
 var writeToFile_after = _.after(_.size(db_tables), writeToFile); // Only invoked after all the tables have been processed
 
 function treasuryIo(query, cb){
-  request('https://api.treasury.io/cc7znvq/47d80ae900e04f2/sql/?q=' + query, function (err, response, body) {
+  var uid = _.uniqueId()
+  var endpoint = 'http://premium.scraperwiki.com/cc7znvq/47d80ae900e04f2/sql/?q='
+  request(endpoint + query, function (err, response, body) {
     if (err) {
       return cb(err)
     }
@@ -211,7 +213,7 @@ function insertTableToDbSchema(table_data){
 
 function addDatatoColumnInfo(column_info, key, values){
   // Make sure they're sorted
-  sorted_values = _.sortBy(values, function(val) { return val } );
+  _.sortBy(values, function(val) { return val } );
   column_info[key] = values;
 };
 
@@ -222,9 +224,22 @@ function addColumnInfoToAssociatedTable(table_obj, column_name, column_info, ins
   insertTableToDbSchema_after(table_obj);
 };
 
+var dbTableIndex = 0
+var tableNames = Object.keys(db_tables)
 
-for (var table_name in db_tables){
-  if (_.has(db_tables, table_name)){
+runTableInfo()
+function runTableInfo () {
+  var tableName = tableNames[dbTableIndex]
+  if (tableName) {
+    dbTableIndex++
+    console.log('Getting...', tableName)
+    getTableInfo(tableName, runTableInfo)
+  }
+}
+
+function getTableInfo (table_name, cb) {
+// for (var table_name in db_tables){
+//   if (_.has(db_tables, table_name)){
     // if (table_name == 't2'){ // Limit it just to t2 for testing
 
     // Get a table scheme for each table, use a closure becaue it's done asynchronously and you need to know what table this ajax call refers to
@@ -258,7 +273,6 @@ for (var table_name in db_tables){
                 query_text = 'SELECT min("' + column_info.name + '") as min, max("' + column_info.name + '") as max FROM ' + table_obj.name;
               };
 
-              // console.log(query_text)
 
               treasuryIo(query_text, function(err, response){
                   if (err) {
@@ -300,7 +314,7 @@ for (var table_name in db_tables){
                       addDatatoColumnInfo(column_info, 'item_values', date_item_values);
                       // The column now has all of its values added, so you can add that completed column information to the designated table
                       addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
-
+                      cb()
                     }else{
                       var t = table_obj.name,
                           item_values = [];
@@ -315,6 +329,7 @@ for (var table_name in db_tables){
                         addDatatoColumnInfo(column_info, 'item_values', item_values);
                         // The column now has all of its values added, so you can add that completed column information to the designated table
                         addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                        cb()
                       }else if (t == 't3c'){
                        var date_item_values = [
                           {
@@ -329,7 +344,7 @@ for (var table_name in db_tables){
                         addDatatoColumnInfo(column_info, 'item_values', item_values);
                         // The column now has all of its values added, so you can add that completed column information to the designated table
                         addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
-                 
+                        cb()
                       }else if (t == 't2'){
                         if (column_info.name != 'item'){
                           _.each(values_with_blank, function(value){
@@ -340,17 +355,22 @@ for (var table_name in db_tables){
                             item_values.push(val_with_children);
                             addDatatoColumnInfo(column_info, 'item_values', item_values);
                             addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                            cb()
                           });
                         }else{
                           (function(column_info, table_obj){
-                            _.each(values_with_blank, function(value){
-                              var parent_query = 'SELECT group_concat(DISTINCT transaction_type) as t_type_parents FROM t2 WHERE "item" = \'' + value + '\''
-                              
-                              treasuryIo(parent_query, function(err, r){
+                            var indexVal = 0
+                            runBlankVal()
+                            function runBlankVal () {
+                              var value = values_with_blank[indexVal]
+                              if (value) {
+                                var parent_query = 'SELECT group_concat(DISTINCT transaction_type) as t_type_parents FROM t2 WHERE "item" = \'' + value + '\''
+                                console.log('Getting...', value)
+                                treasuryIo(parent_query, function(err, r){
                                   if (err) {
                                     return console.log(err)
                                   }
-                                  var parent_t_types = r[0].t_type_parents.split(',')
+                                  var parent_t_types = r.t_type_parents ? r[0].t_type_parents.split(',') : r.t_type_parents
                                   var val_with_children = {
                                     comparinator: '=',
                                     value: value,
@@ -365,11 +385,11 @@ for (var table_name in db_tables){
                                   item_values.push(val_with_children);
                                   addDatatoColumnInfo(column_info, 'item_values', item_values);
                                   addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                                  indexVal++
+                                  runBlankVal()
                                 })
-                                .fail(function(err){
-                                  console.log(err)
-                                })
-                            })
+                              }
+                            }
                           })(column_info, table_obj)
                         }
                       }
@@ -404,6 +424,7 @@ for (var table_name in db_tables){
                     addDatatoColumnInfo(column_info, 'item_values', int_real_vals);
                     // The column now has all of its values added, so you can add that completed column information to the designated table
                     addColumnInfoToAssociatedTable(table_obj, column_info.name, column_info, insertTableToDbSchema_after);
+                    cb()
                   };
 
 
@@ -413,6 +434,5 @@ for (var table_name in db_tables){
         }); 
     })(table_name);
      // } // Limiting t2 if statement for testing 
-  };
-};
+}
 
