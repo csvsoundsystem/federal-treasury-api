@@ -1,0 +1,28 @@
+{
+  "name": "federal-treasury-api",
+  "version": "1.0.0",
+  "description": "The scraper, parser, and database creation scripts for Financial Management Service daily U.S. Treasury statements",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build-schema": "node schema-builder/db-schema-builder.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/csvsoundsystem/federal-treasury-api.git"
+  },
+  "keywords": [],
+  "author": "Michael Keller <code@mhkeller.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/csvsoundsystem/federal-treasury-api/issues"
+  },
+  "homepage": "https://github.com/csvsoundsystem/federal-treasury-api#readme",
+  "dependencies": {
+    "request": "^2.75.0",
+    "underscore": "^1.8.3"
+  }
+}
