@@ -79,7 +79,7 @@ Run everything each day around 4:30 - right after the data has been released.
 30 16 * * * cd path/to/federal-treasury-api && ./run.sh
 ```
 
-####Optional: set up logging
+#### Optional: set up logging
 ```
 30 16 * * * cd path/to/federal-treasury-api && ./run.sh >> run.log 2>> err.log
 ```
