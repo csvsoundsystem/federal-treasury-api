@@ -6,6 +6,7 @@ import datetime
 import io
 import logging
 import os
+import random
 import sys
 import time
 
@@ -18,7 +19,7 @@ import requests
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
 SAVE_DIR = os.path.join('..', 'data', 'fixie')
 
-LOGGER = logging.getLogger(__name__)
+LOGGER = logging.getLogger('download_fms_fixies')
 LOGGER.setLevel(logging.INFO)
 _handler = logging.StreamHandler()
 _formatter = logging.Formatter('%(name)s | %(levelname)s | %(message)s')
@@ -105,7 +106,7 @@ def request_all_fixies(all_fnames, save_dir):
         all_fnames (Iterable[Tuple[str]])
     """
     for fnames in all_fnames:
-        time.sleep(0.1)
+        time.sleep(0.1 + 0.1 * random.random())
         success = False
         for fname in fnames:
             fixie = request_fixie(fname)
@@ -135,7 +136,7 @@ def request_fixie(fname):
         str or None
     """
     for dir_ in ('a', 'w'):
-        response = requests.get(BASE_URL, params={'dir': 'a', 'fname': fname})
+        response = requests.get(BASE_URL, params={'dir': dir_, 'fname': fname})
         if response.status_code == 200:
             return response.text
     return None
