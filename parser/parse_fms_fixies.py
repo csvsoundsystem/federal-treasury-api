@@ -1,14 +1,25 @@
 #!/usr/bin/env python
 from __future__ import print_function
 
-import json
+import argparse
 import datetime
-import pandas as pd
+import io
+import json
+import logging
 import re
+import sys
+
+import pandas as pd
 import requests
 
 
-NORMALIZE_FIELD_TABLE = json.load(open("../parser/normalize_field_table.json"))
+LOGGER = logging.getLogger('parse_fms_fixies')
+LOGGER.setLevel(logging.INFO)
+_handler = logging.StreamHandler()
+_formatter = logging.Formatter('%(name)s | %(levelname)s | %(message)s')
+_handler.setFormatter(_formatter)
+LOGGER.addHandler(_handler)
+
 
 T4_USE_ITEMS = {
     'Tax and Loan Accounts',
@@ -18,11 +29,15 @@ T4_USE_ITEMS = {
     'Federal Reserve Account Depositaries',
     }
 
-ERRANT_FOOTNOTE_PATTERNS = tuple(
-    p for p in open('../parser/errant_footnote_patterns.txt').read().split('\n')
-    if p is not '')
+with io.open('../parser/normalize_field_table.json', mode='rt') as f:
+    NORMALIZE_FIELD_TABLE = json.load(f)
 
-NULL_TEST_PARAMS = json.load(open("../tests/null_test_params.json"))
+with io.open('../parser/errant_footnote_patterns.txt', mode='rt') as f:
+    ERRANT_FOOTNOTE_PATTERNS = tuple(
+        line.strip() for line in f.readlines() if line.strip())
+
+with io.open('../tests/null_test_params.json', mode='rt') as f:
+    NULL_TEST_PARAMS = json.load(f)
 
 re_net = re.compile(".*\(.*net.*\).*", flags=re.IGNORECASE)
 re_net_remove = re.compile('\(.*net.*\)', flags=re.IGNORECASE)
@@ -93,7 +108,7 @@ def get_footnote(line):
 
 
 def check_fixie_url(url):
-    print("INFO: checking %s to make sure it's valid" % url)
+    LOGGER.info("checking %s to make sure it's valid", url)
     r = requests.get(url)
     if r.status_code == 200:
         return url
@@ -107,9 +122,9 @@ def check_fixie_url(url):
         return re.sub("dir=" + bad_dir, "dir=" + good_dir, url)
 
 
-def gen_fixie_url(f_name, date):
+def gen_fixie_url(fname, date):
     # simplify file name for url creation
-    new_f_name = re.sub(r'\.\./data/fixie/', '', f_name)
+    new_fname = re.sub(r'\.\./data/fixie/', '', fname)
 
     # arbitrary cutoff to determine archive and working directories
     rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
@@ -119,7 +134,7 @@ def gen_fixie_url(f_name, date):
         f_dir = "w"
 
     # format the url
-    url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_f_name, f_dir)
+    url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_fname, f_dir)
 
     # now lets check urls that fall within 15 days before and after our rolling cutoff
     check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
@@ -142,11 +157,12 @@ def check_for_nulls(df, table):
     # 	[r[f] for r in null_rows
 
 
-def parse_file(f_name, verbose=False):
-    f = open(f_name, 'rb').read()
+def parse_file(fname, verbose=False):
+    with io.open(fname, mode='rb') as f:
+        data = f.read()
 
-    # raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', f)
-    raw_tables = re.split(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', f)
+    # raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', data)
+    raw_tables = re.split(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', data)
     tables = []
     for raw_table in raw_tables[1:]:
         # if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
@@ -160,10 +176,10 @@ def parse_file(f_name, verbose=False):
         tables.append(table)
 
     # file metadata
-    date = get_date_from_fname(f_name)
-    url = gen_fixie_url(f_name, date)
+    date = get_date_from_fname(fname)
+    url = gen_fixie_url(fname, date)
 
-    print('INFO: parsing', f_name, '(', date, ')')
+    LOGGER.info('parsing %s (%s)', fname, date)
     dfs = {}
     for table in tables:
         table_index = tables.index(table)
@@ -203,7 +219,7 @@ def parse_table(table, date, url, verbose=False):
         row['day'] = date.day
         row['year_month'] = datetime.date.strftime(date, '%Y-%m')
         row['weekday'] = datetime.datetime.strftime(date, '%A')
-        row['url'] = ur
+        row['url'] = url
 
         # what's our line number? shall we bail out?
         index += 1
@@ -406,8 +422,7 @@ def parse_table(table, date, url, verbose=False):
                 row['open_mo'] = digits[-2]
                 row['open_fy'] = digits[-1]
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-i line exception: %s', line)
 
         elif re.search(r'TABLE II\s', row.get('table', '')):
             try:
@@ -442,8 +457,7 @@ def parse_table(table, date, url, verbose=False):
                     row['item_raw'] = row_item_raw
                     row.pop('subtype')
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-ii line exception: %s', line)
 
         elif re.search(r'TABLE III-A', row.get('table', '')):
             try:
@@ -463,8 +477,7 @@ def parse_table(table, date, url, verbose=False):
                     row['item_raw'] = row_item_raw
                     row.pop('subtype')
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-iiia line exception: %s', line)
 
         elif re.search(r'TABLE III-B', row.get('table', '')):
             try:
@@ -484,8 +497,7 @@ def parse_table(table, date, url, verbose=False):
                     row['item_raw'] = row_item_raw
                     row.pop('subtype')
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-iiib line exception: %s', line)
 
         elif re.search(r'TABLE III-C', row.get('table', '')):
             try:
@@ -500,8 +512,7 @@ def parse_table(table, date, url, verbose=False):
                     row['parent_item'] = row['subtype']
                     row.pop('subtype')
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-iiic line exception: %s', line)
 
         elif re.search(r'TABLE IV', row.get('table', '')):
             try:
@@ -525,8 +536,7 @@ def parse_table(table, date, url, verbose=False):
                 else:
                     row['type'] = "use"
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-iv line exception: %s', line)
 
         elif re.search(r'TABLE V\s', row.get('table', '')):
             try:
@@ -538,8 +548,7 @@ def parse_table(table, date, url, verbose=False):
                 # tweak column names
                 row['transaction_type'] = row.get('type')
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-v line exception: %s', line)
 
         elif re.search(r'TABLE VI', row.get('table', '')):
             try:
@@ -553,8 +562,7 @@ def parse_table(table, date, url, verbose=False):
                 elif '( checks )' in row.get('refund_type_raw', '').lower():
                     row['refund_method'] = 'CHECKS'
             except Exception:
-                if verbose is True:
-                    print('WARNING:', line)
+                LOGGER.debug('table-vi line exception: %s', line)
 
         parsed_table.append(row)
 
@@ -583,9 +591,9 @@ def parse_table(table, date, url, verbose=False):
         df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'is_total', 'account', 'account_raw', 'close_today', 'open_today', 'open_mo', 'open_fy', 'footnote'])
         # check_for_nulls(df, "t1")
     elif re.search(r'TABLE II\s', row.get('table', '')):
-        df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item','is_total', 'is_net', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
+        df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'account', 'transaction_type', 'parent_item', 'is_total', 'is_net', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
         if 'withdrawal' not in set(list(df['transaction_type'])):
-            print("ERROR: No withdrawal items in t2 for %s" % df['date'][0])
+            LOGGER.error('No withdrawal items in t2 for %s', df['date'][0])
         # check_for_nulls(df, "t2")
     elif re.search(r'TABLE III-A', row.get('table', '')):
         df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'transaction_type', 'debt_type', 'parent_item', 'is_total', 'item', 'item_raw', 'today', 'mtd', 'fytd', 'footnote'])
@@ -606,9 +614,31 @@ def parse_table(table, date, url, verbose=False):
         df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'refund_method', 'refund_type', 'refund_type_raw', 'today', 'mtd', 'fytd', 'footnote'])
         # check_for_nulls(df, "t6")
 
+    # LOGGER.debug('parsed table:\n%s', df.head(3))
+
     return df
 
 
 # BJD: Does this function serve a purpose...?
 def strip_table_name(table_name):
     return re.sub('[^a-zA-Z]*$', '', table_name)
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description='Script to parse "FMS fixie" files.')
+    parser.add_argument(
+        '-f', '--filename', type=str, required=True,
+        help='Full path/to/file on disk where fixie is saved.')
+    parser.add_argument(
+        '-l', '--level', type=int, default=20, choices=[10, 20, 30, 40, 50],
+        help='Level of message to be logged; default => "INFO".')
+    args = parser.parse_args()
+
+    LOGGER.setLevel(args.level)
+
+    parse_file(args.filename)
+
+
+if __name__ == '__main__':
+    sys.exit(main())
