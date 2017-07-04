@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import absolute_import
 from __future__ import print_function
 
 import argparse
@@ -11,13 +12,12 @@ import sys
 import time
 
 import arrow
-import holidays
 import pandas as pd
 import requests
 
+from .constants import DEFAULT_FIXIE_DIR, EARLIEST_DATE
+from .utils import get_all_dates, get_fixies_by_date
 
-BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
-SAVE_DIR = os.path.join('..', 'data', 'fixie')
 
 LOGGER = logging.getLogger('download_fms_fixies')
 LOGGER.setLevel(logging.INFO)
@@ -26,12 +26,10 @@ _formatter = logging.Formatter('%(name)s | %(levelname)s | %(message)s')
 _handler.setFormatter(_formatter)
 LOGGER.addHandler(_handler)
 
-EARLIEST_DATE = arrow.get('2005-06-09')
-""":class:`arrow.Arrow`: Earliest date of available fixie files. Note that PDFs
-*are* available, for the brave soul who wants to parse them."""
+BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
 
 
-def download_fixies(start_date, end_date=None, save_dir=SAVE_DIR):
+def download_fixies(start_date, end_date=None, data_dir=DEFAULT_FIXIE_DIR):
     """
     Download FMS fixie files from the FMS website for all non-weekend, non-
     holiday dates between ``start_date`` and ``end_date``.
@@ -39,48 +37,15 @@ def download_fixies(start_date, end_date=None, save_dir=SAVE_DIR):
     Args:
         start_date (datetime or str)
         end_date (datetime or str)
-        save_dir (str)
+        data_dir (str)
     """
-    start_date = arrow.get(start_date)
-    end_date = arrow.get(end_date) if end_date else start_date
     all_dates = get_all_dates(start_date, end_date)
     LOGGER.info(
         'downloading FMS fixies from %s to %s!',
         all_dates[0].date(), all_dates[-1].date())
 
     fnames = generate_fixie_fnames(all_dates)
-    request_all_fixies(fnames, save_dir)
-
-
-def get_all_dates(start_date, end_date):
-    """
-    Get all dates between ``start_date`` and ``end_date`` that are neither
-    holidays nor weekends.
-
-    Args:
-        start_date (:class:`arrow.Arrow`)
-        end_date (:class:`arrow.Arrow`)
-
-    Returns:
-        Tuple[:class:`arrow.Arrow`]
-    """
-    # sanity check the date range
-    if start_date < EARLIEST_DATE:
-        start_date = EARLIEST_DATE
-        LOGGER.warning(
-            'start date "%s" before earliest available date; setting equal to "%s"',
-            start_date, EARLIEST_DATE)
-    if start_date > end_date:
-        start_date, end_date = end_date, start_date
-        LOGGER.warning(
-            'start date "%s" before end date "%s"; swapping the dates',
-            start_date, end_date)
-    # no fixies on holidays or weekends; remove them
-    us_holidays = holidays.UnitedStates(
-        years=range(start_date.year, end_date.year + 1),
-        observed=True)
-    return tuple(dt for dt in arrow.Arrow.range('day', start_date, end_date)
-                 if dt.isoweekday() < 6 and dt.date() not in us_holidays)
+    request_all_fixies(fnames, data_dir)
 
 
 def generate_fixie_fnames(dates):
@@ -100,10 +65,11 @@ def generate_fixie_fnames(dates):
         yield tuple(dt.format('YYMMDD') + suffix for suffix in suffixes)
 
 
-def request_all_fixies(all_fnames, save_dir):
+def request_all_fixies(all_fnames, data_dir):
     """
     Args:
         all_fnames (Iterable[Tuple[str]])
+        data_dir (str)
     """
     for fnames in all_fnames:
         time.sleep(0.1 + 0.1 * random.random())
@@ -111,7 +77,7 @@ def request_all_fixies(all_fnames, save_dir):
         for fname in fnames:
             fixie = request_fixie(fname)
             if fixie:
-                filepath = os.path.join(save_dir, fname)
+                filepath = os.path.join(data_dir, fname)
                 with io.open(filepath, mode='wb') as f:
                     f.write(fixie)
                 LOGGER.info('%s fixie saved to %s', fname, filepath)
@@ -119,7 +85,7 @@ def request_all_fixies(all_fnames, save_dir):
                 break
         if success is False:
             LOGGER.warning(
-                '%s fixie (%s) not found',
+                '%s fixie (%s) not available',
                 fnames[0],
                 str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()))
 
@@ -155,11 +121,30 @@ def main():
         help="""End of date range over which to download FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
-        '--savedir', type=str, default=SAVE_DIR,
+        '--datadir', type=str, default=DEFAULT_FIXIE_DIR,
         help='Directory on disk to which fixies will be saved.')
+    parser.add_argument(
+        '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
+        help='Level of message to be logged; 20 => "INFO".')
+    parser.add_argument(
+        '--force', default=False, action='store_true',
+        help="""If true, download all fixies in [start_date, end_date], even if
+             the resulting files already exist on disk in ``datadir``.
+             Otherwise, only download un-downloaded fixies.""")
     args = parser.parse_args()
 
-    download_fixies(args.startdate, end_date=args.enddate, save_dir=args.savedir)
+    LOGGER.setLevel(args.loglevel)
+
+    all_dates = get_all_dates(args.startdate, args.enddate)
+    # if force is False, only download fixies that haven't yet been downloaded
+    if args.force is False:
+        fixie_dates = set(get_fixies_by_date(all_dates[0], all_dates[-1],
+                                             data_dir=args.datadir).keys())
+        if fixie_dates:
+            all_dates = sorted(set(all_dates).difference(fixie_dates))
+
+    fnames = generate_fixie_fnames(all_dates)
+    request_all_fixies(fnames, args.datadir)
 
 
 if __name__ == '__main__':

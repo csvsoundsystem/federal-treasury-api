@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+from __future__ import absolute_import
 from __future__ import print_function
 
 import argparse
@@ -6,11 +7,19 @@ import datetime
 import io
 import json
 import logging
+from operator import itemgetter
+import os
 import re
 import sys
 
+import arrow
 import pandas as pd
 import requests
+
+from .constants import (DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR,
+                        EARLIEST_DATE, PARSER_DIR)
+from .utils import (get_all_dates, get_date_from_fname,
+                    get_daily_csvs_by_date, get_fixies_by_date)
 
 
 LOGGER = logging.getLogger('parse_fms_fixies')
@@ -20,7 +29,6 @@ _formatter = logging.Formatter('%(name)s | %(levelname)s | %(message)s')
 _handler.setFormatter(_formatter)
 LOGGER.addHandler(_handler)
 
-
 T4_USE_ITEMS = {
     'Tax and Loan Accounts',
     'Inter agency Transfers',
@@ -29,15 +37,16 @@ T4_USE_ITEMS = {
     'Federal Reserve Account Depositaries',
     }
 
-with io.open('../parser/normalize_field_table.json', mode='rt') as f:
+with io.open(os.path.join(PARSER_DIR, 'normalize_field_table.json'), mode='rt') as f:
     NORMALIZE_FIELD_TABLE = json.load(f)
 
-with io.open('../parser/errant_footnote_patterns.txt', mode='rt') as f:
+with io.open(os.path.join(PARSER_DIR, 'errant_footnote_patterns.txt'), mode='rt') as f:
     ERRANT_FOOTNOTE_PATTERNS = tuple(
         line.strip() for line in f.readlines() if line.strip())
 
-with io.open('../tests/null_test_params.json', mode='rt') as f:
-    NULL_TEST_PARAMS = json.load(f)
+# TODO
+# with io.open('../tests/null_test_params.json', mode='rt') as f:
+#     NULL_TEST_PARAMS = json.load(f)
 
 re_net = re.compile(".*\(.*net.*\).*", flags=re.IGNORECASE)
 re_net_remove = re.compile('\(.*net.*\)', flags=re.IGNORECASE)
@@ -63,12 +72,6 @@ def normalize_fields(text, table, field):
             return value
 
 
-def get_date_from_fname(fname):
-    raw_date = re.search(r'(\d+).txt', fname).group(1)
-    date = datetime.date(2000+int(raw_date[0:2]), int(raw_date[2:4]), int(raw_date[4:6]))
-    return date
-
-
 def get_table_name(line):
     try:
         table_line = re.search(r'\s+TABLE\s+[\w-]+.*', line).group()
@@ -76,6 +79,13 @@ def get_table_name(line):
     except AttributeError:
         table_name = None
     return table_name
+
+
+def get_footnote(line):
+    footnote = re.search(r'^\s*(\d)\/([\w\s\./,]+.*)', line)
+    if footnote:
+        return [footnote.group(1), footnote.group(2)]
+    return None
 
 
 def normalize_page_text(page):
@@ -98,13 +108,6 @@ def normalize_page_text(page):
     # get rid of blank lines
     lines = [line for line in lines if line != '' and line != ' ']
     return lines
-
-
-def get_footnote(line):
-    footnote = re.search(r'^\s*(\d)\/([\w\s\./,]+.*)', line)
-    if footnote:
-        return [footnote.group(1), footnote.group(2)]
-    return None
 
 
 def check_fixie_url(url):
@@ -183,12 +186,12 @@ def parse_file(fname, verbose=False):
     dfs = {}
     for table in tables:
         table_index = tables.index(table)
-        dfs[table_index] = parse_table(table, date, url, verbose=verbose)
+        dfs[table_index] = parse_table(table, date, url)
 
     return dfs
 
 
-def parse_table(table, date, url, verbose=False):
+def parse_table(table, date, url):
 
     # table defaults
     t4_total_count = 0
@@ -203,21 +206,22 @@ def parse_table(table, date, url, verbose=False):
     # total hack for when the treasury decided to switch
     # which (upper or lower) line of two-line items gets the 0s
     # NOTE: THIS IS ONLY FOR TABLE I, BECAUSE OF COURSE
-    if date > datetime.date(2013, 1, 3) or date < datetime.date(2012, 6, 1):
-        two_line_delta = 1
-    else:
+    if datetime.date(2012, 6, 1) <= date <= datetime.date(2013, 1, 3):
         two_line_delta = -1
+    else:
+        two_line_delta = 1
 
     parsed_table = []
     for i, line in enumerate(table):
-        # print '|' + line + '|', '<', i, '>'
+        # print('|' + line + '|', '<', i, '>')
         row = {}
+
         # a variety of date formats -- for your convenience
         row['date'] = date
         row['year'] = date.year
         row['month'] = date.month
         row['day'] = date.day
-        row['year_month'] = datetime.date.strftime(date, '%Y-%m')
+        row['year_month'] = datetime.datetime.strftime(date, '%Y-%m')
         row['weekday'] = datetime.datetime.strftime(date, '%A')
         row['url'] = url
 
@@ -227,7 +231,7 @@ def parse_table(table, date, url, verbose=False):
             continue
         indent = len(re.search(r'^\s*', line).group())
 
-        # Rows that we definitely want to skip
+        # rows that we definitely want to skip
         # empty rows or centered header rows
         if re.match(r'^\s{7,}', line):
             continue
@@ -628,16 +632,46 @@ def main():
     parser = argparse.ArgumentParser(
         description='Script to parse "FMS fixie" files.')
     parser.add_argument(
-        '-f', '--filename', type=str, required=True,
-        help='Full path/to/file on disk where fixie is saved.')
+        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
+        help="""Start of date range over which to parse FMS fixies
+             as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
-        '-l', '--level', type=int, default=20, choices=[10, 20, 30, 40, 50],
-        help='Level of message to be logged; default => "INFO".')
+        '-e', '--enddate', type=str, default=arrow.utcnow().format('YYYY-MM-DD'),
+        help="""End of date range over which to download FMS fixies
+             as an ISO-formatted string, i.e. YYYY-MM-DD.""")
+    parser.add_argument(
+        '-i', '--indatadir', type=str, default=DEFAULT_FIXIE_DIR,
+        help='Directory on disk from which fixies will be loaded.')
+    parser.add_argument(
+        '-o', '--outdatadir', type=str, default=DEFAULT_DAILY_CSV_DIR,
+        help='Directory on disk from which fixies will be loaded.')
+    parser.add_argument(
+        '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
+        help='Level of message to be logged; 20 => "INFO".')
+    parser.add_argument(
+        '--force', default=False, action='store_true',
+        help="""If true, parse all fixies in [start_date, end_date], even if
+             the resulting csvs already exist on disk in ``outdatadir``.
+             Otherwise, only parse un-parsed fixies.""")
     args = parser.parse_args()
 
-    LOGGER.setLevel(args.level)
+    LOGGER.setLevel(args.loglevel)
 
-    parse_file(args.filename)
+    all_dates = get_all_dates(args.startdate, args.enddate)
+    fixies_by_date = get_fixies_by_date(
+        all_dates[0], all_dates[-1], data_dir=args.indatadir)
+    # if force is False, only parse fixies that haven't yet been parsed
+    if args.force is False:
+        daily_csv_dates = set(get_daily_csvs_by_date(all_dates[0], all_dates[-1],
+                                                     data_dir=args.outdatadir).keys())
+        if daily_csv_dates:
+            dates = set(fixies_by_date.keys()).difference(daily_csv_dates)
+            fixies_by_date = {
+                dt: fname for dt, fname in fixies_by_date.items()
+                if dt in dates}
+
+    for _, fname in sorted(fixies_by_date.items(), key=itemgetter(0)):
+        parse_file(fname)
 
 
 if __name__ == '__main__':
