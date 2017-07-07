@@ -93,8 +93,8 @@ def get_daily_csvs_by_date(start_date, end_date, data_dir=DEFAULT_DAILY_CSV_DIR)
         fname_date_str = fname[:6]
         if not start_date_str <= fname_date_str <= end_date_str:
             continue
-        fname_date = datetime.datetime.strptime(fname_date_str, '%y%m%d').date()
-        fnames_by_date[str(fname_date)].append(os.path.join(dir_, fname))
+        fname_date = arrow.get(datetime.datetime.strptime(fname_date_str, '%y%m%d'))
+        fnames_by_date[fname_date].append(os.path.join(data_dir, fname))
 
     return dict(fnames_by_date)
 

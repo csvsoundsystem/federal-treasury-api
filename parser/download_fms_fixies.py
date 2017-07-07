@@ -117,11 +117,11 @@ def main():
         help="""Start of date range over which to download FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
-        '-e', '--enddate', type=str, default=arrow.utcnow().format('YYYY-MM-DD'),
+        '-e', '--enddate', type=str, default=arrow.utcnow().shift(days=-1).format('YYYY-MM-DD'),
         help="""End of date range over which to download FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
-        '--datadir', type=str, default=DEFAULT_FIXIE_DIR,
+        '--fixiedir', type=str, default=DEFAULT_FIXIE_DIR,
         help='Directory on disk to which fixies will be saved.')
     parser.add_argument(
         '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
@@ -135,16 +135,33 @@ def main():
 
     LOGGER.setLevel(args.loglevel)
 
+    # auto-make data directory, if not present
+    try:
+        os.makedirs(args.fixiedir)
+    except OSError:  # already exists
+        continue
+
+    # get all valid dates within range
     all_dates = get_all_dates(args.startdate, args.enddate)
+    if not all_dates:
+        LOGGER.warning(
+            'no valid dates in range [%s, %s]',
+            args.startdate, args.enddate)
+        return
+
     # if force is False, only download fixies that haven't yet been downloaded
     if args.force is False:
-        fixie_dates = set(get_fixies_by_date(all_dates[0], all_dates[-1],
-                                             data_dir=args.datadir).keys())
+        fixie_dates = set(
+            get_fixies_by_date(
+                all_dates[0], all_dates[-1], data_dir=args.fixiedir
+                ).keys())
         if fixie_dates:
-            all_dates = sorted(set(all_dates).difference(fixie_dates))
+            fixie_dates = sorted(set(all_dates).difference(fixie_dates))
+    else:
+        fixie_dates = all_dates
 
-    fnames = generate_fixie_fnames(all_dates)
-    request_all_fixies(fnames, args.datadir)
+    fnames = generate_fixie_fnames(fixie_dates)
+    request_all_fixies(fnames, args.fixiedir)
 
 
 if __name__ == '__main__':

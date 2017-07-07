@@ -112,7 +112,7 @@ def normalize_page_text(page):
 
 def check_fixie_url(url):
     LOGGER.info("checking %s to make sure it's valid", url)
-    r = requests.get(url)
+    r = requests.head(url)
     if r.status_code == 200:
         return url
     else:
@@ -126,22 +126,23 @@ def check_fixie_url(url):
 
 
 def gen_fixie_url(fname, date):
-    # simplify file name for url creation
-    new_fname = re.sub(r'\.\./data/fixie/', '', fname)
+    """Super awkward function whose purpose isn't entirely clear."""
+    # split the filename from the rest of its path
+    _, fname = os.path.split(fname)
 
     # arbitrary cutoff to determine archive and working directories
-    rolling_cutoff = datetime.datetime.now().date() - datetime.timedelta(days=50)
-    if date < rolling_cutoff:
+    rolling_cutoff = arrow.utcnow().shift(days=-50)
+    if date < rolling_cutoff.date():
         f_dir = "a"
     else:
         f_dir = "w"
 
     # format the url
-    url = "https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname=%s&dir=%s" % (new_fname, f_dir)
+    url = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles?fname={}&dir={}'.format(fname, f_dir)
 
     # now lets check urls that fall within 15 days before and after our rolling cutoff
-    check_cutoff_start = rolling_cutoff - datetime.timedelta(days=15)
-    check_cutoff_end = rolling_cutoff + datetime.timedelta(days=15)
+    check_cutoff_start = rolling_cutoff.shift(days=-15).date()
+    check_cutoff_end = rolling_cutoff.shift(days=15).date()
     if date > check_cutoff_start and date < check_cutoff_end:
         url = check_fixie_url(url)
 
@@ -160,33 +161,70 @@ def check_for_nulls(df, table):
     # 	[r[f] for r in null_rows
 
 
-def parse_file(fname, verbose=False):
+def parse_all_fixies(filepaths, data_dir):
+    """
+    Args:
+        filepaths (Iterable[str])
+        data_dir (str)
+    """
+    for filepath in filepaths:
+        _, fname = os.path.split(filepath)
+        froot, _ = os.path.splitext(fname)
+
+        dfs = parse_fixie(filepath)
+        if dfs:
+            for table_key, df in sorted(dfs.items(), key=itemgetter(0)):
+                daily_csv_fname = os.path.join(
+                    data_dir, froot + '_' + table_key + '.csv')
+                df.to_csv(
+                    daily_csv_fname,
+                    index=False, header=True, encoding='utf-8', na_rep='')
+                LOGGER.info(
+                    'parsed %s and saved it to %s',
+                    table_key, daily_csv_fname)
+        else:
+            LOGGER.info('error parsing fixie %s', fname)
+
+
+def parse_fixie(fname):
+    """
+    Args:
+        fname (str)
+
+    Returns:
+        Dict[str, :class:`pd.DataFrame`]
+    """
     with io.open(fname, mode='rb') as f:
         data = f.read()
-
-    # raw_tables = re.split(r'(\s+TABLE\s+[\w-]+.*)', data)
-    raw_tables = re.split(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', data)
-    tables = []
-    for raw_table in raw_tables[1:]:
-        # if re.search(r'\s+TABLE\s+[\w-]+.*', raw_table):
-        if re.search(r'([\s_]+TABLE[\s_]+[\w_-]+.*)', raw_table):
-            table_name = raw_table
-            # fix malformed fixie table names, BLERGH GOV'T!
-            table_name = re.sub(r'_+', ' ', table_name)
-            continue
-        raw_table = table_name + raw_table
-        table = normalize_page_text(raw_table)
-        tables.append(table)
 
     # file metadata
     date = get_date_from_fname(fname)
     url = gen_fixie_url(fname, date)
 
     LOGGER.info('parsing %s (%s)', fname, date)
+
+    # split the file on table names
+    # use regex parens to *keep* the delimiters, then clean them up
+    # skip the first one, which is just the fixie header info
+    re_raw_table_name = re.compile(r'([\s_]+TABLE[\s_]+[\w_-]+.*)')
+    raw_tables = re_raw_table_name.split(data)
     dfs = {}
-    for table in tables:
-        table_index = tables.index(table)
-        dfs[table_index] = parse_table(table, date, url)
+    for raw_table in raw_tables[1:]:
+        try:
+            if re_raw_table_name.search(raw_table):
+                # fix malformed fixie table names, BLERGH GOV'T!
+                table_name = re.sub(r'_+', ' ', raw_table)
+                # then convert it into a standardized "key"
+                table_key = re.sub(
+                    r'-| ', '_',
+                    re.search(r'TABLE [\w-]+', table_name).group().lower()
+                    )
+                continue
+            raw_table = table_name + raw_table
+            table = normalize_page_text(raw_table)
+            dfs[table_key] = parse_table(table, date, url)
+        except Exception as e:
+            LOGGER.exception('error parsing fixie table %s', table_key)
 
     return dfs
 
@@ -636,15 +674,15 @@ def main():
         help="""Start of date range over which to parse FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
-        '-e', '--enddate', type=str, default=arrow.utcnow().format('YYYY-MM-DD'),
+        '-e', '--enddate', type=str, default=arrow.utcnow().shift(days=-1).format('YYYY-MM-DD'),
         help="""End of date range over which to download FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
-        '-i', '--indatadir', type=str, default=DEFAULT_FIXIE_DIR,
+        '--fixiedir', type=str, default=DEFAULT_FIXIE_DIR,
         help='Directory on disk from which fixies will be loaded.')
     parser.add_argument(
-        '-o', '--outdatadir', type=str, default=DEFAULT_DAILY_CSV_DIR,
-        help='Directory on disk from which fixies will be loaded.')
+        '--dailycsvdir', type=str, default=DEFAULT_DAILY_CSV_DIR,
+        help='Directory on disk to which daily CSVs will be saved.')
     parser.add_argument(
         '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
         help='Level of message to be logged; 20 => "INFO".')
@@ -657,21 +695,41 @@ def main():
 
     LOGGER.setLevel(args.loglevel)
 
+    # auto-make data directories, if not present
+    for dir_ in (args.fixiedir, args.dailycsvdir):
+        try:
+            os.makedirs(dir_)
+        except OSError:  # already exists
+            continue
+
+    # get all valid dates within range, and their corresponding fixie files
     all_dates = get_all_dates(args.startdate, args.enddate)
+    if not all_dates:
+        LOGGER.warning(
+            'no valid dates in range [%s, %s]',
+            args.startdate, args.enddate)
+        return
     fixies_by_date = get_fixies_by_date(
-        all_dates[0], all_dates[-1], data_dir=args.indatadir)
+        all_dates[0], all_dates[-1], data_dir=args.fixiedir)
     # if force is False, only parse fixies that haven't yet been parsed
     if args.force is False:
-        daily_csv_dates = set(get_daily_csvs_by_date(all_dates[0], all_dates[-1],
-                                                     data_dir=args.outdatadir).keys())
+        daily_csv_dates = set(
+            get_daily_csvs_by_date(
+                all_dates[0], all_dates[-1], data_dir=args.dailycsvdir
+                ).keys())
         if daily_csv_dates:
-            dates = set(fixies_by_date.keys()).difference(daily_csv_dates)
             fixies_by_date = {
                 dt: fname for dt, fname in fixies_by_date.items()
-                if dt in dates}
+                if dt not in daily_csv_dates}
+    if not fixies_by_date:
+        LOGGER.warning(
+            'no un-parsed fixies in range [%s, %s]',
+            args.startdate, args.enddate)
+        return
 
-    for _, fname in sorted(fixies_by_date.items(), key=itemgetter(0)):
-        parse_file(fname)
+    parse_all_fixies(
+        (fname for _, fname in sorted(fixies_by_date.items(), key=itemgetter(0))),
+        args.dailycsvdir)
 
 
 if __name__ == '__main__':
