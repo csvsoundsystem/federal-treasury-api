@@ -9,6 +9,7 @@ fi
 
 git checkout master
 git pull origin master
+npm install
 
 (
   python -m parser.download_fms_fixies
@@ -28,6 +29,6 @@ echo "INFO: Running tests\r\n"
 echo "INFO: Building db_schema.json \r\n"
 (
   cd ./schema-builder
-  node db-schema-builder.js
+  npm run build-schema
 )
 echo "\r\nDone!\r\n"
