@@ -74,12 +74,16 @@ def build_db(dbfile, lifetimecsvdir):
     for table_key, table_name in zip(TABLE_KEYS, DB_TABLE_NAMES):
 
         lifetime_csv_fname = os.path.join(lifetimecsvdir, table_key + '.csv')
+        if not os.path.isfile(lifetime_csv_fname):
+            LOGGER.warning(
+                'lifetime CSV %s does not exist -- skipping db table build...',
+                lifetime_csv_fname)
         df = pd.read_csv(lifetime_csv_fname, header=0)
 
         # HACK: filter out Table V after 2012-04-02
         # TODO: check with cezary podkul about this
         if table_name == 't5':
-            LOGGER.info(
+            LOGGER.debug(
                 'filtering out invalid dates for TABLE V (deprecated as of 2012-04-02)')
             max_date = arrow.get('2012-04-02').date()
             df['date'] = df['date'].map(lambda x: arrow.get(x).date())
@@ -94,7 +98,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Script to aggregate parsed "FMS fixie" files.')
     parser.add_argument(
-        '-s', '--startdate', type=str, default=arrow.utcnow().shift(days=-8).format('YYYY-MM-DD'),
+        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
         help="""Start of date range over which to parse FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
@@ -158,14 +162,17 @@ def main():
         # iterate over lifetime tables, adding corresponding daily rows as needed
         for table_key in TABLE_KEYS:
             LOGGER.info(
-                'aggregating %s in range [%s, %s]',
+                'aggregating parsed fixies for %s in range [%s, %s]',
                 table_key, args.startdate, args.enddate)
             aggregate_table(
                 table_key, args.lifetimecsvdir, daily_csvs_by_date, args.force)
-        # build a sqlite database of aggregated tables?
-        if args.nodb is False:
-            LOGGER.info('building sqlite db file at %s', args.dbfile)
-            build_db(args.dbfile, args.lifetimecsvdir)
+
+    # build a sqlite database of aggregated tables?
+    if args.nodb is False:
+        LOGGER.info(
+            'building sqlite db file of aggregated tables at %s',
+            args.dbfile)
+        build_db(args.dbfile, args.lifetimecsvdir)
 
 
 if __name__ == '__main__':

@@ -110,7 +110,7 @@ def normalize_page_text(page):
 
 
 def check_fixie_url(url):
-    LOGGER.info("checking %s to make sure it's valid", url)
+    LOGGER.debug("checking %s to make sure it's valid", url)
     r = requests.head(url)
     if r.status_code == 200:
         return url
@@ -178,11 +178,11 @@ def parse_all_fixies(filepaths, data_dir):
                 df.to_csv(
                     daily_csv_fname,
                     index=False, header=True, encoding='utf-8', na_rep='')
-                LOGGER.info(
+                LOGGER.debug(
                     'parsed %s and saved it to %s',
                     table_key, daily_csv_fname)
         else:
-            LOGGER.info('error parsing fixie %s', fname)
+            LOGGER.warning('error parsing fixie %s', fname)
 
 
 def parse_fixie(fname):
@@ -200,7 +200,7 @@ def parse_fixie(fname):
     date = get_date_from_fname(fname)
     url = gen_fixie_url(fname, date)
 
-    LOGGER.info('parsing %s (%s)', fname, date)
+    LOGGER.debug('parsing %s (%s)', fname, date)
 
     # split the file on table names
     # use regex parens to *keep* the delimiters, then clean them up
@@ -664,7 +664,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Script to parse "FMS fixie" files.')
     parser.add_argument(
-        '-s', '--startdate', type=str, default=arrow.utcnow().shift(days=-8).format('YYYY-MM-DD'),
+        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
         help="""Start of date range over which to parse FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
@@ -723,8 +723,8 @@ def main():
             args.startdate, args.enddate)
     else:
         LOGGER.info(
-            'parsing %s fixies and saving them to %s',
-            len(fixies_by_date), args.dailycsvdir)
+            'parsing %s fixies in range [%s, %s] and saving them to %s',
+            len(fixies_by_date), args.startdate, args.enddate, args.dailycsvdir)
         fixie_fnames = (
             fname for _, fname in sorted(fixies_by_date.items(), key=itemgetter(0)))
         parse_all_fixies(fixie_fnames, args.dailycsvdir)

@@ -69,10 +69,11 @@ This one command downloads the (new) fixies and converts them to an SQLite3 data
 
 ### Windows
 
-Run everything
+Run everything:
 
-    cd parser
-    python download_and_parse_fms_fixies.py
+    python -m parser.download_fms_fixies
+    python -m parser.parse_fms_fixies
+    python -m parser.aggregate_fms_fixies
 
 ## Testing the data
 

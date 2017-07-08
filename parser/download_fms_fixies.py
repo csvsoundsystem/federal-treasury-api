@@ -14,7 +14,7 @@ import arrow
 import pandas as pd
 import requests
 
-from .constants import DEFAULT_FIXIE_DIR
+from .constants import DEFAULT_FIXIE_DIR, EARLIEST_DATE
 from .utils import get_all_dates, get_fixies_by_date
 
 
@@ -26,25 +26,6 @@ _handler.setFormatter(_formatter)
 LOGGER.addHandler(_handler)
 
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
-
-
-def download_fixies(start_date, end_date=None, data_dir=DEFAULT_FIXIE_DIR):
-    """
-    Download FMS fixie files from the FMS website for all non-weekend, non-
-    holiday dates between ``start_date`` and ``end_date``.
-
-    Args:
-        start_date (datetime or str)
-        end_date (datetime or str)
-        data_dir (str)
-    """
-    all_dates = get_all_dates(start_date, end_date)
-    LOGGER.info(
-        'downloading FMS fixies from %s to %s!',
-        all_dates[0].date(), all_dates[-1].date())
-
-    fnames = generate_fixie_fnames(all_dates)
-    request_all_fixies(fnames, data_dir)
 
 
 def generate_fixie_fnames(dates):
@@ -79,7 +60,7 @@ def request_all_fixies(all_fnames, data_dir):
                 filepath = os.path.join(data_dir, fname)
                 with io.open(filepath, mode='wb') as f:
                     f.write(fixie)
-                LOGGER.info('%s fixie saved to %s', fname, filepath)
+                LOGGER.debug('%s fixie saved to %s', fname, filepath)
                 success = True
                 break
         if success is False:
@@ -112,7 +93,7 @@ def main():
         description="""Script to download "FMS fixie" files for all non-weekend,
                     non-holiday dates between ``startdate`` and ``enddate``.""")
     parser.add_argument(
-        '-s', '--startdate', type=str, default=arrow.utcnow().shift(days=-8).format('YYYY-MM-DD'),
+        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
         help="""Start of date range over which to download FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
@@ -165,8 +146,8 @@ def main():
             args.startdate, args.enddate)
     else:
         LOGGER.info(
-            'requesting %s fixies and saving them to %s',
-            len(fixie_dates), args.fixiedir)
+            'requesting %s fixies in range [%s, %s] and saving them to %s',
+            len(fixie_dates), args.startdate, args.enddate, args.fixiedir)
         fixie_fnames = generate_fixie_fnames(fixie_dates)
         request_all_fixies(fixie_fnames, args.fixiedir)
 

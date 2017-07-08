@@ -18,5 +18,6 @@ if [ -d data/lifetime_csv ]; then
     rm -r data/lifetime_csv/
 fi
 
-cd parser
-python download_and_parse_fms_fixies.py
+python -m parser.download_fms_fixies
+python -m parser.parse_fms_fixies
+python -m parser.aggregate_fms_fixies
