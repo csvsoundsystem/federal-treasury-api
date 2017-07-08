@@ -1,6 +1,6 @@
 arrow==0.10.0
 holidays==0.5
-pandas>=0.11.0
+pandas>=0.20.0
 requests>=1.2.0
 pysqlite
 bottle>=0.11.4

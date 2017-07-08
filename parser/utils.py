@@ -11,7 +11,7 @@ import holidays
 from .constants import DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR, EARLIEST_DATE
 
 
-re_fname_date_str = re.compile(r'(\d{6})(\d{2})(?:\.txt|[\w_]+\.csv)$')
+re_fname_date_str = re.compile(r'^(\d{6})(\d{2})_?([\w_]*?)(?:\.txt|\.csv)$')
 
 
 def get_all_dates(start_date, end_date):
@@ -61,10 +61,11 @@ def get_fixies_by_date(start_date, end_date, data_dir=DEFAULT_FIXIE_DIR):
     end_date_str = end_date.format('YYMMDD')
     fnames_by_date = {}
     for fname in os.listdir(data_dir):
+        match = re_fname_date_str.search(fname)
         # filter out the cruft
-        if not re_fname_date_str.search(fname):
+        if not match:
             continue
-        fname_date_str = fname[:6]
+        fname_date_str = match.group(1)
         if not start_date_str <= fname_date_str <= end_date_str:
             continue
         fname_date = arrow.get(datetime.datetime.strptime(fname_date_str, '%y%m%d'))
@@ -85,16 +86,18 @@ def get_daily_csvs_by_date(start_date, end_date, data_dir=DEFAULT_DAILY_CSV_DIR)
     """
     start_date_str = start_date.format('YYMMDD')
     end_date_str = end_date.format('YYMMDD')
-    fnames_by_date = collections.defaultdict(list)
+    fnames_by_date = collections.defaultdict(dict)
     for fname in os.listdir(data_dir):
+        match = re_fname_date_str.search(fname)
         # filter out the cruft
-        if not re_fname_date_str.search(fname):
+        if not match:
             continue
-        fname_date_str = fname[:6]
+        fname_date_str = match.group(1)
+        table_key = match.group(3)
         if not start_date_str <= fname_date_str <= end_date_str:
             continue
         fname_date = arrow.get(datetime.datetime.strptime(fname_date_str, '%y%m%d'))
-        fnames_by_date[fname_date].append(os.path.join(data_dir, fname))
+        fnames_by_date[fname_date][table_key] = os.path.join(data_dir, fname)
 
     return dict(fnames_by_date)
 

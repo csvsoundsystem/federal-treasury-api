@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import argparse
 import datetime
@@ -17,7 +16,7 @@ import pandas as pd
 import requests
 
 from .constants import (DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR,
-                        EARLIEST_DATE, PARSER_DIR)
+                        EARLIEST_DATE, PARSER_DIR, TABLE_KEYS)
 from .utils import (get_all_dates, get_date_from_fname,
                     get_daily_csvs_by_date, get_fixies_by_date)
 
@@ -219,6 +218,8 @@ def parse_fixie(fname):
                     r'-| ', '_',
                     re.search(r'TABLE [\w-]+', table_name).group().lower()
                     )
+                if table_key not in TABLE_KEYS:
+                    raise ValueError()
                 continue
             raw_table = table_name + raw_table
             table = normalize_page_text(raw_table)
@@ -670,7 +671,7 @@ def main():
     parser = argparse.ArgumentParser(
         description='Script to parse "FMS fixie" files.')
     parser.add_argument(
-        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
+        '-s', '--startdate', type=str, default=arrow.utcnow().shift(days=-8).format('YYYY-MM-DD'),
         help="""Start of date range over which to parse FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
@@ -679,17 +680,17 @@ def main():
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
         '--fixiedir', type=str, default=DEFAULT_FIXIE_DIR,
-        help='Directory on disk from which fixies will be loaded.')
+        help='Directory on disk from which fixies (raw text) are loaded.')
     parser.add_argument(
         '--dailycsvdir', type=str, default=DEFAULT_DAILY_CSV_DIR,
-        help='Directory on disk to which daily CSVs will be saved.')
+        help='Directory on disk to which parsed fixies (daily CSVs) are saved.')
     parser.add_argument(
         '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
         help='Level of message to be logged; 20 => "INFO".')
     parser.add_argument(
         '--force', default=False, action='store_true',
-        help="""If true, parse all fixies in [start_date, end_date], even if
-             the resulting csvs already exist on disk in ``outdatadir``.
+        help="""If True, parse all fixies in [start_date, end_date], even if
+             the resulting csvs already exist on disk in ``dailycsvdir``.
              Otherwise, only parse un-parsed fixies.""")
     args = parser.parse_args()
 
@@ -709,6 +710,7 @@ def main():
             'no valid dates in range [%s, %s]',
             args.startdate, args.enddate)
         return
+
     fixies_by_date = get_fixies_by_date(
         all_dates[0], all_dates[-1], data_dir=args.fixiedir)
     # if force is False, only parse fixies that haven't yet been parsed
@@ -721,15 +723,18 @@ def main():
             fixies_by_date = {
                 dt: fname for dt, fname in fixies_by_date.items()
                 if dt not in daily_csv_dates}
+
     if not fixies_by_date:
         LOGGER.warning(
             'no un-parsed fixies in range [%s, %s]',
             args.startdate, args.enddate)
-        return
-
-    parse_all_fixies(
-        (fname for _, fname in sorted(fixies_by_date.items(), key=itemgetter(0))),
-        args.dailycsvdir)
+    else:
+        LOGGER.info(
+            'parsing %s fixies and saving them to %s',
+            len(fixies_by_date), args.dailycsvdir)
+        fixie_fnames = (
+            fname for _, fname in sorted(fixies_by_date.items(), key=itemgetter(0)))
+        parse_all_fixies(fixie_fnames, args.dailycsvdir)
 
 
 if __name__ == '__main__':

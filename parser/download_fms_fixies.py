@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-from __future__ import absolute_import
-from __future__ import print_function
+from __future__ import absolute_import, print_function
 
 import argparse
 import datetime
@@ -113,7 +112,7 @@ def main():
         description="""Script to download "FMS fixie" files for all non-weekend,
                     non-holiday dates between ``startdate`` and ``enddate``.""")
     parser.add_argument(
-        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
+        '-s', '--startdate', type=str, default=arrow.utcnow().shift(days=-8).format('YYYY-MM-DD'),
         help="""Start of date range over which to download FMS fixies
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
@@ -122,13 +121,13 @@ def main():
              as an ISO-formatted string, i.e. YYYY-MM-DD.""")
     parser.add_argument(
         '--fixiedir', type=str, default=DEFAULT_FIXIE_DIR,
-        help='Directory on disk to which fixies will be saved.')
+        help='Directory on disk to which fixies (raw text) are saved.')
     parser.add_argument(
         '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
         help='Level of message to be logged; 20 => "INFO".')
     parser.add_argument(
         '--force', default=False, action='store_true',
-        help="""If true, download all fixies in [start_date, end_date], even if
+        help="""If True, download all fixies in [start_date, end_date], even if
              the resulting files already exist on disk in ``datadir``.
              Otherwise, only download un-downloaded fixies.""")
     args = parser.parse_args()
@@ -139,7 +138,7 @@ def main():
     try:
         os.makedirs(args.fixiedir)
     except OSError:  # already exists
-        continue
+        pass
 
     # get all valid dates within range
     all_dates = get_all_dates(args.startdate, args.enddate)
@@ -160,8 +159,16 @@ def main():
     else:
         fixie_dates = all_dates
 
-    fnames = generate_fixie_fnames(fixie_dates)
-    request_all_fixies(fnames, args.fixiedir)
+    if not fixie_dates:
+        LOGGER.warning(
+            'no un-requested fixies in range [%s, %s]',
+            args.startdate, args.enddate)
+    else:
+        LOGGER.info(
+            'requesting %s fixies and saving them to %s',
+            len(fixie_dates), args.fixiedir)
+        fixie_fnames = generate_fixie_fnames(fixie_dates)
+        request_all_fixies(fixie_fnames, args.fixiedir)
 
 
 if __name__ == '__main__':
