@@ -2,13 +2,10 @@
 from __future__ import absolute_import, print_function
 
 import argparse
-import datetime
-import io
 import json
 import logging
 from operator import itemgetter
 import os
-import re
 import sqlite3
 import sys
 
@@ -17,7 +14,7 @@ import pandas as pd
 
 from .constants import (DEFAULT_DAILY_CSV_DIR, DEFAULT_LIFETIME_CSV_DIR,
                         DEFAULT_DATA_DIR, DB_TABLE_NAMES, TABLE_KEYS)
-from .utils import get_all_dates, get_date_from_fname, get_daily_csvs_by_date
+from .utils import get_all_dates, get_daily_csvs_by_date
 
 
 LOGGER = logging.getLogger('aggregate_fms_fixies')

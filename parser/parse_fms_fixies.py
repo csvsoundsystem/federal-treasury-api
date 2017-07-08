@@ -16,7 +16,7 @@ import pandas as pd
 import requests
 
 from .constants import (DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR,
-                        EARLIEST_DATE, PARSER_DIR, TABLE_KEYS)
+                        PARSER_DIR, TABLE_KEYS)
 from .utils import (get_all_dates, get_date_from_fname,
                     get_daily_csvs_by_date, get_fixies_by_date)
 
@@ -657,14 +657,7 @@ def parse_table(table, date, url):
         df = df.reindex(columns=['table', 'url', 'date', 'year_month', 'year', 'month', 'day', 'weekday', 'refund_method', 'refund_type', 'refund_type_raw', 'today', 'mtd', 'fytd', 'footnote'])
         # check_for_nulls(df, "t6")
 
-    # LOGGER.debug('parsed table:\n%s', df.head(3))
-
     return df
-
-
-# BJD: Does this function serve a purpose...?
-def strip_table_name(table_name):
-    return re.sub('[^a-zA-Z]*$', '', table_name)
 
 
 def main():

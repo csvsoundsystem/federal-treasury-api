@@ -11,6 +11,14 @@ import holidays
 from .constants import DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR, EARLIEST_DATE
 
 
+LOGGER = logging.getLogger('utils')
+LOGGER.setLevel(logging.INFO)
+_handler = logging.StreamHandler()
+_formatter = logging.Formatter('%(name)s | %(levelname)s | %(message)s')
+_handler.setFormatter(_formatter)
+LOGGER.addHandler(_handler)
+
+
 re_fname_date_str = re.compile(r'^(\d{6})(\d{2})_?([\w_]*?)(?:\.txt|\.csv)$')
 
 
