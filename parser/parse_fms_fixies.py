@@ -16,7 +16,7 @@ import pandas as pd
 import requests
 
 from .constants import (DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR,
-                        PARSER_DIR, TABLE_KEYS)
+                        EARLIEST_DATE, PARSER_DIR, TABLE_KEYS)
 from .utils import (get_all_dates, get_date_from_fname,
                     get_daily_csvs_by_date, get_fixies_by_date)
 

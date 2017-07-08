@@ -75,6 +75,8 @@ Run everything:
     python -m parser.parse_fms_fixies
     python -m parser.aggregate_fms_fixies
 
+For information about options, pass the `--help` flag to any of these.
+
 ## Testing the data
 
 Various tests are contained in `tests`

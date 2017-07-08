@@ -13,7 +13,8 @@ import arrow
 import pandas as pd
 
 from .constants import (DEFAULT_DAILY_CSV_DIR, DEFAULT_LIFETIME_CSV_DIR,
-                        DEFAULT_DATA_DIR, DB_TABLE_NAMES, TABLE_KEYS)
+                        DEFAULT_DATA_DIR, EARLIEST_DATE,
+                        DB_TABLE_NAMES, TABLE_KEYS)
 from .utils import get_all_dates, get_daily_csvs_by_date
 
 
