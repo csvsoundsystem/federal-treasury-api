@@ -12,10 +12,10 @@ import sys
 import arrow
 import pandas as pd
 
-from .constants import (DEFAULT_DAILY_CSV_DIR, DEFAULT_LIFETIME_CSV_DIR,
+from constants import (DEFAULT_DAILY_CSV_DIR, DEFAULT_LIFETIME_CSV_DIR,
                         DEFAULT_DATA_DIR, EARLIEST_DATE,
                         DB_TABLE_NAMES, TABLE_KEYS)
-from .utils import get_all_dates, get_daily_csvs_by_date
+from utils import get_all_dates, get_daily_csvs_by_date
 
 
 LOGGER = logging.getLogger('aggregate_fms_fixies')
@@ -70,7 +70,8 @@ def build_db(dbfile, lifetimecsvdir):
 
     connection = sqlite3.connect(dbfile)
     # bad, but pandas doesn't work otherwise (TODO: check this)
-    # connection.text_factory = str
+    # true, but the perfect is the enemy of the good
+    connection.text_factory = str
 
     for table_key, table_name in zip(TABLE_KEYS, DB_TABLE_NAMES):
 

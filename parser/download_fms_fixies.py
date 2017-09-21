@@ -14,8 +14,8 @@ import arrow
 import pandas as pd
 import requests
 
-from .constants import DEFAULT_FIXIE_DIR, EARLIEST_DATE
-from .utils import get_all_dates, get_fixies_by_date
+from constants import DEFAULT_FIXIE_DIR, EARLIEST_DATE
+from utils import get_all_dates, get_fixies_by_date
 
 
 LOGGER = logging.getLogger('download_fms_fixies')

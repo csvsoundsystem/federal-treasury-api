@@ -9,7 +9,7 @@ import re
 import arrow
 import holidays
 
-from .constants import DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR, EARLIEST_DATE
+from constants import DEFAULT_FIXIE_DIR, DEFAULT_DAILY_CSV_DIR, EARLIEST_DATE
 
 
 LOGGER = logging.getLogger('utils')
