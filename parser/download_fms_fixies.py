@@ -1,127 +1,156 @@
 #!/usr/bin/env python
-import codecs
+from __future__ import absolute_import, print_function
+
+import argparse
 import datetime
+import io
+import logging
 import os
+import random
+import sys
+import time
+
+import arrow
 import pandas as pd
 import requests
-import sys
+
+from constants import DEFAULT_FIXIE_DIR, EARLIEST_DATE
+from utils import get_all_dates, get_fixies_by_date
+
+
+LOGGER = logging.getLogger('download_fms_fixies')
+LOGGER.setLevel(logging.INFO)
+_handler = logging.StreamHandler()
+_formatter = logging.Formatter('%(name)s | %(levelname)s | %(message)s')
+_handler.setFormatter(_formatter)
+LOGGER.addHandler(_handler)
 
 BASE_URL = 'https://www.fms.treas.gov/fmsweb/viewDTSFiles'
-SAVE_DIR = os.path.join('..', 'data', 'fixie')
-HOLIDAYS = [datetime.datetime.strptime(d, '%Y%m%d').date() for d in [
-	'20050117', '20050221', '20050530', '20050704', '20050905', '20051010', '20051111', '20051124', '20051226',
-	'20060102', '20060116', '20060220', '20060529', '20060704', '20060904', '20061009', '20061110', '20061123', '20061225',
-	'20070101', '20070115', '20070219', '20070528', '20070704', '20070903', '20071008', '20071112', '20071122', '20071225',
-	'20080101', '20080121', '20080218', '20080526', '20080704', '20080901', '20081013', '20081111', '20081127', '20081225',
-	'20090101', '20090119', '20090216', '20090525', '20090703', '20090907', '20091012', '20091111', '20091126', '20091225',
-	'20100101', '20100118', '20100215', '20100531', '20100705', '20100906', '20101011', '20101111', '20101125', '20101224',
-	'20101231', '20110117', '20110221', '20110530', '20110704', '20110905', '20111010', '20111111', '20111124', '20111226',
-	'20120102', '20120116', '20120220', '20120528', '20120704', '20120903', '20121008', '20121112', '20121122', '20121225',
-	'20130101', '20130121', '20130218', '20130527', '20130704', '20131014', '20131111', '20131128', '20131225'
-	]]
 
-################################################################################
-def check_dates(start_date, end_date):
-	# fixie files not available before this date
-	# PDFs *are* available, for the brave soul who wants to parse them
-	earliest_date = datetime.date(2005, 6, 9)
-	if start_date < earliest_date:
-		print '\n**WARNING:', start_date, 'before earliest available date (',
-		print str(earliest_date), ')'
-		print '... setting start_date to', str(earliest_date)
-		start_date = earliest_date
-	if start_date > end_date:
-		temp = start_date
-		start_date = end_date
-		end_date = temp
 
-	return start_date, end_date
+def generate_fixie_fnames(dates):
+    """
+    Generate likely fixie filenames for each date in ``dates``. Fnames are
+    constructed by combining the date formatted as 'YYMMDD', a zero-padded digit
+    string like '00', and the filetype, '.txt'.
 
-################################################################################
-def generate_date_range(start_date, end_date):
-	start_date, end_date = check_dates(start_date, end_date)
-	dates = []
-	td = datetime.timedelta(days=1)
-	current_date = start_date
-	while current_date <= end_date:
-		dates.append(current_date)
-		current_date += td
-	return dates
+    Args:
+        dates (Iterable[:class:`arrow.Arrow`])
 
-################################################################################
-def remove_weekends_and_holidays(all_dates):
-	good_dates = [date for date in all_dates
-				  if datetime.datetime.strftime(date, '%A') not in ['Saturday', 'Sunday']
-				  and date not in HOLIDAYS]
-	return good_dates
+    Yields:
+        Tuple[str]
+    """
+    suffixes = ('00.txt', '01.txt', '02.txt', '03.txt')
+    for dt in dates:
+        yield tuple(dt.format('YYMMDD') + suffix for suffix in suffixes)
 
-################################################################################
+
+def request_all_fixies(all_fnames, data_dir):
+    """
+    Args:
+        all_fnames (Iterable[Tuple[str]])
+        data_dir (str)
+    """
+    for fnames in all_fnames:
+        time.sleep(0.1 + 0.1 * random.random())
+        success = False
+        for fname in fnames:
+            fixie = request_fixie(fname)
+            if fixie:
+                filepath = os.path.join(data_dir, fname)
+                with io.open(filepath, mode='wb') as f:
+                    f.write(fixie)
+                LOGGER.debug('%s fixie saved to %s', fname, filepath)
+                success = True
+                break
+        if success is False:
+            LOGGER.warning(
+                '%s fixie (%s) not available',
+                fnames[0],
+                str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()))
+
+
 def request_fixie(fname):
-	response = requests.get(BASE_URL,
-							params={'dir': 'a',
-									'fname': fname}
-							)
-	if response.status_code == 200:
-		return response.text
-	# check in working directory instead
-	else:
-		response = requests.get(BASE_URL,
-						params={'dir': 'w',
-								'fname': fname}
-						)
-		if response.status_code == 200:
-			return response.text
-		else:
-			return None
+    """
+    Request fixie files from FMS server, checking in 2 different directories
+    where they are likely to be stored.
 
-################################################################################
-def request_all_fixies(fnames):
-	for fname in reversed(fnames):
-		alt_fnames = [fname]
-		alt_fnames.extend([fname[:-5] + i +'.txt' for i in ['1', '2', '3']])
-		for alt_fname in alt_fnames:
-			fixie = request_fixie(alt_fname)
-			if fixie:
-				print 'INFO: saving', os.path.join(SAVE_DIR, alt_fname)
-				f = codecs.open(os.path.join(SAVE_DIR, alt_fname), 'wb', 'utf-8')
-				f.write(fixie)
-				f.close()
-				break
+    Args:
+        fname (str)
 
-		if fixie is None:
-			print 'WARNING:', fname, '(',
-			print str(datetime.datetime.strptime(fname[:6], '%y%m%d').date()),
-			print ')', 'not available'
+    Returns:
+        str or None
+    """
+    for dir_ in ('a', 'w'):
+        response = requests.get(BASE_URL, params={'dir': dir_, 'fname': fname})
+        if response.status_code == 200:
+            return response.text
+    return None
 
-	return fnames
 
-################################################################################
-def download_fixies(start_date, end_date=None):
-	start_date = datetime.datetime.strptime(str(start_date), '%Y-%m-%d').date()
-	if end_date:
-		end_date = datetime.datetime.strptime(str(end_date), '%Y-%m-%d').date()
-	else:
-		end_date = start_date
+def main():
+    parser = argparse.ArgumentParser(
+        description="""Script to download "FMS fixie" files for all non-weekend,
+                    non-holiday dates between ``startdate`` and ``enddate``.""")
+    parser.add_argument(
+        '-s', '--startdate', type=str, default=EARLIEST_DATE.format('YYYY-MM-DD'),
+        help="""Start of date range over which to download FMS fixies
+             as an ISO-formatted string, i.e. YYYY-MM-DD.""")
+    parser.add_argument(
+        '-e', '--enddate', type=str, default=arrow.utcnow().shift(days=-1).format('YYYY-MM-DD'),
+        help="""End of date range over which to download FMS fixies
+             as an ISO-formatted string, i.e. YYYY-MM-DD.""")
+    parser.add_argument(
+        '--fixiedir', type=str, default=DEFAULT_FIXIE_DIR,
+        help='Directory on disk to which fixies (raw text) are saved.')
+    parser.add_argument(
+        '--loglevel', type=int, default=20, choices=[10, 20, 30, 40, 50],
+        help='Level of message to be logged; 20 => "INFO".')
+    parser.add_argument(
+        '--force', default=False, action='store_true',
+        help="""If True, download all fixies in [start_date, end_date], even if
+             the resulting files already exist on disk in ``datadir``.
+             Otherwise, only download un-downloaded fixies.""")
+    args = parser.parse_args()
 
-	all_dates = generate_date_range(start_date, end_date)
-	print '\nINFO: Downloading FMS fixies from', all_dates[0], 'to', all_dates[-1], "!\n"
+    LOGGER.setLevel(args.loglevel)
 
-	good_dates = remove_weekends_and_holidays(all_dates)
-	fnames = [''.join([datetime.datetime.strftime(date, '%y%m%d'), '00.txt']) for date in good_dates]
-	request_all_fixies(fnames)
+    # auto-make data directory, if not present
+    try:
+        os.makedirs(args.fixiedir)
+    except OSError:  # already exists
+        pass
 
-################################################################################
+    # get all valid dates within range
+    all_dates = get_all_dates(args.startdate, args.enddate)
+    if not all_dates:
+        LOGGER.warning(
+            'no valid dates in range [%s, %s]',
+            args.startdate, args.enddate)
+        return
+
+    # if force is False, only download fixies that haven't yet been downloaded
+    if args.force is False:
+        fixie_dates = set(
+            get_fixies_by_date(
+                all_dates[0], all_dates[-1], data_dir=args.fixiedir
+                ).keys())
+        if fixie_dates:
+            fixie_dates = sorted(set(all_dates).difference(fixie_dates))
+    else:
+        fixie_dates = all_dates
+
+    if not fixie_dates:
+        LOGGER.warning(
+            'no un-requested fixies in range [%s, %s]',
+            args.startdate, args.enddate)
+    else:
+        LOGGER.info(
+            'requesting %s fixies in range [%s, %s] and saving them to %s',
+            len(fixie_dates), args.startdate, args.enddate, args.fixiedir)
+        fixie_fnames = generate_fixie_fnames(fixie_dates)
+        request_all_fixies(fixie_fnames, args.fixiedir)
+
+
 if __name__ == '__main__':
-	try:
-		start_date = datetime.datetime.strptime(str(sys.argv[1]), '%Y-%m-%d').date()
-	except IndexError:
-		print 'ERROR: must provide date as argument!'
-		sys.exit()
-	try:
-		end_date = datetime.datetime.strptime(str(sys.argv[2]), '%Y-%m-%d').date()
-	except IndexError:
-		end_date = start_date
-
-	download_fixies(start_date, end_date)
-
-
+    sys.exit(main())
